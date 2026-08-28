@@ -10,6 +10,7 @@ const products = [
       "A comforting multi-purpose balm I love for dry or sensitive-feeling skin.",
     tag: "Lizzy Loves",
     image: "/images/cicaplast.png",
+    affiliateUrl: "https://link.amazon/B0cEHg5tR",
   },
   {
     brand: "e.l.f.",
@@ -19,6 +20,7 @@ const products = [
       "An easy way to add a fresh, luminous finish to everyday makeup.",
     tag: "Everyday Pick",
     image: "/images/elf.png",
+    affiliateUrl: "https://link.amazon/B00dNPsB9",
   },
   {
     brand: "COSRX",
@@ -28,6 +30,7 @@ const products = [
       "A lightweight hydrating essence that fits easily into a simple routine.",
     tag: "Trending",
     image: "/images/snail.png",
+    affiliateUrl: "https://link.amazon/B0fvYk7Dt",
   },
   {
     brand: "Sol de Janeiro",
@@ -37,6 +40,7 @@ const products = [
       "A body-care favorite for when you want your routine to feel a little more luxurious.",
     tag: "Worth the Splurge",
     image: "/images/bumbum.png",
+    affiliateUrl: "https://link.amazon/B016a0cXN",
   },
 ];
 
@@ -115,10 +119,15 @@ export default function LizzyPicks() {
               </p>
 
               <div className="mt-5">
-                <span className="inline-flex min-h-10 w-full items-center justify-center rounded-full border border-stone-300 px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-stone-500">
-                  Product Link Coming Soon
-                </span>
-              </div>
+                  <a
+                    href={product.affiliateUrl}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
+                  >
+                    Shop This Product →
+                  </a>
+                </div>
             </div>
           </article>
         ))}

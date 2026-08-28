@@ -159,6 +159,14 @@ export default function Header() {
             </Link>
 
             <Link
+              href="/fragrances"
+              onClick={closeMenu}
+              className="border-b border-stone-200 py-4 text-sm font-medium uppercase tracking-[0.15em]"
+            >
+              Fragrances
+            </Link>
+
+            <Link
               href="/beauty-guide"
               onClick={closeMenu}
               className="border-b border-stone-200 py-4 text-sm font-medium uppercase tracking-[0.15em]"
