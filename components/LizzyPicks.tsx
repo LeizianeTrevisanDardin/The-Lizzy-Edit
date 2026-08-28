@@ -1,50 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
 
-const products = [
-  {
-    brand: "La Roche-Posay",
-    name: "Cicaplast Baume B5+",
-    category: "Skincare",
-    description:
-      "A comforting multi-purpose balm I love for dry or sensitive-feeling skin.",
-    tag: "Lizzy Loves",
-    image: "/images/cicaplast.png",
-    affiliateUrl: "https://link.amazon/B0cEHg5tR",
-  },
-  {
-    brand: "e.l.f.",
-    name: "Halo Glow Liquid Filter",
-    category: "Makeup",
-    description:
-      "An easy way to add a fresh, luminous finish to everyday makeup.",
-    tag: "Everyday Pick",
-    image: "/images/elf.png",
-    affiliateUrl: "https://link.amazon/B00dNPsB9",
-  },
-  {
-    brand: "COSRX",
-    name: "Advanced Snail 96 Mucin Power Essence",
-    category: "Skincare",
-    description:
-      "A lightweight hydrating essence that fits easily into a simple routine.",
-    tag: "Trending",
-    image: "/images/snail.png",
-    affiliateUrl: "https://link.amazon/B0fvYk7Dt",
-  },
-  {
-    brand: "Sol de Janeiro",
-    name: "Brazilian Bum Bum Cream",
-    category: "Self-Care",
-    description:
-      "A body-care favorite for when you want your routine to feel a little more luxurious.",
-    tag: "Worth the Splurge",
-    image: "/images/bumbum.png",
-    affiliateUrl: "https://link.amazon/B016a0cXN",
-  },
-];
+import ProductCard from "@/components/ProducCard";
+import { products } from "@/app/data/products";
 
 export default function LizzyPicks() {
+  const latestProducts = [...products]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 6);
+
   return (
     <section
       id="picks"
@@ -64,8 +27,8 @@ export default function LizzyPicks() {
           </h2>
 
           <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
-            A few beauty products currently on my radar — from skincare
-            staples to makeup and self-care favorites.
+            A few of my latest beauty finds — from skincare staples to makeup,
+            fragrance and self-care favorites.
           </p>
         </div>
 
@@ -77,68 +40,25 @@ export default function LizzyPicks() {
         </Link>
       </div>
 
-      <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-        {products.map((product) => (
-          <article
-            key={product.name}
-            className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl"
-          >
-            {/* PRODUCT IMAGE */}
-            <div className="relative aspect-[4/5] overflow-hidden bg-[#f5eee9]">
-              <Image
-                src={product.image}
-                alt={`${product.brand} ${product.name}`}
-                fill
-                quality={95}
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-cover object-center transition duration-700 group-hover:scale-[1.02]"
-              />
-
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
-
-              <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[8px] font-medium uppercase tracking-[0.14em] shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
-                {product.tag}
-              </span>
-            </div>
-
-            <div className="flex flex-1 flex-col p-4 sm:p-5">
-              <p className="text-[8px] font-medium uppercase tracking-[0.18em] text-stone-400 sm:text-[9px]">
-                {product.category}
-              </p>
-
-              <p className="mt-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-stone-500 sm:text-[10px]">
-                {product.brand}
-              </p>
-
-              <h3 className="mt-1 font-serif text-xl leading-tight sm:text-2xl">
-                {product.name}
-              </h3>
-
-              <p className="mt-3 hidden text-sm leading-6 text-stone-500 sm:block">
-                {product.description}
-              </p>
-
-              <div className="mt-auto pt-5">
-                  <a
-                    href={product.affiliateUrl}
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
-                  >
-                    Shop This Product →
-                  </a>
-                </div>
-            </div>
-          </article>
+      {/* LATEST 6 PRODUCTS */}
+      <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        {latestProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
         ))}
       </div>
 
+      {/* AFFILIATE NOTE */}
       <div className="mt-8 rounded-[22px] bg-[#f6eee9] p-5 sm:p-6">
         <p className="text-xs leading-6 text-stone-600 sm:text-sm">
           <span className="font-medium text-stone-800">
-          ♡ A note from Lizzy:
+            ♡ A note from Lizzy:
           </span>{" "}
-          Product can be purchased through Amazon. And if you have Amazon Prime, you will get it on the very next day. ♡
+          Some products featured on The Lizzy Edit may be purchased through
+          affiliate links. As an Amazon Associate, I earn from qualifying
+          purchases at no additional cost to you. ♡
         </p>
       </div>
     </section>

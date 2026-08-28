@@ -267,12 +267,14 @@ export default function SkincarePage() {
               needs.
             </p>
 
-            <Link
-              href="/beauty-guide"
-              className="mt-7 inline-flex min-h-12 items-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:bg-stone-800"
-            >
-              Read Beauty Guide →
-            </Link>
+            <div className="mt-7 flex justify-center lg:justify-start">
+              <Link
+                href="/beauty-guide"
+                className="inline-flex min-h-12 items-center justify-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
+              >
+                Read Beauty Guide →
+              </Link>
+            </div>
           </div>
 
           <div className="divide-y divide-stone-200 border-y border-stone-200">

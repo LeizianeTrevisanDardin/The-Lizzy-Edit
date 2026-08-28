@@ -9,7 +9,11 @@ export type Product = {
   image: string;
   description: string;
   whyILikeIt: string[];
+
   affiliateUrl?: string;
+
+  featured?: boolean;
+  homeTag?: string;
 };
 
 export const products: Product[] = [
@@ -29,6 +33,9 @@ export const products: Product[] = [
       "Great for dry-feeling areas",
       "Easy to add to a simple routine",
     ],
+    affiliateUrl: "https://link.amazon/B09l4XWkQ",
+    featured: true,
+    homeTag: "Lizzy Loves",
   },
 
   {
@@ -47,6 +54,9 @@ export const products: Product[] = [
       "Easy for everyday makeup",
       "Works well for a fresh, natural look",
     ],
+    affiliateUrl: "https://link.amazon/B00OSatwG",
+    featured: true,
+    homeTag: "Everyday Pick",
   },
 
   {
@@ -65,6 +75,9 @@ export const products: Product[] = [
       "Rich, indulgent texture",
       "A fun addition to a self-care routine",
     ],
+    affiliateUrl: "https://link.amazon/B09nb5T12",
+    featured: true,
+    homeTag: "Worth the Splurge",
   },
 
   {
@@ -83,6 +96,9 @@ export const products: Product[] = [
       "Easy for daytime",
       "Polished without feeling heavy",
     ],
+    affiliateUrl: "https://link.amazon/B02cZZRZS",
+    featured: true,
+    homeTag: "fragrance",
   },
 
   {
@@ -101,6 +117,9 @@ export const products: Product[] = [
       "Comforting but elegant",
       "Beautiful for cooler days and evenings",
     ],
+    affiliateUrl: "https://link.amazon/B0eqvfMSm",
+    featured: true,
+    homeTag: "fragrance",
   },
 
   {
@@ -119,6 +138,9 @@ export const products: Product[] = [
       "Feels glamorous and feminine",
       "Great when you want a statement scent",
     ],
+    affiliateUrl: "https://link.amazon/B0cR5gyhA",
+    featured: true,
+    homeTag: "fragrance",
   },
 
   {
@@ -137,5 +159,33 @@ export const products: Product[] = [
       "Elegant and polished",
       "A timeless feminine fragrance",
     ],
+    affiliateUrl: "https://link.amazon/B0enBBgiW",
+    featured: true,
+    homeTag: "fragrance",
+  },
+
+  {
+    id: 8,
+    slug: "cosrx-snail-mucin",
+    brand: "COSRX",
+    name: "Advanced Snail 96 Mucin Power Essence",
+    category: "Skincare",
+    tags: ["Trending"],
+    type: "Hydrating • Lightweight",
+    image: "/images/snail.png",
+  
+    description:
+      "A lightweight hydrating essence that fits easily into a simple routine.",
+  
+    whyILikeIt: [
+      "Lightweight texture",
+      "Easy to layer",
+      "Fits nicely into a simple routine",
+    ],
+  
+    affiliateUrl: "https://link.amazon/B0gz02hYB",
+  
+    featured: true,
+    homeTag: "Trending",
   },
 ];
