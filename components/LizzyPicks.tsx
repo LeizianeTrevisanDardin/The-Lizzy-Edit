@@ -81,7 +81,7 @@ export default function LizzyPicks() {
         {products.map((product) => (
           <article
             key={product.name}
-            className="group overflow-hidden rounded-[24px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl"
+            className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl"
           >
             {/* PRODUCT IMAGE */}
             <div className="relative aspect-[4/5] overflow-hidden bg-[#f5eee9]">
@@ -101,7 +101,7 @@ export default function LizzyPicks() {
               </span>
             </div>
 
-            <div className="p-4 sm:p-5">
+            <div className="flex flex-1 flex-col p-4 sm:p-5">
               <p className="text-[8px] font-medium uppercase tracking-[0.18em] text-stone-400 sm:text-[9px]">
                 {product.category}
               </p>
@@ -118,7 +118,7 @@ export default function LizzyPicks() {
                 {product.description}
               </p>
 
-              <div className="mt-5">
+              <div className="mt-auto pt-5">
                   <a
                     href={product.affiliateUrl}
                     target="_blank"
@@ -136,11 +136,9 @@ export default function LizzyPicks() {
       <div className="mt-8 rounded-[22px] bg-[#f6eee9] p-5 sm:p-6">
         <p className="text-xs leading-6 text-stone-600 sm:text-sm">
           <span className="font-medium text-stone-800">
-            A note from Lizzy:
+          ♡ A note from Lizzy:
           </span>{" "}
-          Product links are being added soon. In the meantime, The Lizzy Edit
-          is being built as a curated space for beauty recommendations,
-          education and product discovery.
+          Product can be purchased through Amazon. And if you have Amazon Prime, you will get it on the very next day. ♡
         </p>
       </div>
     </section>
