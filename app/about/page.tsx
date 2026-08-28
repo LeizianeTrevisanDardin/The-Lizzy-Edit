@@ -111,7 +111,7 @@ export default function AboutPage() {
                   priority
                   quality={95}
                   sizes="(max-width: 1024px) 90vw, 420px"
-                  className="object-cover object-center"
+                  className="object-cover object-[center-50%] scale-[1.06]"
                 />
 
                 {/* subtle overlay */}
@@ -288,29 +288,6 @@ export default function AboutPage() {
               >
                 Read Affiliate Disclosure →
               </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
-        <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12 lg:px-14">
-          <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
-
-          <div className="relative grid gap-7 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="text-[9px] uppercase tracking-[0.22em] text-stone-400">
-                The Lizzy List
-              </p>
-
-              <h2 className="mt-3 max-w-2xl font-serif text-3xl sm:text-4xl">
-                Want to see what I&apos;m loving?
-              </h2>
-
-              <p className="mt-3 max-w-xl text-sm leading-6 text-stone-400">
-                Browse my curated skincare, makeup and self-care favorites.
-              </p>
             </div>
           </div>
         </div>

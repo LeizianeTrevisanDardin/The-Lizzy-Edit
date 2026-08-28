@@ -95,13 +95,15 @@ export default function AboutLizzy() {
               </p>
             </div>
           </div>
-
-          <Link
-            href="/picks"
-            className="mt-8 inline-flex min-h-12 items-center justify-center bg-black px-7 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
-          >
-            Discover My Favorites →
-          </Link>
+          
+          <div className="mt-8 flex justify-center lg:justify-start">
+            <Link
+              href="/picks"
+              className="inline-flex min-h-12 items-center justify-center bg-black px-7 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
+            >
+              Discover My Favorites →
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -4,114 +4,7 @@ import { notFound } from "next/navigation";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const products = [
-  {
-    slug: "cicaplast-baume-b5",
-    brand: "La Roche-Posay",
-    name: "Cicaplast Baume B5+",
-    category: "Skincare",
-    type: "Soothing • Barrier Support",
-    image: "/images/cicaplast.png",
-    description:
-      "A comforting multi-purpose balm I love for dry or sensitive-feeling skin.",
-    whyILikeIt: [
-      "Comforting texture",
-      "Great for dry-feeling areas",
-      "Easy to add to a simple routine",
-    ],
-  },
-  {
-    slug: "elf-halo-glow",
-    brand: "e.l.f.",
-    name: "Halo Glow Liquid Filter",
-    category: "Makeup",
-    type: "Glow • Everyday Makeup",
-    image: "/images/elf.png",
-    description:
-      "An easy way to add a fresh, luminous finish to everyday makeup.",
-    whyILikeIt: [
-      "Beautiful luminous finish",
-      "Easy for everyday makeup",
-      "Works well for a fresh, natural look",
-    ],
-  },
-  {
-    slug: "sol-de-janeiro-bum-bum-cream",
-    brand: "Sol de Janeiro",
-    name: "Brazilian Bum Bum Cream",
-    category: "Self-Care",
-    type: "Body Care • Indulgent",
-    image: "/images/bumbum.png",
-    description:
-      "A body-care favorite for when you want your routine to feel a little more luxurious.",
-    whyILikeIt: [
-      "Makes body care feel special",
-      "Rich, indulgent texture",
-      "A fun addition to a self-care routine",
-    ],
-  },
-  {
-    slug: "narciso-rodriguez-pure-musc",
-    brand: "Narciso Rodriguez",
-    name: "For Her Pure Musc",
-    category: "Fragrance",
-    type: "Fresh • Soft Musk",
-    image: "/images/narciso.png",
-    description:
-      "Clean, soft and effortlessly feminine. A beautiful everyday musk that feels polished without being overpowering.",
-    whyILikeIt: [
-      "Soft and feminine",
-      "Easy for daytime",
-      "Polished without feeling heavy",
-    ],
-  },
-  {
-    slug: "burberry-goddess",
-    brand: "Burberry",
-    name: "Goddess Eau de Parfum",
-    category: "Fragrance",
-    type: "Vanilla • Warm • Gourmand",
-    image: "/images/burberry.png",
-    description:
-      "Warm, creamy and beautifully feminine. A sophisticated vanilla fragrance with a soft, comforting sweetness.",
-    whyILikeIt: [
-      "Warm vanilla profile",
-      "Comforting but elegant",
-      "Beautiful for cooler days and evenings",
-    ],
-  },
-  {
-    slug: "rabanne-million-gold-for-her",
-    brand: "Rabanne",
-    name: "Million Gold For Her Parfum",
-    category: "Fragrance",
-    type: "Floral • Warm • Sensual",
-    image: "/images/pacco.png",
-    description:
-      "Bold, glamorous and effortlessly feminine with a warm, sensual finish.",
-    whyILikeIt: [
-      "Has more presence",
-      "Feels glamorous and feminine",
-      "Great when you want a statement scent",
-    ],
-  },
-  {
-    slug: "dior-jadore",
-    brand: "Dior",
-    name: "J’adore Eau de Parfum",
-    category: "Fragrance",
-    type: "Floral • Elegant • Feminine",
-    image: "/images/dior.png",
-    description:
-      "Radiant, elegant and beautifully feminine. A sophisticated floral fragrance with a timeless feel.",
-    whyILikeIt: [
-      "Classic floral profile",
-      "Elegant and polished",
-      "A timeless feminine fragrance",
-    ],
-  },
-];
+import { products } from "@/app/data/products";
 
 type ProductPageProps = {
   params: Promise<{
@@ -136,6 +29,7 @@ export default async function ProductPage({
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
       <Header />
 
+      {/* BACK */}
       <section className="mx-auto max-w-7xl px-5 py-8 sm:px-6 sm:py-12 lg:px-8">
         <Link
           href="/picks"
@@ -145,8 +39,10 @@ export default async function ProductPage({
         </Link>
       </section>
 
+      {/* PRODUCT */}
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+
           {/* IMAGE */}
           <div className="relative">
             <div className="absolute -inset-5 rounded-[40px] bg-[#d6b7ad]/20 blur-3xl" />
@@ -210,19 +106,35 @@ export default async function ProductPage({
               </div>
             </div>
 
-            {/* SHOP BUTTON */}
+            {/* SHOP */}
             <div className="mt-8">
-              <button
-                type="button"
-                disabled
-                className="inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-black px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-white opacity-70 sm:w-auto"
-              >
-                Product Link Coming Soon
-              </button>
+              {product.affiliateUrl ? (
+                <>
+                  <a
+                    href={product.affiliateUrl}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#211d1b] px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70] sm:w-auto"
+                  >
+                    Shop This Product →
+                  </a>
 
-              <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
-                Shopping links will be added as affiliate partnerships become available.
-              </p>
+                  <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
+                    This link may be an affiliate link. I may earn a commission
+                    at no additional cost to you.
+                  </p>
+                </>
+              ) : (
+                <div>
+                  <span className="inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full border border-stone-300 px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-stone-500 sm:w-auto">
+                    Product Link Coming Soon
+                  </span>
+
+                  <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
+                    Shopping link coming soon.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* DISCLOSURE */}
