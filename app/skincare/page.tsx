@@ -4,37 +4,44 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
+import ExploreCard from "@/components/ExploreCards";
 
 const concerns = [
   {
     title: "Dryness",
     description: "Hydration, barrier support & comfort",
     symbol: "◌",
+    filter: "Dryness",
   },
   {
     title: "Sensitivity",
     description: "Gentle care for easily irritated skin",
     symbol: "♡",
+    filter: "Sensitivity",
   },
   {
     title: "Breakouts",
     description: "Balance, clarify & support your skin",
     symbol: "✦",
+    filter: "Breakouts",
   },
   {
     title: "Fine Lines",
     description: "Smooth, hydrate & support renewal",
     symbol: "⌁",
+    filter: "Fine Lines",
   },
   {
     title: "Dark Spots",
     description: "Brighten & improve uneven-looking tone",
     symbol: "◇",
+    filter: "Dark Spots",
   },
   {
     title: "Dullness",
     description: "Bring back glow & radiance",
     symbol: "☼",
+    filter: "Dullness",
   },
 ];
 
@@ -42,18 +49,26 @@ const skinTypes = [
   {
     title: "Dry",
     description: "Comforting hydration and barrier-focused care.",
+    symbol: "D",
+    filter: "Dry",
   },
   {
     title: "Oily",
     description: "Lightweight hydration and balanced formulas.",
+    symbol: "O",
+    filter: "Oily",
   },
   {
     title: "Combination",
     description: "Flexible care for both dry and oily areas.",
+    symbol: "C",
+    filter: "Combination",
   },
   {
     title: "Sensitive",
     description: "Gentle formulas with a simpler approach.",
+    symbol: "S",
+    filter: "Sensitive",
   },
 ];
 
@@ -97,7 +112,9 @@ export default function SkincarePage() {
 
             <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               Skincare made{" "}
-              <span className="italic text-[#c78f86]">simpler.</span>
+              <span className="italic text-[#c78f86]">
+                simpler.
+              </span>
             </h1>
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
@@ -124,27 +141,27 @@ export default function SkincarePage() {
           </div>
 
           {/* Skincare Hero Image */}
-<div className="relative">
-  <div className="absolute -inset-5 rounded-[36px] bg-[#e5d0c7] opacity-30 blur-3xl sm:-inset-7" />
+          <div className="relative">
+            <div className="absolute -inset-5 rounded-[36px] bg-[#e5d0c7] opacity-30 blur-3xl sm:-inset-7" />
 
-  <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
-    <Image
-      src="/images/skincare-hero.png"
-      alt="Skincare products curated by The Lizzy Edit"
-      width={1536}
-      height={1024}
-      priority
-      quality={95}
-      className="h-auto w-full object-contain"
-    />
+            <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
+              <Image
+                src="/images/skincare-hero.png"
+                alt="Skincare products curated by The Lizzy Edit"
+                width={1536}
+                height={1024}
+                priority
+                quality={95}
+                className="h-auto w-full object-contain"
+              />
 
-    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
-  </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
+            </div>
 
-  <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
-    Skincare, simplified ✦
-  </div>
-</div>
+            <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
+              Skincare, simplified ✦
+            </div>
+          </div>
         </div>
       </section>
 
@@ -160,7 +177,9 @@ export default function SkincarePage() {
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
             What does your skin{" "}
-            <span className="italic text-[#c78f86]">need?</span>
+            <span className="italic text-[#c78f86]">
+              need?
+            </span>
           </h2>
 
           <p className="mt-4 max-w-lg text-sm leading-6 text-stone-600 sm:text-base">
@@ -171,33 +190,13 @@ export default function SkincarePage() {
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
           {concerns.map((concern) => (
-            <Link
+            <ExploreCard
               key={concern.title}
-              href="/picks"
-              className="group relative min-h-[190px] overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition duration-500 hover:-translate-y-2 hover:shadow-lg sm:min-h-[220px] sm:p-6"
-            >
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#f1ddd6] opacity-50 blur-2xl transition duration-500 group-hover:scale-125" />
-
-              <div className="relative flex h-full flex-col justify-between">
-                <span className="text-2xl text-stone-500">
-                  {concern.symbol}
-                </span>
-
-                <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl">
-                    {concern.title}
-                  </h3>
-
-                  <p className="mt-2 text-xs leading-5 text-stone-500 sm:text-sm">
-                    {concern.description}
-                  </p>
-
-                  <span className="mt-4 inline-block text-sm transition-transform duration-300 group-hover:translate-x-2">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Link>
+              title={concern.title}
+              description={concern.description}
+              symbol={concern.symbol}
+              filter={concern.filter}
+            />
           ))}
         </div>
       </section>
@@ -212,35 +211,21 @@ export default function SkincarePage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               Shop by{" "}
-              <span className="italic text-[#c78f86]">skin type.</span>
+              <span className="italic text-[#c78f86]">
+                skin type.
+              </span>
             </h2>
           </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {skinTypes.map((skin) => (
-              <article
+              <ExploreCard
                 key={skin.title}
-                className="rounded-[24px] border border-white/70 bg-white/60 p-6 backdrop-blur-sm transition duration-300 hover:bg-white"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#ead8d1] font-serif text-xl">
-                  {skin.title.charAt(0)}
-                </div>
-
-                <h3 className="mt-6 font-serif text-2xl">
-                  {skin.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-6 text-stone-600">
-                  {skin.description}
-                </p>
-
-                <Link
-                  href="/picks"
-                  className="mt-5 inline-flex text-[10px] font-medium uppercase tracking-[0.15em]"
-                >
-                  Explore →
-                </Link>
-              </article>
+                title={skin.title}
+                description={skin.description}
+                symbol={skin.symbol}
+                filter={skin.filter}
+              />
             ))}
           </div>
         </div>
@@ -301,12 +286,10 @@ export default function SkincarePage() {
       </section>
 
       {/* CTA */}
-          <PicksCTA
-            eyebrow="Lizzy's Skincare Picks"
-            title="Ready to discover products for your routine?"
-          />
-
-
+      <PicksCTA
+        eyebrow="Lizzy's Skincare Picks"
+        title="Ready to discover products for your routine?"
+      />
 
       <Footer />
     </main>

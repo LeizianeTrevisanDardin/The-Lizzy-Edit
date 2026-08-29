@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import ProductCard from "@/components/ProducCard";
+import ProductCard from "@/components/ProductCard";
 import { products } from "@/app/data/products";
 
 export default function LizzyPicks() {

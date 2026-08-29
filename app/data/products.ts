@@ -23,7 +23,13 @@ export const products: Product[] = [
     brand: "La Roche-Posay",
     name: "Cicaplast Baume B5+",
     category: "Skincare",
-    tags: ["Everyday"],
+    tags: [
+      "Everyday",
+      "Dryness",
+      "Sensitivity",
+      "Dry",
+      "Sensitive",
+    ],
     type: "Soothing • Barrier Support",
     image: "/images/cicaplast.png",
     description:
@@ -44,7 +50,13 @@ export const products: Product[] = [
     brand: "e.l.f.",
     name: "Halo Glow Liquid Filter",
     category: "Makeup",
-    tags: ["Everyday", "Under $25"],
+    tags: [
+      "Everyday",
+      "Under $25",
+      "Face",
+      "Everyday Makeup",
+      "No-Makeup Makeup",
+    ],
     type: "Glow • Everyday Makeup",
     image: "/images/elf.png",
     description:
@@ -65,7 +77,10 @@ export const products: Product[] = [
     brand: "Sol de Janeiro",
     name: "Brazilian Bum Bum Cream",
     category: "Self-Care",
-    tags: ["Worth the Splurge"],
+    tags: [
+      "Worth the Splurge",
+      "Body Care",
+    ],
     type: "Body Care • Indulgent",
     image: "/images/bumbum.png",
     description:
@@ -86,7 +101,11 @@ export const products: Product[] = [
     brand: "Narciso Rodriguez",
     name: "For Her Pure Musc",
     category: "Fragrance",
-    tags: ["Everyday"],
+    tags: [
+      "Everyday",
+      "Fresh",
+      "Soft Musk",
+    ],
     type: "Fresh • Soft Musk",
     image: "/images/narciso.png",
     description:
@@ -98,7 +117,7 @@ export const products: Product[] = [
     ],
     affiliateUrl: "https://link.amazon/B02cZZRZS",
     featured: true,
-    homeTag: "fragrance",
+    homeTag: "Fragrance",
   },
 
   {
@@ -107,7 +126,12 @@ export const products: Product[] = [
     brand: "Burberry",
     name: "Goddess Eau de Parfum",
     category: "Fragrance",
-    tags: ["Worth the Splurge"],
+    tags: [
+      "Worth the Splurge",
+      "Warm",
+      "Gourmand",
+      "Vanilla",
+    ],
     type: "Vanilla • Warm • Gourmand",
     image: "/images/burberry.png",
     description:
@@ -119,7 +143,7 @@ export const products: Product[] = [
     ],
     affiliateUrl: "https://link.amazon/B0eqvfMSm",
     featured: true,
-    homeTag: "fragrance",
+    homeTag: "Fragrance",
   },
 
   {
@@ -128,7 +152,12 @@ export const products: Product[] = [
     brand: "Rabanne",
     name: "Million Gold For Her Parfum",
     category: "Fragrance",
-    tags: ["Worth the Splurge"],
+    tags: [
+      "Worth the Splurge",
+      "Floral",
+      "Warm",
+      "Statement",
+    ],
     type: "Floral • Warm • Sensual",
     image: "/images/pacco.png",
     description:
@@ -140,7 +169,7 @@ export const products: Product[] = [
     ],
     affiliateUrl: "https://link.amazon/B0cR5gyhA",
     featured: true,
-    homeTag: "fragrance",
+    homeTag: "Fragrance",
   },
 
   {
@@ -149,7 +178,12 @@ export const products: Product[] = [
     brand: "Dior",
     name: "J’adore Eau de Parfum",
     category: "Fragrance",
-    tags: ["Worth the Splurge"],
+    tags: [
+      "Worth the Splurge",
+      "Floral",
+      "Elegant",
+      "Timeless",
+    ],
     type: "Floral • Elegant • Feminine",
     image: "/images/dior.png",
     description:
@@ -161,7 +195,7 @@ export const products: Product[] = [
     ],
     affiliateUrl: "https://link.amazon/B0enBBgiW",
     featured: true,
-    homeTag: "fragrance",
+    homeTag: "Fragrance",
   },
 
   {
@@ -170,22 +204,52 @@ export const products: Product[] = [
     brand: "COSRX",
     name: "Advanced Snail 96 Mucin Power Essence",
     category: "Skincare",
-    tags: ["Trending"],
+    tags: [
+      "Trending",
+      "Everyday",
+      "Dryness",
+      "Sensitivity",
+      "Dullness",
+      "Dry",
+      "Sensitive",
+      "Combination",
+    ],
     type: "Hydrating • Lightweight",
     image: "/images/snail.png",
-  
     description:
       "A lightweight hydrating essence that fits easily into a simple routine.",
-  
     whyILikeIt: [
       "Lightweight texture",
       "Easy to layer",
       "Fits nicely into a simple routine",
     ],
-  
     affiliateUrl: "https://link.amazon/B0gz02hYB",
-  
     featured: true,
     homeTag: "Trending",
+  },
+
+  {
+    id: 9,
+    slug: "patrick-ta",
+    brand: "Patrick Ta",
+    name: "",
+    category: "Makeup",
+    tags: [
+      "Everyday",
+      "Face",
+      "Everyday Makeup",
+      "Soft-Glam",
+    ],
+    type: "Glow • Everyday Makeup",
+    image: "/images/patrick.png",
+    description:
+      "An easy way to add a soft glam to your look.",
+    whyILikeIt: [
+      "Easy for everyday makeup",
+      "Works well for a fresh, natural look on the eyes",
+    ],
+    affiliateUrl: "",
+    featured: true,
+    homeTag: "Soft Glam",
   },
 ];

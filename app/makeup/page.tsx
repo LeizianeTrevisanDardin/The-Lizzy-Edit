@@ -4,37 +4,44 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
+import ExploreCard from "@/components/ExploreCards";
 
 const categories = [
   {
     title: "Face",
     description: "Foundation, concealer, powder & skin tints",
     symbol: "◌",
+    filter: "Face",
   },
   {
     title: "Cheeks",
     description: "Blush, bronzer, contour & highlighter",
     symbol: "♡",
+    filter: "Cheeks",
   },
   {
     title: "Eyes",
     description: "Mascara, liner, shadows & brows",
     symbol: "✦",
+    filter: "Eyes",
   },
   {
     title: "Lips",
     description: "Lip oils, glosses, liners & lipstick",
     symbol: "◇",
+    filter: "Lips",
   },
   {
     title: "Everyday Makeup",
     description: "Easy essentials for quick daily looks",
     symbol: "☼",
+    filter: "Everyday Makeup",
   },
   {
     title: "Beauty Tools",
     description: "Brushes, sponges & makeup accessories",
     symbol: "⌁",
+    filter: "Beauty Tools",
   },
 ];
 
@@ -44,18 +51,21 @@ const looks = [
     description:
       "Fresh skin, soft cheeks and easy products for a polished everyday look.",
     image: "/images/makeup-no-makeup.png",
+    filter: "No-Makeup Makeup",
   },
   {
     title: "Soft Glam",
     description:
       "Neutral tones, defined eyes and luminous skin without feeling overdone.",
     image: "/images/soft-glam.png",
+    filter: "Soft Glam",
   },
   {
     title: "Statement Lip",
     description:
       "Keep the rest simple and let a beautiful lip color do the work.",
     image: "/images/statement-lip.png",
+    filter: "Statement Lip",
   },
 ];
 
@@ -104,7 +114,9 @@ export default function MakeupPage() {
 
             <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               Makeup that feels{" "}
-              <span className="italic text-[#b76f70]">like you.</span>
+              <span className="italic text-[#b76f70]">
+                like you.
+              </span>
             </h1>
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
@@ -130,28 +142,27 @@ export default function MakeupPage() {
           </div>
 
           {/* Makeup Hero Image */}
-            <div className="relative">
-              <div className="absolute -inset-5 rounded-[36px] bg-[#d9aaa5] opacity-25 blur-3xl sm:-inset-7" />
+          <div className="relative">
+            <div className="absolute -inset-5 rounded-[36px] bg-[#d9aaa5] opacity-25 blur-3xl sm:-inset-7" />
 
-              <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
-                <Image
-                  src="/images/makeup-hero.png"
-                  alt="Makeup products curated by The Lizzy Edit"
-                  width={1536}
-                  height={1024}
-                  priority
-                  quality={95}
-                  className="h-auto w-full object-contain"
-                />
+            <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
+              <Image
+                src="/images/makeup-hero.png"
+                alt="Makeup products curated by The Lizzy Edit"
+                width={1536}
+                height={1024}
+                priority
+                quality={95}
+                className="h-auto w-full object-contain"
+              />
 
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
-              </div>
-
-              <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
-                Makeup, the Lizzy way ✦
-              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
             </div>
-          
+
+            <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
+              Makeup, the Lizzy way ✦
+            </div>
+          </div>
         </div>
       </section>
 
@@ -167,7 +178,9 @@ export default function MakeupPage() {
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
             Build your beauty{" "}
-            <span className="italic text-[#b76f70]">edit.</span>
+            <span className="italic text-[#b76f70]">
+              edit.
+            </span>
           </h2>
 
           <p className="mt-4 max-w-xl text-sm leading-6 text-stone-600 sm:text-base">
@@ -178,33 +191,13 @@ export default function MakeupPage() {
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
           {categories.map((category) => (
-            <Link
+            <ExploreCard
               key={category.title}
-              href="/picks"
-              className="group relative min-h-[190px] overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition duration-500 hover:-translate-y-2 hover:shadow-lg sm:min-h-[220px] sm:p-6"
-            >
-              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#ecd0cc] opacity-55 blur-2xl transition duration-500 group-hover:scale-125" />
-
-              <div className="relative flex h-full flex-col justify-between">
-                <span className="text-2xl text-[#b76f70]">
-                  {category.symbol}
-                </span>
-
-                <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl">
-                    {category.title}
-                  </h3>
-
-                  <p className="mt-2 text-xs leading-5 text-stone-500 sm:text-sm">
-                    {category.description}
-                  </p>
-
-                  <span className="mt-4 inline-block text-sm transition-transform duration-300 group-hover:translate-x-2">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Link>
+              title={category.title}
+              description={category.description}
+              symbol={category.symbol}
+              filter={category.filter}
+            />
           ))}
         </div>
       </section>
@@ -219,7 +212,9 @@ export default function MakeupPage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               Choose your{" "}
-              <span className="italic text-[#b76f70]">mood.</span>
+              <span className="italic text-[#b76f70]">
+                mood.
+              </span>
             </h2>
           </div>
 
@@ -252,7 +247,7 @@ export default function MakeupPage() {
                   </p>
 
                   <Link
-                    href="/picks"
+                    href={`/picks?filter=${encodeURIComponent(look.filter)}`}
                     className="mt-5 inline-flex text-[10px] font-medium uppercase tracking-[0.15em]"
                   >
                     Shop the look →
@@ -264,7 +259,7 @@ export default function MakeupPage() {
         </div>
       </section>
 
-           {/* MAKEUP GUIDE */}
+      {/* MAKEUP GUIDE */}
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
           <div>
