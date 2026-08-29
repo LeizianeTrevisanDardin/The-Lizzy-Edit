@@ -69,14 +69,14 @@ export default function ProductCard({
             >
               Shop This Product →
             </a>
-          ) : (
-            <Link
-              href={`/picks/${product.slug}`}
-              className="inline-flex min-h-10 w-full items-center justify-center rounded-full border border-stone-300 px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-stone-600 transition duration-300 hover:border-stone-500 hover:bg-stone-50"
-            >
-              View Product →
-            </Link>
-          )}
+            ) : (
+              <Link
+                href={`/picks/${product.slug}`}
+                className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
+              >
+                View Product →
+              </Link>
+            )}
         </div>
       </div>
     </article>
