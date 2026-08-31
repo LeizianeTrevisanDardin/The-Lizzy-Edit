@@ -10,6 +10,11 @@ export type Product = {
   description: string;
   whyILikeIt: string[];
   affiliateUrl?: string;
+  featured?: boolean;
+  homeTag?: string;
+  skinTones?: string[];
+  undertones?: string[];
+  concerns?: string[];
 };
 
 export const products: Product[] = [
@@ -20,6 +25,7 @@ export const products: Product[] = [
     name: "Cicaplast Baume B5+",
     category: "Skincare",
     tags: ["Everyday"],
+    concerns: ["Dryness", "Sensitivity"],
     type: "Soothing • Barrier Support",
     image: "/images/cicaplast.png",
     description:
@@ -38,6 +44,22 @@ export const products: Product[] = [
     name: "Halo Glow Liquid Filter",
     category: "Makeup",
     tags: ["Everyday", "Under $25"],
+    skinTones: [
+    "Fair",
+    "Light",
+    "Light-Medium",
+    "Medium",
+    "Medium-Deep",
+    "Deep",
+  ],
+
+  undertones: [
+    "Cool",
+    "Neutral-Cool",
+    "Neutral",
+    "Neutral-Warm",
+    "Warm",
+  ],
     type: "Glow • Everyday Makeup",
     image: "/images/elf.png",
     description:
