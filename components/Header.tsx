@@ -70,6 +70,13 @@ export default function Header() {
             </Link>
 
             <Link
+              href="/undertone"
+              className="transition hover:text-[#b77b72]"
+            >
+              Find Your Undertone
+            </Link>
+
+            <Link
               href="/about"
               className="transition hover:opacity-50"
             >
