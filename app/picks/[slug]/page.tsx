@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products } from "@/app/data/products";
+import { createClient } from "@/lib/supabase/server";
 
 type ProductPageProps = {
   params: Promise<{
@@ -12,18 +12,49 @@ type ProductPageProps = {
   }>;
 };
 
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
+};
+
 export default async function ProductPage({
   params,
 }: ProductPageProps) {
   const { slug } = await params;
 
-  const product = products.find(
-    (item) => item.slug === slug
-  );
+  const supabase = await createClient();
 
-  if (!product) {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error loading product:", error);
+  }
+
+  if (!data) {
     notFound();
   }
+
+  const product = data as Product;
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
@@ -48,15 +79,21 @@ export default async function ProductPage({
             <div className="absolute -inset-5 rounded-[40px] bg-[#d6b7ad]/20 blur-3xl" />
 
             <div className="relative mx-auto aspect-[4/5] max-w-[560px] overflow-hidden rounded-[30px] border border-stone-200 bg-[#f2e4de] shadow-sm">
-              <Image
-                src={product.image}
-                alt={`${product.brand} ${product.name}`}
-                fill
-                priority
-                quality={95}
-                sizes="(max-width: 1024px) 90vw, 560px"
-                className="object-cover object-center"
-              />
+              {product.image_url ? (
+                <Image
+                  src={product.image_url}
+                  alt={`${product.brand} ${product.name}`}
+                  fill
+                  priority
+                  quality={95}
+                  sizes="(max-width: 1024px) 90vw, 560px"
+                  className="object-cover object-center"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center px-6 text-center text-sm text-stone-400">
+                  Product image coming soon
+                </div>
+              )}
             </div>
           </div>
 
@@ -74,44 +111,51 @@ export default async function ProductPage({
               {product.name}
             </h1>
 
-            <p className="mt-5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
-              {product.type}
-            </p>
+            {product.type && (
+              <p className="mt-5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
+                {product.type}
+              </p>
+            )}
 
-            <p className="mt-7 max-w-xl text-base leading-8 text-stone-600">
-              {product.description}
-            </p>
+            {product.description && (
+              <p className="mt-7 max-w-xl text-base leading-8 text-stone-600">
+                {product.description}
+              </p>
+            )}
 
             {/* WHY I LIKE IT */}
-            <div className="mt-10 border-y border-stone-200 py-8">
-              <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
-                Why I Like It
-              </p>
+            {product.why_i_like_it &&
+              product.why_i_like_it.length > 0 && (
+                <div className="mt-10 border-y border-stone-200 py-8">
+                  <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
+                    Why I Like It
+                  </p>
 
-              <div className="mt-5 space-y-4">
-                {product.whyILikeIt.map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-start gap-3"
-                  >
-                    <span className="mt-1 text-[#c78f86]">
-                      ✦
-                    </span>
+                  <div className="mt-5 space-y-4">
+                    {product.why_i_like_it.map((item) => (
+                      <div
+                        key={item}
+                        className="flex items-start gap-3"
+                      >
+                        <span className="mt-1 text-[#c78f86]">
+                          ✦
+                        </span>
 
-                    <p className="text-sm leading-6 text-stone-700 sm:text-base">
-                      {item}
-                    </p>
+                        <p className="text-sm leading-6 text-stone-700 sm:text-base">
+                          {item}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              )}
 
             {/* SHOP */}
             <div className="mt-8">
-              {product.affiliateUrl ? (
+              {product.affiliate_url ? (
                 <>
                   <a
-                    href={product.affiliateUrl}
+                    href={product.affiliate_url}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
                     className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#211d1b] px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70] sm:w-auto"

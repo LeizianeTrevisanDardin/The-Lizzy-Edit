@@ -82,6 +82,13 @@ export default function Header() {
             >
               About
             </Link>
+
+            <Link
+              href="/admin/login"
+              className="text-stone-400 transition hover:text-[#b77b72]"
+            >
+              Admin
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -128,7 +135,7 @@ export default function Header() {
         <div
           className={`overflow-hidden border-t border-stone-200 bg-[#fffaf7] transition-all duration-500 lg:hidden ${
             menuOpen
-              ? "max-h-[650px] opacity-100"
+              ? "max-h-[750px] opacity-100"
               : "max-h-0 border-t-transparent opacity-0"
           }`}
         >
@@ -182,11 +189,27 @@ export default function Header() {
             </Link>
 
             <Link
+              href="/undertone"
+              onClick={closeMenu}
+              className="border-b border-stone-200 py-4 text-sm font-medium uppercase tracking-[0.15em]"
+            >
+              Find Your Undertone
+            </Link>
+
+            <Link
               href="/about"
               onClick={closeMenu}
               className="border-b border-stone-200 py-4 text-sm font-medium uppercase tracking-[0.15em]"
             >
               About Me
+            </Link>
+
+            <Link
+              href="/admin/login"
+              onClick={closeMenu}
+              className="border-b border-stone-200 py-4 text-sm font-medium uppercase tracking-[0.15em] text-stone-500"
+            >
+              Admin Login
             </Link>
 
             <Link

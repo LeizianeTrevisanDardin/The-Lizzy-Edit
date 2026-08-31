@@ -3,10 +3,30 @@
 import { useState } from "react";
 
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/app/data/products";
+
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
+};
 
 type PicksCatalogProps = {
   initialFilter?: string;
+  products: Product[];
 };
 
 const filters = [
@@ -22,6 +42,7 @@ const filters = [
 
 export default function PicksCatalog({
   initialFilter = "All",
+  products,
 }: PicksCatalogProps) {
   const [activeFilter, setActiveFilter] = useState(initialFilter);
 
@@ -100,7 +121,24 @@ export default function PicksCatalog({
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
-                product={product}
+                product={{
+                  id: product.id,
+                  slug: product.slug,
+                  brand: product.brand,
+                  name: product.name,
+                  category: product.category,
+                  tags: product.tags ?? [],
+                  type: product.type ?? "",
+                  image: product.image_url ?? "",
+                  description: product.description ?? "",
+                  whyILikeIt: product.why_i_like_it ?? [],
+                  affiliateUrl: product.affiliate_url ?? undefined,
+                  featured: product.featured,
+                  homeTag: product.home_tag ?? undefined,
+                  skinTones: product.skin_tones ?? [],
+                  undertones: product.undertones ?? [],
+                  concerns: product.concerns ?? [],
+                }}
               />
             ))}
           </div>

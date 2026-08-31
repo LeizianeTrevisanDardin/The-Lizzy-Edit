@@ -5,6 +5,29 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
 import ExploreCard from "@/components/ExploreCard";
+import ProductCard from "@/components/ProductCard";
+
+import { createClient } from "@/lib/supabase/server";
+
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
+};
 
 const concerns = [
   {
@@ -95,7 +118,24 @@ const routineSteps = [
   },
 ];
 
-export default function SkincarePage() {
+export default async function SkincarePage() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("status", "published")
+    .eq("category", "Skincare")
+    .order("created_at", {
+      ascending: false,
+    });
+
+  if (error) {
+    console.error("Error loading skincare products:", error);
+  }
+
+  const skincareProducts = (data ?? []) as Product[];
+
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
       <Header />
@@ -132,7 +172,7 @@ export default function SkincarePage() {
               </a>
 
               <Link
-                href="/picks"
+                href="/picks?filter=Skincare"
                 className="inline-flex min-h-12 items-center justify-center border border-stone-400 bg-white/50 px-7 text-xs font-medium uppercase tracking-[0.15em] transition hover:bg-white"
               >
                 Lizzy&apos;s Picks
@@ -231,56 +271,125 @@ export default function SkincarePage() {
         </div>
       </section>
 
-      {/* ROUTINE */}
+      {/* SKINCARE PRODUCTS FROM SUPABASE */}
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-        <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-stone-500">
-              Lizzy&apos;s Guide
+              Lizzy&apos;s Skincare Picks
             </p>
 
-            <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              A simple routine is often a{" "}
+            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+              Skincare worth{" "}
               <span className="italic text-[#c78f86]">
-                good routine.
+                discovering.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
-              You don&apos;t necessarily need ten different products. Start
-              with the essentials and build around what your skin actually
-              needs.
+            <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
+              A curated selection of skincare products from The Lizzy Edit.
             </p>
-
-            <div className="mt-7 flex justify-center lg:justify-start">
-              <Link
-                href="/beauty-guide"
-                className="inline-flex min-h-12 items-center justify-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
-              >
-                Read Beauty Guide →
-              </Link>
-            </div>
           </div>
 
-          <div className="divide-y divide-stone-200 border-y border-stone-200">
-            {routineSteps.map((step) => (
-              <div
-                key={step.number}
-                className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_160px_1fr] sm:items-center"
-              >
-                <span className="font-serif text-xl text-[#c78f86]">
-                  {step.number}
-                </span>
+          <Link
+            href="/picks?filter=Skincare"
+            className="inline-flex min-h-11 items-center text-[10px] font-medium uppercase tracking-[0.16em] underline underline-offset-4"
+          >
+            View All Skincare →
+          </Link>
+        </div>
 
-                <h3 className="font-serif text-2xl">
-                  {step.title}
-                </h3>
-
-                <p className="col-start-2 text-sm leading-6 text-stone-500 sm:col-start-auto">
-                  {step.description}
-                </p>
-              </div>
+        {skincareProducts.length > 0 ? (
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+            {skincareProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={{
+                  id: product.id,
+                  slug: product.slug,
+                  brand: product.brand,
+                  name: product.name,
+                  category: product.category,
+                  tags: product.tags ?? [],
+                  type: product.type ?? "",
+                  image: product.image_url ?? "",
+                  description: product.description ?? "",
+                  whyILikeIt: product.why_i_like_it ?? [],
+                  affiliateUrl: product.affiliate_url ?? undefined,
+                  featured: product.featured,
+                  homeTag: product.home_tag ?? undefined,
+                  skinTones: product.skin_tones ?? [],
+                  undertones: product.undertones ?? [],
+                  concerns: product.concerns ?? [],
+                }}
+              />
             ))}
+          </div>
+        ) : (
+          <div className="mt-10 rounded-[28px] border border-stone-200 bg-white px-6 py-14 text-center">
+            <p className="font-serif text-3xl">
+              More skincare picks are coming.
+            </p>
+
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
+              I&apos;m still curating products for this collection.
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* ROUTINE */}
+      <section className="border-t border-stone-200">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
+            <div>
+              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-stone-500">
+                Lizzy&apos;s Guide
+              </p>
+
+              <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+                A simple routine is often a{" "}
+                <span className="italic text-[#c78f86]">
+                  good routine.
+                </span>
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
+                You don&apos;t necessarily need ten different products. Start
+                with the essentials and build around what your skin actually
+                needs.
+              </p>
+
+              <div className="mt-7 flex justify-center lg:justify-start">
+                <Link
+                  href="/beauty-guide"
+                  className="inline-flex min-h-12 items-center justify-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
+                >
+                  Read Beauty Guide →
+                </Link>
+              </div>
+            </div>
+
+            <div className="divide-y divide-stone-200 border-y border-stone-200">
+              {routineSteps.map((step) => (
+                <div
+                  key={step.number}
+                  className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_160px_1fr] sm:items-center"
+                >
+                  <span className="font-serif text-xl text-[#c78f86]">
+                    {step.number}
+                  </span>
+
+                  <h3 className="font-serif text-2xl">
+                    {step.title}
+                  </h3>
+
+                  <p className="col-start-2 text-sm leading-6 text-stone-500 sm:col-start-auto">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

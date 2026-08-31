@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
-import ProductCard from "@/components/ProductCard";
-import { products } from "@/app/data/products";
+import ProductCard, { type Product } from "@/components/ProductCard";
+import { createClient } from "@/lib/supabase/client";
 
 type AnalysisResult = {
   tone: string;
@@ -29,6 +29,11 @@ const emptyAnswers: QuestionnaireAnswers = {
 export default function UndertoneAnalyzePage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const supabase = useMemo(() => createClient(), []);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
 
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState("");
@@ -547,6 +552,57 @@ export default function UndertoneAnalyzePage() {
     answers.colors !== "";
 
   useEffect(() => {
+  async function loadProducts() {
+    setProductsLoading(true);
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("status", "published")
+      .order("created_at", {
+        ascending: false,
+      });
+
+    if (error) {
+      console.error(
+        "Error loading undertone recommendations:",
+        error
+      );
+
+      setProducts([]);
+      setProductsLoading(false);
+      return;
+    }
+
+    const mappedProducts: Product[] = (data ?? []).map(
+      (product) => ({
+        id: product.id,
+        slug: product.slug,
+        brand: product.brand,
+        name: product.name,
+        category: product.category,
+        tags: product.tags ?? [],
+        type: product.type ?? "",
+        image: product.image_url ?? "",
+        description: product.description ?? "",
+        whyILikeIt: product.why_i_like_it ?? [],
+        affiliateUrl: product.affiliate_url ?? undefined,
+        featured: product.featured,
+        homeTag: product.home_tag ?? undefined,
+        skinTones: product.skin_tones ?? [],
+        undertones: product.undertones ?? [],
+        concerns: product.concerns ?? [],
+      })
+    );
+
+    setProducts(mappedProducts);
+    setProductsLoading(false);
+  }
+
+  loadProducts();
+}, [supabase]);
+
+  useEffect(() => {
     return () => {
       stream
         ?.getTracks()
@@ -761,9 +817,9 @@ export default function UndertoneAnalyzePage() {
         ) : finalResult ? (
           <ResultView
             result={finalResult}
-            onTryAgain={
-              tryAgain
-            }
+            onTryAgain={tryAgain}
+            products={products}
+            productsLoading={productsLoading}
           />
         ) : null}
       </div>
@@ -1017,13 +1073,17 @@ function QuestionCard({
   );
 }
 
-function ResultView({
-  result,
-  onTryAgain,
-}: {
-  result: AnalysisResult;
-  onTryAgain: () => void;
-}) {
+  function ResultView({
+    result,
+    onTryAgain,
+    products,
+    productsLoading,
+  }: {
+    result: AnalysisResult;
+    onTryAgain: () => void;
+    products: Product[];
+    productsLoading: boolean;
+  }) {
   const recommendedProducts =
     products.filter(
       (product) => {
@@ -1249,8 +1309,22 @@ function ResultView({
         </div>
       </section>
 
-      {recommendedProducts.length >
-        0 && (
+      {productsLoading && (
+          <section className="mt-12">
+            <div className="rounded-[24px] border border-stone-200 bg-white p-8 text-center">
+              <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
+                Lizzy&apos;s Picks
+              </p>
+
+              <p className="mt-3 font-serif text-2xl">
+                Finding your product matches...
+              </p>
+            </div>
+          </section>
+        )}
+
+      {!productsLoading &&
+        recommendedProducts.length > 0 && (
         <section className="mt-12">
           <div className="text-center">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">

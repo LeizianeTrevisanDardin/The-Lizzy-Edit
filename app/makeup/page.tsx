@@ -5,6 +5,29 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
 import ExploreCard from "@/components/ExploreCard";
+import ProductCard from "@/components/ProductCard";
+
+import { createClient } from "@/lib/supabase/server";
+
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
+};
 
 const categories = [
   {
@@ -96,7 +119,24 @@ const steps = [
   },
 ];
 
-export default function MakeupPage() {
+export default async function MakeupPage() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("status", "published")
+    .eq("category", "Makeup")
+    .order("created_at", {
+      ascending: false,
+    });
+
+  if (error) {
+    console.error("Error loading makeup products:", error);
+  }
+
+  const makeupProducts = (data ?? []) as Product[];
+
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
       <Header />
@@ -133,7 +173,7 @@ export default function MakeupPage() {
               </a>
 
               <Link
-                href="/picks"
+                href="/picks?filter=Makeup"
                 className="inline-flex min-h-12 items-center justify-center border border-stone-400 bg-white/40 px-7 text-xs font-medium uppercase tracking-[0.15em] transition hover:bg-white"
               >
                 Lizzy&apos;s Picks
@@ -199,6 +239,75 @@ export default function MakeupPage() {
               filter={category.filter}
             />
           ))}
+        </div>
+      </section>
+
+      {/* MAKEUP PRODUCTS FROM SUPABASE */}
+      <section className="border-y border-stone-200 bg-white">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-stone-500">
+                Lizzy&apos;s Makeup Picks
+              </p>
+
+              <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+                Makeup worth{" "}
+                <span className="italic text-[#b76f70]">
+                  discovering.
+                </span>
+              </h2>
+
+              <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
+                A curated selection of makeup favorites from The Lizzy Edit.
+              </p>
+            </div>
+
+            <Link
+              href="/picks?filter=Makeup"
+              className="inline-flex min-h-11 items-center text-[10px] font-medium uppercase tracking-[0.16em] underline underline-offset-4"
+            >
+              View All Makeup →
+            </Link>
+          </div>
+
+          {makeupProducts.length > 0 ? (
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+              {makeupProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={{
+                    id: product.id,
+                    slug: product.slug,
+                    brand: product.brand,
+                    name: product.name,
+                    category: product.category,
+                    tags: product.tags ?? [],
+                    type: product.type ?? "",
+                    image: product.image_url ?? "",
+                    description: product.description ?? "",
+                    whyILikeIt: product.why_i_like_it ?? [],
+                    affiliateUrl: product.affiliate_url ?? undefined,
+                    featured: product.featured,
+                    homeTag: product.home_tag ?? undefined,
+                    skinTones: product.skin_tones ?? [],
+                    undertones: product.undertones ?? [],
+                    concerns: product.concerns ?? [],
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10 rounded-[28px] border border-stone-200 bg-[#fffaf7] px-6 py-14 text-center">
+              <p className="font-serif text-3xl">
+                More makeup picks are coming.
+              </p>
+
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
+                I&apos;m still curating products for this collection.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

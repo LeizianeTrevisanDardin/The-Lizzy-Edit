@@ -2,10 +2,32 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCatalog from "@/components/PicksCatalog";
 
+import { createClient } from "@/lib/supabase/server";
+
 type PicksPageProps = {
   searchParams: Promise<{
     filter?: string;
   }>;
+};
+
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
 };
 
 export default async function PicksPage({
@@ -17,6 +39,22 @@ export default async function PicksPage({
     typeof params.filter === "string"
       ? params.filter
       : "All";
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("status", "published")
+    .order("created_at", {
+      ascending: false,
+    });
+
+  if (error) {
+    console.error("Error loading products:", error);
+  }
+
+  const products = (data ?? []) as Product[];
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
@@ -45,7 +83,10 @@ export default async function PicksPage({
         </div>
       </section>
 
-      <PicksCatalog initialFilter={initialFilter} />
+      <PicksCatalog
+        initialFilter={initialFilter}
+        products={products}
+      />
 
       {/* LIZZY NOTE */}
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">

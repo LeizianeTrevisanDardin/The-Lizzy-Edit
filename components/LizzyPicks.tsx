@@ -1,12 +1,45 @@
 import Link from "next/link";
 
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/app/data/products";
+import { createClient } from "@/lib/supabase/server";
 
-export default function LizzyPicks() {
-  const latestProducts = [...products]
-    .sort((a, b) => b.id - a.id)
-    .slice(0, 6);
+type Product = {
+  id: number;
+  slug: string;
+  brand: string;
+  name: string;
+  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  tags: string[];
+  type: string | null;
+  image_url: string | null;
+  description: string | null;
+  why_i_like_it: string[] | null;
+  affiliate_url: string | null;
+  featured: boolean;
+  home_tag: string | null;
+  skin_tones: string[];
+  undertones: string[];
+  concerns: string[];
+  status: "draft" | "published";
+};
+
+export default async function LizzyPicks() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("status", "published")
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(6);
+
+  if (error) {
+    console.error("Error loading home products:", error);
+  }
+
+  const products = (data ?? []) as Product[];
 
   return (
     <section
@@ -41,14 +74,44 @@ export default function LizzyPicks() {
       </div>
 
       {/* LATEST 6 PRODUCTS */}
-      <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-        {latestProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
-      </div>
+      {products.length > 0 ? (
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={{
+                id: product.id,
+                slug: product.slug,
+                brand: product.brand,
+                name: product.name,
+                category: product.category,
+                tags: product.tags ?? [],
+                type: product.type ?? "",
+                image: product.image_url ?? "",
+                description: product.description ?? "",
+                whyILikeIt: product.why_i_like_it ?? [],
+                affiliateUrl: product.affiliate_url ?? undefined,
+                featured: product.featured,
+                homeTag: product.home_tag ?? undefined,
+                skinTones: product.skin_tones ?? [],
+                undertones: product.undertones ?? [],
+                concerns: product.concerns ?? [],
+              }}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="mt-10 rounded-[28px] border border-stone-200 bg-white px-6 py-14 text-center">
+          <p className="font-serif text-3xl">
+            New beauty picks are coming.
+          </p>
+
+          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
+            I&apos;m curating more skincare, makeup, fragrance and self-care
+            favorites.
+          </p>
+        </div>
+      )}
 
       {/* AFFILIATE NOTE */}
       <div className="mt-8 rounded-[22px] bg-[#f6eee9] p-5 sm:p-6">
