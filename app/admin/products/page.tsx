@@ -130,10 +130,10 @@ export default async function AdminProductsPage() {
                   </div>
 
                   <div>
-                    <span
+                   <span
                       className={`inline-flex rounded-full px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.12em] ${
                         product.status === "published"
-                          ? "bg-green-50 text-green-700"
+                          ? "bg-[#f7e8e4] text-[#8f5651]"
                           : "bg-stone-100 text-stone-500"
                       }`}
                     >

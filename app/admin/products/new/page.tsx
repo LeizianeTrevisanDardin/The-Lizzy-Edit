@@ -3,6 +3,8 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+import CustomSelect from "@/components/CustomSelect";
 import { createClient } from "@/lib/supabase/client";
 
 const skinToneOptions = [
@@ -66,7 +68,9 @@ export default function NewProductPage() {
   const [concerns, setConcerns] = useState<string[]>([]);
 
   const [featured, setFeatured] = useState(false);
-  const [status, setStatus] = useState<"draft" | "published">("draft");
+
+  const [status, setStatus] =
+    useState<"draft" | "published">("draft");
 
   const [image, setImage] = useState<File | null>(null);
 
@@ -85,7 +89,9 @@ export default function NewProductPage() {
     }
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setLoading(true);
@@ -93,7 +99,9 @@ export default function NewProductPage() {
 
     try {
       if (!brand.trim() || !name.trim()) {
-        throw new Error("Brand and product name are required.");
+        throw new Error(
+          "Brand and product name are required."
+        );
       }
 
       const slug = createSlug(`${brand}-${name}`);
@@ -101,17 +109,20 @@ export default function NewProductPage() {
       let imageUrl: string | null = null;
 
       if (image) {
-        const extension = image.name.split(".").pop()?.toLowerCase() || "jpg";
+        const extension =
+          image.name.split(".").pop()?.toLowerCase() ||
+          "jpg";
 
         const fileName = `${crypto.randomUUID()}.${extension}`;
         const filePath = `products/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("product-images")
-          .upload(filePath, image, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+        const { error: uploadError } =
+          await supabase.storage
+            .from("product-images")
+            .upload(filePath, image, {
+              cacheControl: "3600",
+              upsert: false,
+            });
 
         if (uploadError) {
           throw uploadError;
@@ -140,9 +151,11 @@ export default function NewProductPage() {
             .map((item) => item.trim())
             .filter(Boolean),
 
-          affiliate_url: affiliateUrl.trim() || null,
+          affiliate_url:
+            affiliateUrl.trim() || null,
 
           featured,
+
           home_tag: homeTag.trim() || null,
 
           skin_tones: skinTones,
@@ -194,7 +207,8 @@ export default function NewProductPage() {
           </h1>
 
           <p className="mt-3 text-sm text-stone-500">
-            Add a new beauty recommendation to The Lizzy Edit.
+            Add a new beauty recommendation to The
+            Lizzy Edit.
           </p>
         </div>
 
@@ -207,7 +221,9 @@ export default function NewProductPage() {
               <input
                 required
                 value={brand}
-                onChange={(event) => setBrand(event.target.value)}
+                onChange={(event) =>
+                  setBrand(event.target.value)
+                }
                 className="input"
                 placeholder="La Roche-Posay"
               />
@@ -217,7 +233,9 @@ export default function NewProductPage() {
               <input
                 required
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) =>
+                  setName(event.target.value)
+                }
                 className="input"
                 placeholder="Cicaplast Baume B5+"
               />
@@ -226,21 +244,19 @@ export default function NewProductPage() {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Category">
-              <select
+              <CustomSelect
                 value={category}
-                onChange={(event) => setCategory(event.target.value)}
-                className="input"
-              >
-                {categoryOptions.map((option) => (
-                  <option key={option}>{option}</option>
-                ))}
-              </select>
+                options={categoryOptions}
+                onChange={setCategory}
+              />
             </Field>
 
             <Field label="Type">
               <input
                 value={type}
-                onChange={(event) => setType(event.target.value)}
+                onChange={(event) =>
+                  setType(event.target.value)
+                }
                 className="input"
                 placeholder="Moisturizer"
               />
@@ -252,7 +268,9 @@ export default function NewProductPage() {
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={(event) =>
-                setImage(event.target.files?.[0] ?? null)
+                setImage(
+                  event.target.files?.[0] ?? null
+                )
               }
               className="block w-full rounded-2xl border border-stone-200 bg-[#fffaf7] p-3 text-sm"
             />
@@ -266,7 +284,9 @@ export default function NewProductPage() {
             <textarea
               rows={4}
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) =>
+                setDescription(event.target.value)
+              }
               className="input resize-none"
               placeholder="Short description of the product..."
             />
@@ -276,9 +296,13 @@ export default function NewProductPage() {
             <textarea
               rows={5}
               value={whyILikeIt}
-              onChange={(event) => setWhyILikeIt(event.target.value)}
+              onChange={(event) =>
+                setWhyILikeIt(event.target.value)
+              }
               className="input resize-none"
-              placeholder={"Hydrating without feeling heavy\nGreat for sensitive skin\nWorks beautifully under makeup"}
+              placeholder={
+                "Hydrating without feeling heavy\nGreat for sensitive skin\nWorks beautifully under makeup"
+              }
             />
 
             <p className="mt-2 text-xs text-stone-400">
@@ -291,7 +315,11 @@ export default function NewProductPage() {
               <input
                 type="url"
                 value={affiliateUrl}
-                onChange={(event) => setAffiliateUrl(event.target.value)}
+                onChange={(event) =>
+                  setAffiliateUrl(
+                    event.target.value
+                  )
+                }
                 className="input"
                 placeholder="https://..."
               />
@@ -300,7 +328,9 @@ export default function NewProductPage() {
             <Field label="Home Tag">
               <input
                 value={homeTag}
-                onChange={(event) => setHomeTag(event.target.value)}
+                onChange={(event) =>
+                  setHomeTag(event.target.value)
+                }
                 className="input"
                 placeholder="Lizzy Loves"
               />
@@ -310,7 +340,9 @@ export default function NewProductPage() {
           <Field label="Tags">
             <input
               value={tags}
-              onChange={(event) => setTags(event.target.value)}
+              onChange={(event) =>
+                setTags(event.target.value)
+              }
               className="input"
               placeholder="Everyday, Dryness, Sensitive"
             />
@@ -325,7 +357,11 @@ export default function NewProductPage() {
             options={skinToneOptions}
             selected={skinTones}
             onToggle={(option) =>
-              toggleValue(option, skinTones, setSkinTones)
+              toggleValue(
+                option,
+                skinTones,
+                setSkinTones
+              )
             }
           />
 
@@ -334,7 +370,11 @@ export default function NewProductPage() {
             options={undertoneOptions}
             selected={undertones}
             onToggle={(option) =>
-              toggleValue(option, undertones, setUndertones)
+              toggleValue(
+                option,
+                undertones,
+                setUndertones
+              )
             }
           />
 
@@ -343,35 +383,51 @@ export default function NewProductPage() {
             options={concernOptions}
             selected={concerns}
             onToggle={(option) =>
-              toggleValue(option, concerns, setConcerns)
+              toggleValue(
+                option,
+                concerns,
+                setConcerns
+              )
             }
           />
 
           <div className="grid gap-5 sm:grid-cols-2">
-           <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
+            <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
               <input
                 type="checkbox"
                 checked={featured}
-                onChange={(event) => setFeatured(event.target.checked)}
+                onChange={(event) =>
+                  setFeatured(
+                    event.target.checked
+                  )
+                }
                 className="h-4 w-4 cursor-pointer accent-[#b77b72]"
               />
 
-              <span className="text-sm">Featured product</span>
+              <span className="text-sm">
+                Featured product
+              </span>
             </label>
 
             <Field label="Status">
-              <select
-                value={status}
-                onChange={(event) =>
+              <CustomSelect
+                value={
+                  status === "draft"
+                    ? "Draft"
+                    : "Published"
+                }
+                options={[
+                  "Draft",
+                  "Published",
+                ]}
+                onChange={(value) =>
                   setStatus(
-                    event.target.value as "draft" | "published"
+                    value.toLowerCase() as
+                      | "draft"
+                      | "published"
                   )
                 }
-                className="input"
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+              />
             </Field>
           </div>
 
@@ -394,7 +450,9 @@ export default function NewProductPage() {
               disabled={loading}
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#211d1b] px-8 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:bg-[#b77b72] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Saving..." : "Save Product"}
+              {loading
+                ? "Saving..."
+                : "Save Product"}
             </button>
           </div>
         </form>
@@ -412,9 +470,13 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-xs font-medium text-stone-700">{label}</span>
+      <span className="text-xs font-medium text-stone-700">
+        {label}
+      </span>
 
-      <div className="mt-2">{children}</div>
+      <div className="mt-2">
+        {children}
+      </div>
     </label>
   );
 }
@@ -438,13 +500,16 @@ function CheckboxGroup({
 
       <div className="mt-3 flex flex-wrap gap-2">
         {options.map((option) => {
-          const active = selected.includes(option);
+          const active =
+            selected.includes(option);
 
           return (
             <button
               key={option}
               type="button"
-              onClick={() => onToggle(option)}
+              onClick={() =>
+                onToggle(option)
+              }
               className={`min-h-10 rounded-full border px-4 text-xs transition ${
                 active
                   ? "border-[#b77b72] bg-[#f7e8e4] text-[#8f5651]"

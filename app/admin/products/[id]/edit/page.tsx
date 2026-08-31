@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+
+import CustomSelect from "@/components/CustomSelect";
 import { createClient } from "@/lib/supabase/client";
 
 const skinToneOptions = [
@@ -95,19 +97,26 @@ export default function EditProductPage() {
   const [status, setStatus] =
     useState<"draft" | "published">("draft");
 
-  const [statusOpen, setStatusOpen] = useState(false);
-
   const [currentImageUrl, setCurrentImageUrl] =
     useState<string | null>(null);
 
-  const [newImage, setNewImage] = useState<File | null>(null);
+  const [newImage, setNewImage] =
+    useState<File | null>(null);
 
-  const [pageLoading, setPageLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+  const [pageLoading, setPageLoading] =
+    useState(true);
 
-  const [deleting, setDeleting] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [saving, setSaving] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  const [deleting, setDeleting] =
+    useState(false);
+
+  const [showDeleteConfirm, setShowDeleteConfirm] =
+    useState(false);
 
   useEffect(() => {
     async function loadProduct() {
@@ -133,14 +142,28 @@ export default function EditProductPage() {
       setCategory(product.category);
       setType(product.type ?? "");
       setDescription(product.description ?? "");
-      setWhyILikeIt((product.why_i_like_it ?? []).join("\n"));
-      setAffiliateUrl(product.affiliate_url ?? "");
+      setWhyILikeIt(
+        (product.why_i_like_it ?? []).join("\n")
+      );
+      setAffiliateUrl(
+        product.affiliate_url ?? ""
+      );
       setHomeTag(product.home_tag ?? "");
-      setTags((product.tags ?? []).join(", "));
+      setTags(
+        (product.tags ?? []).join(", ")
+      );
 
-      setSkinTones(product.skin_tones ?? []);
-      setUndertones(product.undertones ?? []);
-      setConcerns(product.concerns ?? []);
+      setSkinTones(
+        product.skin_tones ?? []
+      );
+
+      setUndertones(
+        product.undertones ?? []
+      );
+
+      setConcerns(
+        product.concerns ?? []
+      );
 
       setFeatured(product.featured);
       setStatus(product.status);
@@ -158,13 +181,19 @@ export default function EditProductPage() {
     setter: (values: string[]) => void
   ) {
     if (current.includes(value)) {
-      setter(current.filter((item) => item !== value));
+      setter(
+        current.filter(
+          (item) => item !== value
+        )
+      );
     } else {
       setter([...current, value]);
     }
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setSaving(true);
@@ -172,77 +201,116 @@ export default function EditProductPage() {
 
     try {
       if (!brand.trim() || !name.trim()) {
-        throw new Error("Brand and product name are required.");
+        throw new Error(
+          "Brand and product name are required."
+        );
       }
 
       let imageUrl = currentImageUrl;
 
       if (newImage) {
         const extension =
-          newImage.name.split(".").pop()?.toLowerCase() || "jpg";
+          newImage.name
+            .split(".")
+            .pop()
+            ?.toLowerCase() || "jpg";
 
-        const fileName = `${crypto.randomUUID()}.${extension}`;
-        const filePath = `products/${fileName}`;
+        const fileName =
+          `${crypto.randomUUID()}.${extension}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("product-images")
-          .upload(filePath, newImage, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+        const filePath =
+          `products/${fileName}`;
+
+        const { error: uploadError } =
+          await supabase.storage
+            .from("product-images")
+            .upload(
+              filePath,
+              newImage,
+              {
+                cacheControl: "3600",
+                upsert: false,
+              }
+            );
 
         if (uploadError) {
           throw uploadError;
         }
 
-        const { data } = supabase.storage
-          .from("product-images")
-          .getPublicUrl(filePath);
+        const { data } =
+          supabase.storage
+            .from("product-images")
+            .getPublicUrl(filePath);
 
         imageUrl = data.publicUrl;
       }
 
-      const slug = createSlug(`${brand}-${name}`);
+      const slug =
+        createSlug(`${brand}-${name}`);
 
-      const { error: updateError } = await supabase
-        .from("products")
-        .update({
-          slug,
-          brand: brand.trim(),
-          name: name.trim(),
-          category,
-          type: type.trim() || null,
-          image_url: imageUrl,
-          description: description.trim() || null,
+      const { error: updateError } =
+        await supabase
+          .from("products")
+          .update({
+            slug,
+            brand: brand.trim(),
+            name: name.trim(),
+            category,
+            type:
+              type.trim() || null,
 
-          why_i_like_it: whyILikeIt
-            .split("\n")
-            .map((item) => item.trim())
-            .filter(Boolean),
+            image_url: imageUrl,
 
-          affiliate_url: affiliateUrl.trim() || null,
+            description:
+              description.trim() || null,
 
-          featured,
-          home_tag: homeTag.trim() || null,
+            why_i_like_it:
+              whyILikeIt
+                .split("\n")
+                .map(
+                  (item) =>
+                    item.trim()
+                )
+                .filter(Boolean),
 
-          skin_tones: skinTones,
-          undertones,
-          concerns,
+            affiliate_url:
+              affiliateUrl.trim() ||
+              null,
 
-          tags: tags
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean),
+            featured,
 
-          status,
-        })
-        .eq("id", productId);
+            home_tag:
+              homeTag.trim() ||
+              null,
+
+            skin_tones:
+              skinTones,
+
+            undertones,
+
+            concerns,
+
+            tags:
+              tags
+                .split(",")
+                .map(
+                  (item) =>
+                    item.trim()
+                )
+                .filter(Boolean),
+
+            status,
+          })
+          .eq("id", productId);
 
       if (updateError) {
         throw updateError;
       }
 
-      router.push("/admin/products");
+      router.push(
+        "/admin/products"
+      );
+
       router.refresh();
     } catch (err) {
       setError(
@@ -260,25 +328,36 @@ export default function EditProductPage() {
     setError("");
 
     try {
-      /**
-       * Remove image from Storage first.
-       *
-       * Public URL example:
-       * https://PROJECT.supabase.co/storage/v1/object/public/product-images/products/file.jpg
-       */
       if (currentImageUrl) {
         const marker =
           "/storage/v1/object/public/product-images/";
 
-        if (currentImageUrl.includes(marker)) {
-          const encodedPath = currentImageUrl.split(marker)[1];
+        if (
+          currentImageUrl.includes(
+            marker
+          )
+        ) {
+          const encodedPath =
+            currentImageUrl.split(
+              marker
+            )[1];
 
           if (encodedPath) {
-            const filePath = decodeURIComponent(encodedPath);
+            const filePath =
+              decodeURIComponent(
+                encodedPath
+              );
 
-            const { error: storageError } = await supabase.storage
-              .from("product-images")
-              .remove([filePath]);
+            const {
+              error: storageError,
+            } =
+              await supabase.storage
+                .from(
+                  "product-images"
+                )
+                .remove([
+                  filePath,
+                ]);
 
             if (storageError) {
               console.error(
@@ -294,16 +373,22 @@ export default function EditProductPage() {
         }
       }
 
-      const { error: deleteError } = await supabase
-        .from("products")
-        .delete()
-        .eq("id", productId);
+      const {
+        error: deleteError,
+      } =
+        await supabase
+          .from("products")
+          .delete()
+          .eq("id", productId);
 
       if (deleteError) {
         throw deleteError;
       }
 
-      router.push("/admin/products");
+      router.push(
+        "/admin/products"
+      );
+
       router.refresh();
     } catch (err) {
       setError(
@@ -379,7 +464,11 @@ export default function EditProductPage() {
               <input
                 required
                 value={brand}
-                onChange={(event) => setBrand(event.target.value)}
+                onChange={(event) =>
+                  setBrand(
+                    event.target.value
+                  )
+                }
                 className="input"
               />
             </Field>
@@ -388,7 +477,11 @@ export default function EditProductPage() {
               <input
                 required
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) =>
+                  setName(
+                    event.target.value
+                  )
+                }
                 className="input"
               />
             </Field>
@@ -396,23 +489,21 @@ export default function EditProductPage() {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Category">
-              <select
+              <CustomSelect
                 value={category}
-                onChange={(event) => setCategory(event.target.value)}
-                className="input"
-              >
-                {categoryOptions.map((option) => (
-                  <option key={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                options={categoryOptions}
+                onChange={setCategory}
+              />
             </Field>
 
             <Field label="Type">
               <input
                 value={type}
-                onChange={(event) => setType(event.target.value)}
+                onChange={(event) =>
+                  setType(
+                    event.target.value
+                  )
+                }
                 className="input"
               />
             </Field>
@@ -423,7 +514,9 @@ export default function EditProductPage() {
               <div className="mb-4 overflow-hidden rounded-2xl border border-stone-200 bg-[#fffaf7] p-3">
                 <div className="relative h-44 w-full sm:h-56">
                   <Image
-                    src={currentImageUrl}
+                    src={
+                      currentImageUrl
+                    }
                     alt={`${brand} ${name}`}
                     fill
                     sizes="(max-width: 640px) 100vw, 768px"
@@ -437,7 +530,10 @@ export default function EditProductPage() {
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={(event) =>
-                setNewImage(event.target.files?.[0] ?? null)
+                setNewImage(
+                  event.target.files?.[0] ??
+                    null
+                )
               }
               className="block w-full rounded-2xl border border-stone-200 bg-[#fffaf7] p-3 text-sm"
             />
@@ -452,7 +548,9 @@ export default function EditProductPage() {
               rows={4}
               value={description}
               onChange={(event) =>
-                setDescription(event.target.value)
+                setDescription(
+                  event.target.value
+                )
               }
               className="input resize-none"
             />
@@ -463,7 +561,9 @@ export default function EditProductPage() {
               rows={5}
               value={whyILikeIt}
               onChange={(event) =>
-                setWhyILikeIt(event.target.value)
+                setWhyILikeIt(
+                  event.target.value
+                )
               }
               className="input resize-none"
             />
@@ -479,7 +579,9 @@ export default function EditProductPage() {
                 type="url"
                 value={affiliateUrl}
                 onChange={(event) =>
-                  setAffiliateUrl(event.target.value)
+                  setAffiliateUrl(
+                    event.target.value
+                  )
                 }
                 className="input"
               />
@@ -489,7 +591,9 @@ export default function EditProductPage() {
               <input
                 value={homeTag}
                 onChange={(event) =>
-                  setHomeTag(event.target.value)
+                  setHomeTag(
+                    event.target.value
+                  )
                 }
                 className="input"
               />
@@ -500,7 +604,9 @@ export default function EditProductPage() {
             <input
               value={tags}
               onChange={(event) =>
-                setTags(event.target.value)
+                setTags(
+                  event.target.value
+                )
               }
               className="input"
             />
@@ -550,12 +656,14 @@ export default function EditProductPage() {
           />
 
           <div className="grid gap-5 sm:grid-cols-2">
-           <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
+            <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
               <input
                 type="checkbox"
                 checked={featured}
                 onChange={(event) =>
-                  setFeatured(event.target.checked)
+                  setFeatured(
+                    event.target.checked
+                  )
                 }
                 className="h-4 w-4 cursor-pointer accent-[#b77b72]"
               />
@@ -566,75 +674,24 @@ export default function EditProductPage() {
             </label>
 
             <Field label="Status">
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setStatusOpen((prev) => !prev)
-                  }
-                  className="flex min-h-12 w-full items-center justify-between rounded-2xl border border-stone-200 bg-[#fffaf7] px-4 text-sm text-[#211d1b] outline-none transition hover:border-[#cfa69f] focus:border-[#b77b72]"
-                >
-                  <span>
-                    {status === "draft"
-                      ? "Draft"
-                      : "Published"}
-                  </span>
-
-                  <span
-                    className={`text-stone-400 transition-transform duration-200 ${
-                      statusOpen ? "rotate-180" : ""
-                    }`}
-                  >
-                    ⌄
-                  </span>
-                </button>
-
-                {statusOpen && (
-                  <div className="absolute left-0 right-0 z-20 mt-2 overflow-hidden rounded-2xl border border-stone-200 bg-white p-1.5 shadow-lg">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setStatus("draft");
-                        setStatusOpen(false);
-                      }}
-                      className={`flex min-h-11 w-full items-center justify-between rounded-xl px-4 text-left text-sm transition ${
-                        status === "draft"
-                          ? "bg-[#f7e8e4] text-[#8f5651]"
-                          : "text-stone-600 hover:bg-[#fffaf7]"
-                      }`}
-                    >
-                      <span>Draft</span>
-
-                      {status === "draft" && (
-                        <span className="text-[#b77b72]">
-                          ✓
-                        </span>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setStatus("published");
-                        setStatusOpen(false);
-                      }}
-                      className={`flex min-h-11 w-full items-center justify-between rounded-xl px-4 text-left text-sm transition ${
-                        status === "published"
-                          ? "bg-[#f7e8e4] text-[#8f5651]"
-                          : "text-stone-600 hover:bg-[#fffaf7]"
-                      }`}
-                    >
-                      <span>Published</span>
-
-                      {status === "published" && (
-                        <span className="text-[#b77b72]">
-                          ✓
-                        </span>
-                      )}
-                    </button>
-                  </div>
-                )}
-              </div>
+              <CustomSelect
+                value={
+                  status === "draft"
+                    ? "Draft"
+                    : "Published"
+                }
+                options={[
+                  "Draft",
+                  "Published",
+                ]}
+                onChange={(value) =>
+                  setStatus(
+                    value.toLowerCase() as
+                      | "draft"
+                      | "published"
+                  )
+                }
+              />
             </Field>
           </div>
 
@@ -647,8 +704,15 @@ export default function EditProductPage() {
           <div className="flex flex-col gap-4 border-t border-stone-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={saving || deleting}
+              onClick={() =>
+                setShowDeleteConfirm(
+                  true
+                )
+              }
+              disabled={
+                saving ||
+                deleting
+              }
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-red-200 px-6 text-[10px] font-medium uppercase tracking-[0.14em] text-red-700 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Delete Product
@@ -664,7 +728,10 @@ export default function EditProductPage() {
 
               <button
                 type="submit"
-                disabled={saving || deleting}
+                disabled={
+                  saving ||
+                  deleting
+                }
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#211d1b] px-8 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:bg-[#b77b72] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving
@@ -696,14 +763,17 @@ export default function EditProductPage() {
             </p>
 
             <p className="mt-2 text-xs leading-5 text-stone-400">
-              The product image stored in Supabase will also be removed.
+              The product image stored in
+              Supabase will also be removed.
             </p>
 
             <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 type="button"
                 onClick={() =>
-                  setShowDeleteConfirm(false)
+                  setShowDeleteConfirm(
+                    false
+                  )
                 }
                 disabled={deleting}
                 className="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-200 px-6 text-[10px] font-medium uppercase tracking-[0.14em] transition hover:border-stone-400 disabled:opacity-60"
@@ -768,13 +838,16 @@ function CheckboxGroup({
 
       <div className="mt-3 flex flex-wrap gap-2">
         {options.map((option) => {
-          const active = selected.includes(option);
+          const active =
+            selected.includes(option);
 
           return (
             <button
               key={option}
               type="button"
-              onClick={() => onToggle(option)}
+              onClick={() =>
+                onToggle(option)
+              }
               className={`min-h-10 rounded-full border px-4 text-xs transition ${
                 active
                   ? "border-[#b77b72] bg-[#f7e8e4] text-[#8f5651]"
