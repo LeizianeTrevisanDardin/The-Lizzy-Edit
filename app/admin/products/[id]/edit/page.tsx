@@ -550,13 +550,14 @@ export default function EditProductPage() {
           />
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
+           <label className="flex min-h-14 items-center gap-3 rounded-2xl border border-stone-200 bg-[#fffaf7] px-4">
               <input
                 type="checkbox"
                 checked={featured}
                 onChange={(event) =>
                   setFeatured(event.target.checked)
                 }
+                className="h-4 w-4 cursor-pointer accent-[#b77b72]"
               />
 
               <span className="text-sm">
