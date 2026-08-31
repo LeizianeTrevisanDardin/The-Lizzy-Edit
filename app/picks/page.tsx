@@ -1,42 +1,22 @@
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products } from "@/app/data/products";
+import PicksCatalog from "@/components/PicksCatalog";
 
-const filters = [
-  "All",
-  "Skincare",
-  "Makeup",
-  "Self-Care",
-  "Fragrance",
-  "Under $25",
-  "Everyday",
-  "Worth the Splurge",
-];
+type PicksPageProps = {
+  searchParams: Promise<{
+    filter?: string;
+  }>;
+};
 
-export default function PicksPage() {
-  const [activeFilter, setActiveFilter] = useState("All");
+export default async function PicksPage({
+  searchParams,
+}: PicksPageProps) {
+  const params = await searchParams;
 
-  const filteredProducts = products.filter((product) => {
-    if (activeFilter === "All") {
-      return true;
-    }
-
-    if (product.category === activeFilter) {
-      return true;
-    }
-
-    if (product.tags.includes(activeFilter)) {
-      return true;
-    }
-
-    return false;
-  });
+  const initialFilter =
+    typeof params.filter === "string"
+      ? params.filter
+      : "All";
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
@@ -65,116 +45,7 @@ export default function PicksPage() {
         </div>
       </section>
 
-      {/* FILTERS */}
-      <section className="sticky top-0 z-20 border-b border-stone-200 bg-[#fffaf7]/95 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-5 py-4 sm:px-6 lg:px-8">
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {filters.map((filter) => {
-              const isActive = activeFilter === filter;
-
-              return (
-                <button
-                  key={filter}
-                  type="button"
-                  onClick={() => setActiveFilter(filter)}
-                  className={`min-h-11 shrink-0 rounded-full px-5 text-[10px] font-medium uppercase tracking-[0.13em] transition ${
-                    isActive
-                      ? "bg-black text-white"
-                      : "border border-stone-300 bg-white text-stone-700 hover:border-stone-500 hover:bg-stone-50"
-                  }`}
-                >
-                  {filter}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* PRODUCTS */}
-      <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-        <div className="mb-8 flex items-center justify-between">
-          <p className="text-sm text-stone-500">
-            {activeFilter === "All"
-              ? "All beauty picks"
-              : `${activeFilter} picks`}
-          </p>
-
-          <p className="text-xs text-stone-400">
-            {filteredProducts.length}{" "}
-            {filteredProducts.length === 1 ? "product" : "products"}
-          </p>
-        </div>
-
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-            {filteredProducts.map((product) => (
-              <article
-                key={product.id}
-                className="group overflow-hidden rounded-[22px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl sm:rounded-[28px]"
-              >
-                {/* IMAGE */}
-                <div className="relative aspect-[4/5] overflow-hidden bg-[#f2e4de]">
-                  <Image
-                    src={product.image}
-                    alt={`${product.brand} ${product.name}`}
-                    fill
-                    quality={95}
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover object-center transition duration-700 group-hover:scale-[1.03]"
-                  />
-
-                  <button
-                    type="button"
-                    aria-label={`Save ${product.name}`}
-                    className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-lg shadow-sm backdrop-blur-md transition hover:scale-105 hover:bg-white"
-                  >
-                    ♡
-                  </button>
-
-                  <span className="absolute bottom-3 left-3 rounded-full bg-white/80 px-3 py-1 text-[8px] font-medium uppercase tracking-[0.15em] text-stone-600 backdrop-blur-md">
-                    {product.category}
-                  </span>
-                </div>
-
-                {/* PRODUCT INFO */}
-                <div className="p-4 sm:p-6">
-                  <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
-                    {product.brand}
-                  </p>
-
-                  <h2 className="mt-2 font-serif text-xl leading-tight sm:text-2xl">
-                    {product.name}
-                  </h2>
-
-                  <p className="mt-3 hidden text-sm leading-6 text-stone-600 sm:block">
-                    {product.description}
-                  </p>
-
-                  <div className="mt-5">
-                    <Link
-                      href={`/picks/${product.slug}`}
-                      className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-black px-4 text-[9px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-stone-700 sm:w-auto sm:px-5 sm:text-[10px]"
-                    >
-                      View Product →
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-[28px] border border-stone-200 bg-white px-6 py-16 text-center">
-            <p className="font-serif text-3xl">
-              More picks are coming.
-            </p>
-
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-              I&apos;m still curating recommendations for this collection.
-            </p>
-          </div>
-        )}
-      </section>
+      <PicksCatalog initialFilter={initialFilter} />
 
       {/* LIZZY NOTE */}
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">

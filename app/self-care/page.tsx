@@ -4,37 +4,44 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
+import ExploreCard from "@/components/ExploreCard";
 
 const categories = [
   {
     title: "Body Care",
     description: "Lotions, oils, scrubs & everyday body essentials",
     symbol: "♡",
+    filter: "Body Care",
   },
   {
     title: "Hair Care",
     description: "Shampoo, masks, treatments & styling favorites",
     symbol: "⌁",
+    filter: "Hair Care",
   },
   {
     title: "Fragrance",
     description: "Scents, body mists & little luxuries",
     symbol: "✦",
+    filter: "Fragrance",
   },
   {
     title: "Bath & Shower",
     description: "Cleansers, bath oils & relaxing rituals",
     symbol: "◌",
+    filter: "Bath & Shower",
   },
   {
     title: "Hands & Feet",
     description: "Creams, treatments & simple care essentials",
     symbol: "◇",
+    filter: "Hands & Feet",
   },
   {
     title: "Beauty Tools",
     description: "Accessories that make your routine easier",
     symbol: "☼",
+    filter: "Beauty Tools",
   },
 ];
 
@@ -44,18 +51,21 @@ const rituals = [
     description:
       "Simple body care, soft fragrance and an easy routine to start the day feeling polished.",
     image: "/images/slow-morning.png",
+    filter: "Slow Morning",
   },
   {
     title: "Everything Shower",
     description:
       "Hair, body and skincare favorites for when you want the full self-care ritual.",
     image: "/images/everything-shower.png",
+    filter: "Everything Shower",
   },
   {
     title: "Wind Down",
     description:
       "Comforting textures and relaxing products for a calm end-of-day routine.",
     image: "/images/wind-down.png",
+    filter: "Wind Down",
   },
 ];
 
@@ -132,29 +142,28 @@ export default function SelfCarePage() {
           </div>
 
           {/* Self-Care Hero Image */}
-            <div className="relative">
-              <div className="absolute -inset-5 rounded-[36px] bg-[#d8c7bd] opacity-30 blur-3xl sm:-inset-7" />
+          <div className="relative">
+            <div className="absolute -inset-5 rounded-[36px] bg-[#d8c7bd] opacity-30 blur-3xl sm:-inset-7" />
 
-              <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
-                <Image
-                  src="/images/skincare-hero-page.png"
-                  alt="Self-care products curated by The Lizzy Edit"
-                  width={1536}
-                  height={1024}
-                  priority
-                  quality={95}
-                  className="h-auto w-full object-contain"
-                />
+            <div className="relative overflow-hidden rounded-[28px] shadow-xl sm:rounded-[36px]">
+              <Image
+                src="/images/skincare-hero-page.png"
+                alt="Self-care products curated by The Lizzy Edit"
+                width={1536}
+                height={1024}
+                priority
+                quality={95}
+                className="h-auto w-full object-contain"
+              />
 
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
-              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5" />
+            </div>
 
-              <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
-                Your little reset ♡
-              </div>
+            <div className="absolute -bottom-4 left-4 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.16em] shadow-lg backdrop-blur-md sm:bottom-5 sm:left-5">
+              Your little reset ♡
             </div>
           </div>
-     
+        </div>
       </section>
 
       {/* CATEGORIES */}
@@ -182,33 +191,13 @@ export default function SelfCarePage() {
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
           {categories.map((category) => (
-            <Link
+            <ExploreCard
               key={category.title}
-              href="/picks"
-              className="group relative min-h-[190px] overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition duration-500 hover:-translate-y-2 hover:shadow-lg sm:min-h-[220px] sm:p-6"
-            >
-              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#e5d8cf] opacity-65 blur-2xl transition duration-500 group-hover:scale-125" />
-
-              <div className="relative flex h-full flex-col justify-between">
-                <span className="text-2xl text-[#aa8778]">
-                  {category.symbol}
-                </span>
-
-                <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl">
-                    {category.title}
-                  </h3>
-
-                  <p className="mt-2 text-xs leading-5 text-stone-500 sm:text-sm">
-                    {category.description}
-                  </p>
-
-                  <span className="mt-4 inline-block text-sm transition-transform duration-300 group-hover:translate-x-2">
-                    →
-                  </span>
-                </div>
-              </div>
-            </Link>
+              title={category.title}
+              description={category.description}
+              symbol={category.symbol}
+              filter={category.filter}
+            />
           ))}
         </div>
       </section>
@@ -258,7 +247,7 @@ export default function SelfCarePage() {
                   </p>
 
                   <Link
-                    href="/picks"
+                    href={`/picks?filter=${encodeURIComponent(ritual.filter)}`}
                     className="mt-5 inline-flex text-[10px] font-medium uppercase tracking-[0.15em]"
                   >
                     Explore products →
@@ -290,12 +279,14 @@ export default function SelfCarePage() {
               genuinely enjoy using can make everyday care feel much better.
             </p>
 
-            <Link
-              href="/beauty-guide"
-              className="mt-7 inline-flex min-h-12 items-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:bg-stone-800"
-            >
-              Read Beauty Guide →
-            </Link>
+            <div className="mt-7 flex justify-center lg:justify-start">
+              <Link
+                href="/beauty-guide"
+                className="inline-flex min-h-12 items-center justify-center bg-black px-6 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
+              >
+                Read Beauty Guide →
+              </Link>
+            </div>
           </div>
 
           <div className="divide-y divide-stone-200 border-y border-stone-200">
@@ -321,14 +312,11 @@ export default function SelfCarePage() {
         </div>
       </section>
 
-    
-
-       {/* CTA */}
+      {/* CTA */}
       <PicksCTA
         eyebrow="Lizzy's Self-Care Picks"
         title="Find the little things that make your routine better."
       />
-
 
       <Footer />
     </main>
