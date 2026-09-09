@@ -4,14 +4,14 @@ type PicksCTAProps = {
   eyebrow: string;
   title: string;
   href?: string;
-  buttonText: string;
+  buttonText?: string;
 };
 
 export default function PicksCTA({
   eyebrow,
   title,
   href = "/picks",
-  buttonText,
+  buttonText = "Explore My Picks",
 }: PicksCTAProps) {
   return (
     <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
