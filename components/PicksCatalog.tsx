@@ -9,7 +9,11 @@ type Product = {
   slug: string;
   brand: string;
   name: string;
-  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  category:
+    | "Skincare"
+    | "Makeup"
+    | "Self-Care"
+    | "Fragrance";
   tags: string[];
   type: string | null;
   image_url: string | null;
@@ -24,43 +28,97 @@ type Product = {
   status: "draft" | "published";
 };
 
+type PicksCatalogContent = {
+  filterAll: string;
+  filterSkincare: string;
+  filterMakeup: string;
+  filterSelfCare: string;
+  filterFragrance: string;
+  filterUnder25: string;
+  filterEveryday: string;
+  filterSplurge: string;
+
+  allPicksLabel: string;
+  picksSuffix: string;
+  curatedForLabel: string;
+
+  productSingular: string;
+  productPlural: string;
+
+  emptyTitle: string;
+  emptyDescription: string;
+  viewAllText: string;
+
+  shopButtonText: string;
+  viewButtonText: string;
+};
+
 type PicksCatalogProps = {
   initialFilter?: string;
   products: Product[];
+  content: PicksCatalogContent;
 };
 
-const filters = [
-  "All",
-  "Skincare",
-  "Makeup",
-  "Self-Care",
-  "Fragrance",
-  "Under $25",
-  "Everyday",
-  "Worth the Splurge",
-];
+const filterValues = [
+  {
+    value: "All",
+    key: "filterAll",
+  },
+  {
+    value: "Skincare",
+    key: "filterSkincare",
+  },
+  {
+    value: "Makeup",
+    key: "filterMakeup",
+  },
+  {
+    value: "Self-Care",
+    key: "filterSelfCare",
+  },
+  {
+    value: "Fragrance",
+    key: "filterFragrance",
+  },
+  {
+    value: "Under $25",
+    key: "filterUnder25",
+  },
+  {
+    value: "Everyday",
+    key: "filterEveryday",
+  },
+  {
+    value: "Worth the Splurge",
+    key: "filterSplurge",
+  },
+] as const;
 
 export default function PicksCatalog({
   initialFilter = "All",
   products,
+  content,
 }: PicksCatalogProps) {
-  const [activeFilter, setActiveFilter] = useState(initialFilter);
+  const [activeFilter, setActiveFilter] =
+    useState(initialFilter);
 
-  const filteredProducts = products.filter((product) => {
-    if (activeFilter === "All") {
-      return true;
-    }
+  const filteredProducts = products.filter(
+    (product) => {
+      if (activeFilter === "All") {
+        return true;
+      }
 
-    if (product.category === activeFilter) {
-      return true;
-    }
+      if (product.category === activeFilter) {
+        return true;
+      }
 
-    if (product.tags.includes(activeFilter)) {
-      return true;
-    }
+      if (product.tags.includes(activeFilter)) {
+        return true;
+      }
 
-    return false;
-  });
+      return false;
+    },
+  );
 
   return (
     <>
@@ -68,21 +126,27 @@ export default function PicksCatalog({
       <section className="sticky top-0 z-20 border-b border-stone-200 bg-[#fffaf7]/95 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-5 py-4 sm:px-6 lg:px-8">
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {filters.map((filter) => {
-              const isActive = activeFilter === filter;
+            {filterValues.map((filter) => {
+              const isActive =
+                activeFilter === filter.value;
+
+              const label =
+                content[filter.key];
 
               return (
                 <button
-                  key={filter}
+                  key={filter.value}
                   type="button"
-                  onClick={() => setActiveFilter(filter)}
+                  onClick={() =>
+                    setActiveFilter(filter.value)
+                  }
                   className={`min-h-11 shrink-0 rounded-full px-5 text-[10px] font-medium uppercase tracking-[0.13em] transition ${
                     isActive
                       ? "bg-black text-white"
                       : "border border-stone-300 bg-white text-stone-700 hover:border-stone-500 hover:bg-stone-50"
                   }`}
                 >
-                  {filter}
+                  {label}
                 </button>
               );
             })}
@@ -96,14 +160,21 @@ export default function PicksCatalog({
           <div>
             <p className="text-sm text-stone-500">
               {activeFilter === "All"
-                ? "All beauty picks"
-                : `${activeFilter} picks`}
+                ? content.allPicksLabel
+                : `${getFilterLabel(
+                    activeFilter,
+                    content,
+                  )} ${content.picksSuffix}`}
             </p>
 
-            {!filters.includes(activeFilter) &&
+            {!filterValues.some(
+              (filter) =>
+                filter.value === activeFilter,
+            ) &&
               activeFilter !== "All" && (
                 <p className="mt-1 text-xs text-[#b77b72]">
-                  Curated for {activeFilter}
+                  {content.curatedForLabel}{" "}
+                  {activeFilter}
                 </p>
               )}
           </div>
@@ -111,8 +182,8 @@ export default function PicksCatalog({
           <p className="shrink-0 text-xs text-stone-400">
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1
-              ? "product"
-              : "products"}
+              ? content.productSingular
+              : content.productPlural}
           </p>
         </div>
 
@@ -130,38 +201,70 @@ export default function PicksCatalog({
                   tags: product.tags ?? [],
                   type: product.type ?? "",
                   image: product.image_url ?? "",
-                  description: product.description ?? "",
-                  whyILikeIt: product.why_i_like_it ?? [],
-                  affiliateUrl: product.affiliate_url ?? undefined,
+                  description:
+                    product.description ?? "",
+                  whyILikeIt:
+                    product.why_i_like_it ?? [],
+                  affiliateUrl:
+                    product.affiliate_url ??
+                    undefined,
                   featured: product.featured,
-                  homeTag: product.home_tag ?? undefined,
-                  skinTones: product.skin_tones ?? [],
-                  undertones: product.undertones ?? [],
-                  concerns: product.concerns ?? [],
+                  homeTag:
+                    product.home_tag ??
+                    undefined,
+                  skinTones:
+                    product.skin_tones ?? [],
+                  undertones:
+                    product.undertones ?? [],
+                  concerns:
+                    product.concerns ?? [],
                 }}
+                shopButtonText={
+                  content.shopButtonText
+                }
+                viewButtonText={
+                  content.viewButtonText
+                }
               />
             ))}
           </div>
         ) : (
           <div className="rounded-[28px] border border-stone-200 bg-white px-6 py-16 text-center">
             <p className="font-serif text-3xl">
-              More picks are coming.
+              {content.emptyTitle}
             </p>
 
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-              I&apos;m still curating recommendations for this collection.
+              {content.emptyDescription}
             </p>
 
             <button
               type="button"
-              onClick={() => setActiveFilter("All")}
+              onClick={() =>
+                setActiveFilter("All")
+              }
               className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-black px-6 text-[10px] font-medium uppercase tracking-[0.14em] text-white transition hover:bg-stone-700"
             >
-              View All Picks
+              {content.viewAllText}
             </button>
           </div>
         )}
       </section>
     </>
   );
+}
+
+function getFilterLabel(
+  value: string,
+  content: PicksCatalogContent,
+) {
+  const filter = filterValues.find(
+    (item) => item.value === value,
+  );
+
+  if (!filter) {
+    return value;
+  }
+
+  return content[filter.key];
 }

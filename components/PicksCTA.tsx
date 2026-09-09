@@ -1,17 +1,17 @@
 import Link from "next/link";
 
 type PicksCTAProps = {
-  eyebrow?: string;
-  title?: string;
+  eyebrow: string;
+  title: string;
   href?: string;
-  buttonText?: string;
+  buttonText: string;
 };
 
 export default function PicksCTA({
-  eyebrow = "Lizzy's Beauty Picks",
-  title = "Ready to discover products for your routine?",
+  eyebrow,
+  title,
   href = "/picks",
-  buttonText = "Explore My Picks",
+  buttonText,
 }: PicksCTAProps) {
   return (
     <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">

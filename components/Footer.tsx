@@ -1,132 +1,246 @@
-export default function Footer() {
+import Link from "next/link";
+
+import { createClient } from "@/lib/supabase/server";
+
+const fallbackFooter = {
+  brandTitle: "LIZZY",
+  brandSubtitle: "The Beauty Edit",
+  brandDescription:
+    "Skincare, makeup and self-care recommendations curated by Beauty Advisor Lizzy Trevisan.",
+
+  exploreTitle: "Explore",
+
+  skincareText: "Skincare",
+  skincareLink: "/skincare",
+
+  makeupText: "Makeup",
+  makeupLink: "/makeup",
+
+  selfCareText: "Self-Care",
+  selfCareLink: "/self-care",
+
+  picksText: "Lizzy's Picks",
+  picksLink: "/picks",
+
+  aboutSectionTitle: "The Lizzy Edit",
+
+  aboutText: "About Lizzy",
+  aboutLink: "/about",
+
+  beautyGuideText: "Beauty Guide",
+  beautyGuideLink: "/beauty-guide",
+
+  privacyText: "Privacy Policy",
+  privacyLink: "/privacy",
+
+  disclosureText: "Affiliate Disclosure",
+  disclosureLink: "/disclosure",
+
+  followTitle: "Follow The Edit",
+  followDescription:
+    "Beauty tips, new finds and Lizzy's latest recommendations.",
+
+  instagramText: "IG",
+  instagramLink: "#",
+
+  tiktokText: "TT",
+  tiktokLink: "#",
+
+  affiliateText:
+    "As an Amazon Associate, I earn from qualifying purchases.",
+
+  copyrightText:
+    "The Lizzy Edit by Lizzy Trevisan.",
+
+  bottomText:
+    "Beauty curated with intention ♡",
+};
+
+export default async function Footer() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("content")
+    .eq("page", "global")
+    .eq("section", "footer")
+    .maybeSingle();
+
+  if (error) {
+    console.error(
+      "FOOTER CONTENT LOAD ERROR:",
+      error,
+    );
+  }
+
+  const footer = {
+    ...fallbackFooter,
+    ...(data?.content ?? {}),
+  };
+
   return (
     <footer className="bg-[#211d1b] text-stone-300">
-
-      {/* Top footer */}
+      {/* TOP FOOTER */}
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8 lg:py-16">
-
-        {/* Brand */}
+        {/* BRAND */}
         <div>
           <h2 className="font-serif text-3xl tracking-[0.12em] text-white">
-            LIZZY
+            {footer.brandTitle}
           </h2>
 
           <p className="mt-1 text-[9px] uppercase tracking-[0.28em] text-stone-500">
-            The Beauty Edit
+            {footer.brandSubtitle}
           </p>
 
           <p className="mt-5 max-w-xs text-sm leading-6 text-stone-400">
-            Skincare, makeup and self-care recommendations curated by Beauty
-            Advisor Lizzy Trevisan.
+            {footer.brandDescription}
           </p>
         </div>
 
-        {/* Explore */}
+        {/* EXPLORE */}
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">
-            Explore
-          </p>
-
-          <div className="mt-5 flex flex-col gap-3 text-sm text-stone-400">
-            <a href="/skincare" className="transition hover:text-white">
-              Skincare
-            </a>
-
-            <a href="/makeup" className="transition hover:text-white">
-              Makeup
-            </a>
-
-            <a href="/self-care" className="transition hover:text-white">
-              Self-Care
-            </a>
-
-            <a href="/picks" className="transition hover:text-white">
-              Lizzy&apos;s Picks
-            </a>
-          </div>
-        </div>
-
-        {/* About */}
-        <div>
-          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">
-            The Lizzy Edit
+            {footer.exploreTitle}
           </p>
 
           <div className="mt-5 flex flex-col gap-3 text-sm text-stone-400">
-            <a href="/about" className="transition hover:text-white">
-              About Lizzy
-            </a>
+            <Link
+              href={footer.skincareLink}
+              className="transition hover:text-white"
+            >
+              {footer.skincareText}
+            </Link>
 
-            <a href="/beauty-guide" className="transition hover:text-white">
-              Beauty Guide
-            </a>
+            <Link
+              href={footer.makeupLink}
+              className="transition hover:text-white"
+            >
+              {footer.makeupText}
+            </Link>
 
-            <a href="/privacy" className="transition hover:text-white">
-              Privacy Policy
-            </a>
+            <Link
+              href={footer.selfCareLink}
+              className="transition hover:text-white"
+            >
+              {footer.selfCareText}
+            </Link>
 
-            <a href="/disclosure" className="transition hover:text-white">
-              Affiliate Disclosure
-            </a>
+            <Link
+              href={footer.picksLink}
+              className="transition hover:text-white"
+            >
+              {footer.picksText}
+            </Link>
           </div>
         </div>
 
-        {/* Follow */}
+        {/* THE LIZZY EDIT */}
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">
-            Follow The Edit
+            {footer.aboutSectionTitle}
+          </p>
+
+          <div className="mt-5 flex flex-col gap-3 text-sm text-stone-400">
+            <Link
+              href={footer.aboutLink}
+              className="transition hover:text-white"
+            >
+              {footer.aboutText}
+            </Link>
+
+            <Link
+              href={footer.beautyGuideLink}
+              className="transition hover:text-white"
+            >
+              {footer.beautyGuideText}
+            </Link>
+
+            <Link
+              href={footer.privacyLink}
+              className="transition hover:text-white"
+            >
+              {footer.privacyText}
+            </Link>
+
+            <Link
+              href={footer.disclosureLink}
+              className="transition hover:text-white"
+            >
+              {footer.disclosureText}
+            </Link>
+          </div>
+        </div>
+
+        {/* FOLLOW */}
+        <div>
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">
+            {footer.followTitle}
           </p>
 
           <p className="mt-5 text-sm leading-6 text-stone-400">
-            Beauty tips, new finds and Lizzy&apos;s latest recommendations.
+            {footer.followDescription}
           </p>
 
           <div className="mt-5 flex gap-3">
             <a
-              href="#"
+              href={footer.instagramLink}
               aria-label="Instagram"
+              target={
+                footer.instagramLink.startsWith("http")
+                  ? "_blank"
+                  : undefined
+              }
+              rel={
+                footer.instagramLink.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
               className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-700 transition hover:border-white hover:bg-white hover:text-black"
             >
-              IG
+              {footer.instagramText}
             </a>
 
             <a
-              href="#"
+              href={footer.tiktokLink}
               aria-label="TikTok"
+              target={
+                footer.tiktokLink.startsWith("http")
+                  ? "_blank"
+                  : undefined
+              }
+              rel={
+                footer.tiktokLink.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
               className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-700 transition hover:border-white hover:bg-white hover:text-black"
             >
-              TT
+              {footer.tiktokText}
             </a>
           </div>
         </div>
       </div>
 
-      {/* Affiliate */}
+      {/* AFFILIATE */}
       <div className="border-t border-stone-800">
         <div className="mx-auto max-w-7xl px-5 py-6 text-xs leading-5 text-stone-500 sm:px-6 lg:px-8">
-
-          <p>
-            As an Amazon Associate, I earn from qualifying purchases.
-          </p>
-
+          <p>{footer.affiliateText}</p>
         </div>
       </div>
 
-      {/* Copyright */}
+      {/* COPYRIGHT */}
       <div className="border-t border-stone-800">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-5 text-[10px] text-stone-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-
           <p>
-            © {new Date().getFullYear()} The Lizzy Edit by Lizzy Trevisan.
+            © {new Date().getFullYear()}{" "}
+            {footer.copyrightText}
           </p>
 
           <p>
-            Beauty curated with intention ♡
+            {footer.bottomText}
           </p>
-
         </div>
       </div>
-
     </footer>
   );
 }

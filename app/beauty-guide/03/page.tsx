@@ -4,49 +4,345 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const differences = [
-  {
-    number: "01",
-    title: "Dry Skin",
-    description:
-      "Dry skin is generally linked to a lower level of natural oils. It may feel tight, rough or uncomfortable and can sometimes look flaky or dull.",
-    note:
-      "Dry skin is usually considered a skin type, so it can be something you experience consistently.",
-  },
-  {
-    number: "02",
-    title: "Dehydrated Skin",
-    description:
-      "Dehydrated skin is lacking water rather than oil. It can feel tight or look dull while still producing oil, especially in areas like the forehead, nose and chin.",
-    note:
-      "Dehydration is a skin condition that can affect different skin types, including oily skin.",
-  },
-  {
-    number: "03",
-    title: "Texture & Feel",
-    description:
-      "Dry skin may feel rough or flaky, while dehydrated skin can feel tight and appear less plump or more tired than usual.",
-    note:
-      "The way your skin feels after cleansing can give you useful clues about what it may need.",
-  },
-  {
-    number: "04",
-    title: "What Your Routine May Need",
-    description:
-      "Dry skin often benefits from nourishing moisturizers and barrier-supporting ingredients, while dehydrated skin may benefit from lightweight hydration paired with a moisturizer that helps keep that hydration in.",
-    note:
-      "Many people can experience both dryness and dehydration at the same time.",
-  },
-];
+import { createClient } from "@/lib/supabase/server";
 
-const reminders = [
-  "Dry skin and dehydrated skin are not exactly the same thing.",
-  "Oily skin can still be dehydrated.",
-  "Hydration and moisture play different roles in your routine.",
-  "How your skin feels can change with weather, environment and your routine.",
-];
+// =================================
+// TYPES
+// =================================
 
-export default function DryVsDehydratedSkinPage() {
+type DifferenceItem = {
+  number: string;
+  title: string;
+  description: string;
+  note: string;
+};
+
+type GuideContent = {
+  hero: {
+    backText: string;
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    description: string;
+    image: string;
+    imageAlt: string;
+  };
+
+  intro: {
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    paragraphs: string[];
+  };
+
+  differences: {
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    noteLabel: string;
+    items: DifferenceItem[];
+  };
+
+  drySkin: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: string[];
+  };
+
+  dehydratedSkin: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: string[];
+  };
+
+  both: {
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    paragraphs: string[];
+  };
+
+  beautyNotes: {
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    items: string[];
+  };
+
+  finalNote: {
+    eyebrow: string;
+    titleBefore: string;
+    highlight: string;
+    description: string;
+  };
+
+  cta: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
+  };
+
+  navigation: {
+    previousText: string;
+    previousLink: string;
+    allGuidesText: string;
+    allGuidesLink: string;
+    nextGuideText: string;
+    nextGuideLink: string;
+  };
+};
+
+// =================================
+// FALLBACK
+// =================================
+
+const fallbackContent: GuideContent = {
+  hero: {
+    backText: "← Beauty Guide",
+    eyebrow: "Skincare • Guide 03",
+    titleBefore: "Dry vs.",
+    highlight: "Dehydrated Skin",
+    description:
+      "They can look and feel similar, but dry skin and dehydrated skin are not exactly the same. Understanding the difference can make choosing products feel much easier.",
+    image: "/images/3.png",
+    imageAlt: "Dry versus dehydrated skin comparison",
+  },
+
+  intro: {
+    eyebrow: "Know the difference",
+    titleBefore: "Think oil versus",
+    highlight: "water.",
+    paragraphs: [
+      "One of the easiest ways to understand the difference is to think about what the skin may be lacking.",
+      "Dry skin is generally associated with a lack of natural oils, while dehydrated skin is lacking water. Because of that, dehydration can happen even if your skin is oily.",
+      "This is why two people who both describe their skin as feeling tight may actually benefit from different types of products.",
+    ],
+  },
+
+  differences: {
+    eyebrow: "Dry vs. dehydrated",
+    titleBefore: "What to look",
+    highlight: "for.",
+    noteLabel: "Lizzy's note",
+
+    items: [
+      {
+        number: "01",
+        title: "Dry Skin",
+        description:
+          "Dry skin is generally linked to a lower level of natural oils. It may feel tight, rough or uncomfortable and can sometimes look flaky or dull.",
+        note:
+          "Dry skin is usually considered a skin type, so it can be something you experience consistently.",
+      },
+      {
+        number: "02",
+        title: "Dehydrated Skin",
+        description:
+          "Dehydrated skin is lacking water rather than oil. It can feel tight or look dull while still producing oil, especially in areas like the forehead, nose and chin.",
+        note:
+          "Dehydration is a skin condition that can affect different skin types, including oily skin.",
+      },
+      {
+        number: "03",
+        title: "Texture & Feel",
+        description:
+          "Dry skin may feel rough or flaky, while dehydrated skin can feel tight and appear less plump or more tired than usual.",
+        note:
+          "The way your skin feels after cleansing can give you useful clues about what it may need.",
+      },
+      {
+        number: "04",
+        title: "What Your Routine May Need",
+        description:
+          "Dry skin often benefits from nourishing moisturizers and barrier-supporting ingredients, while dehydrated skin may benefit from lightweight hydration paired with a moisturizer that helps keep that hydration in.",
+        note:
+          "Many people can experience both dryness and dehydration at the same time.",
+      },
+    ],
+  },
+
+  drySkin: {
+    eyebrow: "Dry Skin",
+    title: "Often needs more nourishment.",
+    description:
+      "Look for comfortable textures that help support the skin barrier and reduce that dry, tight feeling.",
+    items: [
+      "Cream Cleanser",
+      "Ceramides",
+      "Moisturizer",
+      "Facial Oil",
+    ],
+  },
+
+  dehydratedSkin: {
+    eyebrow: "Dehydrated Skin",
+    title: "Often needs more hydration.",
+    description:
+      "Hydrating layers can help add water back into the routine, while moisturizer helps reduce the loss of that hydration.",
+    items: [
+      "Hydrating Serum",
+      "Hyaluronic Acid",
+      "Essence",
+      "Moisturizer",
+    ],
+  },
+
+  both: {
+    eyebrow: "A common question",
+    titleBefore: "Can your skin be dry",
+    highlight: "and dehydrated?",
+    paragraphs: [
+      "Yes. Because dryness and dehydration describe different things, they can happen together.",
+      "Someone with naturally dry skin can also become dehydrated due to weather, over-cleansing, environmental conditions or changes in a skincare routine.",
+      "In that situation, the routine may need both hydration and richer moisturizing products rather than choosing only one or the other.",
+    ],
+  },
+
+  beautyNotes: {
+    eyebrow: "Beauty Notes",
+    titleBefore: "A few things worth",
+    highlight: "remembering.",
+    items: [
+      "Dry skin and dehydrated skin are not exactly the same thing.",
+      "Oily skin can still be dehydrated.",
+      "Hydration and moisture play different roles in your routine.",
+      "How your skin feels can change with weather, environment and your routine.",
+    ],
+  },
+
+  finalNote: {
+    eyebrow: "One more thing",
+    titleBefore: "Pay attention to how your skin",
+    highlight: "responds.",
+    description:
+      "Skin can change over time and with the seasons. Instead of trying to fit perfectly into one label, use these differences as a guide for understanding what your skin may need right now.",
+  },
+
+  cta: {
+    eyebrow: "The Lizzy Edit",
+    title: "Looking for skincare picks?",
+    description:
+      "Explore skincare favorites and find textures that may fit more comfortably into your routine.",
+    buttonText: "Explore Skincare →",
+    buttonLink: "/skincare",
+  },
+
+  navigation: {
+    previousText: "← Previous Guide",
+    previousLink: "/beauty-guide/02",
+    allGuidesText: "All Beauty Guides",
+    allGuidesLink: "/beauty-guide",
+    nextGuideText: "Next Guide",
+    nextGuideLink: "/beauty-guide/04",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
+
+export default async function DryVsDehydratedSkinPage() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("content")
+    .eq("page", "beauty-guide-03")
+    .eq("section", "page")
+    .maybeSingle();
+
+  if (error) {
+    console.error(
+      "BEAUTY GUIDE 03 CONTENT LOAD ERROR:",
+      error,
+    );
+  }
+
+  const savedContent =
+    (data?.content ?? {}) as Partial<GuideContent>;
+
+  // =================================
+  // MERGE CMS + FALLBACK
+  // =================================
+
+  const hero = {
+    ...fallbackContent.hero,
+    ...(savedContent.hero ?? {}),
+  };
+
+  const intro = {
+    ...fallbackContent.intro,
+    ...(savedContent.intro ?? {}),
+    paragraphs:
+      savedContent.intro?.paragraphs?.length
+        ? savedContent.intro.paragraphs
+        : fallbackContent.intro.paragraphs,
+  };
+
+  const differences = {
+    ...fallbackContent.differences,
+    ...(savedContent.differences ?? {}),
+    items:
+      savedContent.differences?.items?.length
+        ? savedContent.differences.items
+        : fallbackContent.differences.items,
+  };
+
+  const drySkin = {
+    ...fallbackContent.drySkin,
+    ...(savedContent.drySkin ?? {}),
+    items:
+      savedContent.drySkin?.items?.length
+        ? savedContent.drySkin.items
+        : fallbackContent.drySkin.items,
+  };
+
+  const dehydratedSkin = {
+    ...fallbackContent.dehydratedSkin,
+    ...(savedContent.dehydratedSkin ?? {}),
+    items:
+      savedContent.dehydratedSkin?.items?.length
+        ? savedContent.dehydratedSkin.items
+        : fallbackContent.dehydratedSkin.items,
+  };
+
+  const both = {
+    ...fallbackContent.both,
+    ...(savedContent.both ?? {}),
+    paragraphs:
+      savedContent.both?.paragraphs?.length
+        ? savedContent.both.paragraphs
+        : fallbackContent.both.paragraphs,
+  };
+
+  const beautyNotes = {
+    ...fallbackContent.beautyNotes,
+    ...(savedContent.beautyNotes ?? {}),
+    items:
+      savedContent.beautyNotes?.items?.length
+        ? savedContent.beautyNotes.items
+        : fallbackContent.beautyNotes.items,
+  };
+
+  const finalNote = {
+    ...fallbackContent.finalNote,
+    ...(savedContent.finalNote ?? {}),
+  };
+
+  const cta = {
+    ...fallbackContent.cta,
+    ...(savedContent.cta ?? {}),
+  };
+
+  const navigation = {
+    ...fallbackContent.navigation,
+    ...(savedContent.navigation ?? {}),
+  };
+
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
       <Header />
@@ -58,25 +354,23 @@ export default function DryVsDehydratedSkinPage() {
             href="/beauty-guide"
             className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-stone-500 transition hover:text-stone-900"
           >
-            ← Beauty Guide
+            {hero.backText}
           </Link>
 
           <div className="mt-10">
             <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#b77b72]">
-              Skincare • Guide 03
+              {hero.eyebrow}
             </p>
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              Dry vs.{" "}
+              {hero.titleBefore}{" "}
               <span className="italic text-[#c78f86]">
-                Dehydrated Skin
+                {hero.highlight}
               </span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-stone-600 sm:text-lg">
-              They can look and feel similar, but dry skin and dehydrated skin
-              are not exactly the same. Understanding the difference can make
-              choosing products feel much easier.
+              {hero.description}
             </p>
           </div>
         </div>
@@ -86,8 +380,8 @@ export default function DryVsDehydratedSkinPage() {
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
-            src="/images/3.png"
-            alt="Dry versus dehydrated skin comparison"
+            src={hero.image}
+            alt={hero.imageAlt}
             fill
             priority
             quality={95}
@@ -102,32 +396,24 @@ export default function DryVsDehydratedSkinPage() {
       {/* INTRODUCTION */}
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
-          Know the difference
+          {intro.eyebrow}
         </p>
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-          Think oil versus{" "}
+          {intro.titleBefore}{" "}
           <span className="italic text-[#c78f86]">
-            water.
+            {intro.highlight}
           </span>
         </h2>
 
         <div className="mt-7 space-y-5 text-base leading-8 text-stone-600">
-          <p>
-            One of the easiest ways to understand the difference is to think
-            about what the skin may be lacking.
-          </p>
-
-          <p>
-            Dry skin is generally associated with a lack of natural oils,
-            while dehydrated skin is lacking water. Because of that,
-            dehydration can happen even if your skin is oily.
-          </p>
-
-          <p>
-            This is why two people who both describe their skin as feeling
-            tight may actually benefit from different types of products.
-          </p>
+          {intro.paragraphs.map(
+            (paragraph, index) => (
+              <p key={index}>
+                {paragraph}
+              </p>
+            ),
+          )}
         </div>
       </section>
 
@@ -136,114 +422,110 @@ export default function DryVsDehydratedSkinPage() {
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
-              Dry vs. dehydrated
+              {differences.eyebrow}
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              What to look{" "}
+              {differences.titleBefore}{" "}
               <span className="italic text-[#c78f86]">
-                for.
+                {differences.highlight}
               </span>
             </h2>
           </div>
 
           <div className="mt-12 divide-y divide-stone-200 border-y border-stone-200">
-            {differences.map((item) => (
-              <div
-                key={item.number}
-                className="grid gap-5 py-8 sm:grid-cols-[80px_1fr] sm:gap-8 sm:py-10"
-              >
-                <span className="font-serif text-3xl text-[#c78f86]">
-                  {item.number}
-                </span>
+            {differences.items.map(
+              (item, index) => (
+                <div
+                  key={`${item.number}-${index}`}
+                  className="grid gap-5 py-8 sm:grid-cols-[80px_1fr] sm:gap-8 sm:py-10"
+                >
+                  <span className="font-serif text-3xl text-[#c78f86]">
+                    {item.number}
+                  </span>
 
-                <div>
-                  <h3 className="font-serif text-3xl">
-                    {item.title}
-                  </h3>
+                  <div>
+                    <h3 className="font-serif text-3xl">
+                      {item.title}
+                    </h3>
 
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
-                    {item.description}
-                  </p>
-
-                  <div className="mt-5 rounded-[20px] bg-[#f8f1ed] px-5 py-4">
-                    <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-[#b77b72]">
-                      Lizzy&apos;s note
+                    <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
+                      {item.description}
                     </p>
 
-                    <p className="mt-2 text-sm leading-6 text-stone-600">
-                      {item.note}
-                    </p>
+                    <div className="mt-5 rounded-[20px] bg-[#f8f1ed] px-5 py-4">
+                      <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-[#b77b72]">
+                        {differences.noteLabel}
+                      </p>
+
+                      <p className="mt-2 text-sm leading-6 text-stone-600">
+                        {item.note}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
       </section>
 
-      {/* SIDE-BY-SIDE */}
+      {/* SIDE BY SIDE */}
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2">
+          {/* DRY SKIN */}
           <div className="rounded-[28px] bg-[#efe1da] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-              Dry Skin
+              {drySkin.eyebrow}
             </p>
 
             <h3 className="mt-3 font-serif text-3xl">
-              Often needs more nourishment.
+              {drySkin.title}
             </h3>
 
             <p className="mt-4 text-sm leading-7 text-stone-600">
-              Look for comfortable textures that help support the skin barrier
-              and reduce that dry, tight feeling.
+              {drySkin.description}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              {[
-                "Cream Cleanser",
-                "Ceramides",
-                "Moisturizer",
-                "Facial Oil",
-              ].map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-white/80 bg-white/70 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.14em]"
-                >
-                  {item}
-                </span>
-              ))}
+              {drySkin.items.map(
+                (item, index) => (
+                  <span
+                    key={`${item}-${index}`}
+                    className="rounded-full border border-white/80 bg-white/70 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.14em]"
+                  >
+                    {item}
+                  </span>
+                ),
+              )}
             </div>
           </div>
 
+          {/* DEHYDRATED SKIN */}
           <div className="rounded-[28px] bg-[#e5e8e4] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
-              Dehydrated Skin
+              {dehydratedSkin.eyebrow}
             </p>
 
             <h3 className="mt-3 font-serif text-3xl">
-              Often needs more hydration.
+              {dehydratedSkin.title}
             </h3>
 
             <p className="mt-4 text-sm leading-7 text-stone-600">
-              Hydrating layers can help add water back into the routine, while
-              moisturizer helps reduce the loss of that hydration.
+              {dehydratedSkin.description}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              {[
-                "Hydrating Serum",
-                "Hyaluronic Acid",
-                "Essence",
-                "Moisturizer",
-              ].map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-white/80 bg-white/70 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.14em]"
-                >
-                  {item}
-                </span>
-              ))}
+              {dehydratedSkin.items.map(
+                (item, index) => (
+                  <span
+                    key={`${item}-${index}`}
+                    className="rounded-full border border-white/80 bg-white/70 px-4 py-2 text-[9px] font-medium uppercase tracking-[0.14em]"
+                  >
+                    {item}
+                  </span>
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -253,32 +535,24 @@ export default function DryVsDehydratedSkinPage() {
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
-            A common question
+            {both.eyebrow}
           </p>
 
           <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-            Can your skin be dry{" "}
+            {both.titleBefore}{" "}
             <span className="italic text-[#c78f86]">
-              and dehydrated?
+              {both.highlight}
             </span>
           </h2>
 
           <div className="mt-7 space-y-5 text-base leading-8 text-stone-600">
-            <p>
-              Yes. Because dryness and dehydration describe different things,
-              they can happen together.
-            </p>
-
-            <p>
-              Someone with naturally dry skin can also become dehydrated due to
-              weather, over-cleansing, environmental conditions or changes in a
-              skincare routine.
-            </p>
-
-            <p>
-              In that situation, the routine may need both hydration and richer
-              moisturizing products rather than choosing only one or the other.
-            </p>
+            {both.paragraphs.map(
+              (paragraph, index) => (
+                <p key={index}>
+                  {paragraph}
+                </p>
+              ),
+            )}
           </div>
         </div>
       </section>
@@ -288,32 +562,36 @@ export default function DryVsDehydratedSkinPage() {
         <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
-              Beauty Notes
+              {beautyNotes.eyebrow}
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              A few things worth{" "}
+              {beautyNotes.titleBefore}{" "}
               <span className="italic text-[#c78f86]">
-                remembering.
+                {beautyNotes.highlight}
               </span>
             </h2>
           </div>
 
           <div className="divide-y divide-stone-300 border-y border-stone-300">
-            {reminders.map((reminder, index) => (
-              <div
-                key={reminder}
-                className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_1fr]"
-              >
-                <span className="font-serif text-xl text-[#c78f86]">
-                  0{index + 1}
-                </span>
+            {beautyNotes.items.map(
+              (item, index) => (
+                <div
+                  key={`${item}-${index}`}
+                  className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_1fr]"
+                >
+                  <span className="font-serif text-xl text-[#c78f86]">
+                    {String(
+                      index + 1,
+                    ).padStart(2, "0")}
+                  </span>
 
-                <p className="text-sm leading-7 text-stone-700 sm:text-base">
-                  {reminder}
-                </p>
-              </div>
-            ))}
+                  <p className="text-sm leading-7 text-stone-700 sm:text-base">
+                    {item}
+                  </p>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </section>
@@ -322,20 +600,18 @@ export default function DryVsDehydratedSkinPage() {
       <section className="mx-auto max-w-4xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-            One more thing
+            {finalNote.eyebrow}
           </p>
 
           <h2 className="mt-3 font-serif text-4xl">
-            Pay attention to how your skin{" "}
+            {finalNote.titleBefore}{" "}
             <span className="italic text-[#c78f86]">
-              responds.
+              {finalNote.highlight}
             </span>
           </h2>
 
           <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
-            Skin can change over time and with the seasons. Instead of trying
-            to fit perfectly into one label, use these differences as a guide
-            for understanding what your skin may need right now.
+            {finalNote.description}
           </p>
         </div>
       </section>
@@ -348,24 +624,23 @@ export default function DryVsDehydratedSkinPage() {
           <div className="relative grid gap-7 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="text-[9px] uppercase tracking-[0.22em] text-stone-400">
-                The Lizzy Edit
+                {cta.eyebrow}
               </p>
 
               <h2 className="mt-3 max-w-xl font-serif text-3xl sm:text-4xl">
-                Looking for skincare picks?
+                {cta.title}
               </h2>
 
               <p className="mt-3 max-w-xl text-sm leading-6 text-stone-400">
-                Explore skincare favorites and find textures that may fit more
-                comfortably into your routine.
+                {cta.description}
               </p>
             </div>
 
             <Link
-              href="/skincare"
+              href={cta.buttonLink}
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-stone-900 transition hover:-translate-y-1"
             >
-              Explore Skincare →
+              {cta.buttonText}
             </Link>
           </div>
         </div>
@@ -375,24 +650,24 @@ export default function DryVsDehydratedSkinPage() {
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-3 sm:items-center">
           <Link
-            href="/beauty-guide/02"
+            href={navigation.previousLink}
             className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone-500 transition hover:text-stone-900"
           >
-            ← Previous Guide
+            {navigation.previousText}
           </Link>
 
           <Link
-            href="/beauty-guide"
+            href={navigation.allGuidesLink}
             className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone-500 transition hover:text-stone-900 sm:text-center"
           >
-            All Beauty Guides
+            {navigation.allGuidesText}
           </Link>
 
           <Link
-            href="/beauty-guide/04"
+            href={navigation.nextGuideLink}
             className="group inline-flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.16em] sm:justify-self-end"
           >
-            Next Guide
+            {navigation.nextGuideText}
 
             <span className="transition-transform duration-300 group-hover:translate-x-2">
               →

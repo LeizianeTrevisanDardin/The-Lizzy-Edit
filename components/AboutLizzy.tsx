@@ -1,7 +1,65 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AboutLizzy() {
+import { createClient } from "@/lib/supabase/server";
+
+const fallbackAbout = {
+  image: "/images/Lizzy.png",
+  imageAlt: "Lizzy Trevisan",
+
+  badgeEyebrow: "Beauty Advisor",
+  badgeText: "Curated by Lizzy ♡",
+
+  eyebrow: "Hi, I'm",
+  name: "Lizzy Trevisan",
+  nameAccent: "♡",
+
+  paragraphOne:
+    "I work with beauty every day and love helping people discover products that fit their skin, style and routine.",
+
+  paragraphTwo:
+    "The Lizzy Edit is where I share skincare, makeup and self-care finds I genuinely think are worth knowing about — from everyday essentials to products worth the splurge.",
+
+  cardOneIcon: "♡",
+  cardOneTitle: "Personal",
+  cardOneText:
+    "Recommendations made with real routines in mind.",
+
+  cardTwoIcon: "✧",
+  cardTwoTitle: "Curated",
+  cardTwoText:
+    "Beauty finds selected with a Beauty Advisor's eye.",
+
+  cardThreeIcon: "◇",
+  cardThreeTitle: "Simple",
+  cardThreeText:
+    "Less overwhelm and more products that make sense.",
+
+  buttonText: "Discover My Favorites →",
+  buttonLink: "/picks",
+};
+
+export default async function AboutLizzy() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("content")
+    .eq("page", "home")
+    .eq("section", "about")
+    .maybeSingle();
+
+  if (error) {
+    console.error("HOME ABOUT LOAD ERROR:", error);
+  }
+
+  const savedAbout = data?.content ?? {};
+
+  const about = {
+    ...fallbackAbout,
+    ...savedAbout,
+  };
+
   return (
     <section
       id="about"
@@ -12,26 +70,25 @@ export default function AboutLizzy() {
         <div className="relative">
           <div className="relative mx-auto aspect-[4/5] max-w-[520px] overflow-hidden rounded-[36px] bg-[#ead7cf] shadow-lg lg:mx-0">
             <Image
-              src="/images/Lizzy.png"
-              alt="Lizzy Trevisan"
+              src={about.image}
+              alt={about.imageAlt}
               fill
               quality={95}
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover object-center"
             />
 
-            {/* subtle editorial overlay */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5" />
           </div>
 
           {/* Floating badge */}
           <div className="absolute -bottom-5 right-2 rounded-[24px] border border-white/70 bg-white/90 px-5 py-4 shadow-lg backdrop-blur-md sm:right-6 lg:-right-5">
             <p className="text-[9px] uppercase tracking-[0.24em] text-stone-500">
-              Beauty Advisor
+              {about.badgeEyebrow}
             </p>
 
             <p className="mt-1 font-serif text-xl">
-              Curated by Lizzy ♡
+              {about.badgeText}
             </p>
           </div>
         </div>
@@ -39,69 +96,77 @@ export default function AboutLizzy() {
         {/* Content */}
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-stone-500 sm:text-xs">
-            Hi, I&apos;m
+            {about.eyebrow}
           </p>
 
           <h2 className="mt-3 font-serif text-5xl leading-none sm:text-6xl">
-            Lizzy Trevisan
-            <span className="ml-2 italic text-[#c78f86]">♡</span>
+            {about.name}
+            <span className="ml-2 italic text-[#c78f86]">
+              {about.nameAccent}
+            </span>
           </h2>
 
           <p className="mt-7 max-w-xl text-base leading-7 text-stone-700 sm:text-lg">
-            I work with beauty every day and love helping people discover
-            products that fit their skin, style and routine.
+            {about.paragraphOne}
           </p>
 
           <p className="mt-5 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
-            The Lizzy Edit is where I share skincare, makeup and self-care
-            finds I genuinely think are worth knowing about — from everyday
-            essentials to products worth the splurge.
+            {about.paragraphTwo}
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {/* CARD 1 */}
             <div className="rounded-[22px] border border-stone-200 bg-white/70 p-5">
-              <span className="text-xl">♡</span>
+              <span className="text-xl">
+                {about.cardOneIcon}
+              </span>
 
               <p className="mt-4 text-xs font-medium uppercase tracking-[0.15em]">
-                Personal
+                {about.cardOneTitle}
               </p>
 
               <p className="mt-2 text-xs leading-5 text-stone-500">
-                Recommendations made with real routines in mind.
+                {about.cardOneText}
               </p>
             </div>
 
+            {/* CARD 2 */}
             <div className="rounded-[22px] border border-stone-200 bg-white/70 p-5">
-              <span className="text-xl">✧</span>
+              <span className="text-xl">
+                {about.cardTwoIcon}
+              </span>
 
               <p className="mt-4 text-xs font-medium uppercase tracking-[0.15em]">
-                Curated
+                {about.cardTwoTitle}
               </p>
 
               <p className="mt-2 text-xs leading-5 text-stone-500">
-                Beauty finds selected with a Beauty Advisor&apos;s eye.
+                {about.cardTwoText}
               </p>
             </div>
 
+            {/* CARD 3 */}
             <div className="rounded-[22px] border border-stone-200 bg-white/70 p-5">
-              <span className="text-xl">◇</span>
+              <span className="text-xl">
+                {about.cardThreeIcon}
+              </span>
 
               <p className="mt-4 text-xs font-medium uppercase tracking-[0.15em]">
-                Simple
+                {about.cardThreeTitle}
               </p>
 
               <p className="mt-2 text-xs leading-5 text-stone-500">
-                Less overwhelm and more products that make sense.
+                {about.cardThreeText}
               </p>
             </div>
           </div>
-          
+
           <div className="mt-8 flex justify-center lg:justify-start">
             <Link
-              href="/picks"
+              href={about.buttonLink}
               className="inline-flex min-h-12 items-center justify-center bg-black px-7 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white transition hover:-translate-y-1 hover:bg-stone-800"
             >
-              Discover My Favorites →
+              {about.buttonText}
             </Link>
           </div>
         </div>

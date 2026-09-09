@@ -6,7 +6,11 @@ export type Product = {
   slug: string;
   brand: string;
   name: string;
-  category: "Skincare" | "Makeup" | "Self-Care" | "Fragrance";
+  category:
+    | "Skincare"
+    | "Makeup"
+    | "Self-Care"
+    | "Fragrance";
   tags: string[];
   type: string;
   image: string;
@@ -25,10 +29,14 @@ export type Product = {
 
 type ProductCardProps = {
   product: Product;
+  shopButtonText?: string;
+  viewButtonText?: string;
 };
 
 export default function ProductCard({
   product,
+  shopButtonText = "Shop This Product →",
+  viewButtonText = "View Product →",
 }: ProductCardProps) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl">
@@ -87,14 +95,14 @@ export default function ProductCard({
               rel="sponsored noopener noreferrer"
               className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
             >
-              Shop This Product →
+              {shopButtonText}
             </a>
           ) : (
             <Link
               href={`/picks/${product.slug}`}
               className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
             >
-              View Product →
+              {viewButtonText}
             </Link>
           )}
         </div>

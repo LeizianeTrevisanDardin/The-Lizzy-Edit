@@ -1,9 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
 import Link from "next/link";
 
-import ProductCard, { type Product } from "@/components/ProductCard";
+import ProductCard, {
+  type Product,
+} from "@/components/ProductCard";
+
 import { createClient } from "@/lib/supabase/client";
 
 type AnalysisResult = {
@@ -20,34 +29,296 @@ type QuestionnaireAnswers = {
   colors: string;
 };
 
+type CameraContent = {
+  backText: string;
+  brand: string;
+  eyebrow: string;
+  titleBefore: string;
+  highlight: string;
+  description: string;
+  readyTitle: string;
+  readyDescription: string;
+  openCameraText: string;
+  openingCameraText: string;
+  cameraGuideText: string;
+  tipOne: string;
+  tipTwo: string;
+  tipThree: string;
+  analyzeButtonText: string;
+  analyzingButtonText: string;
+  closeCameraText: string;
+  privacyText: string;
+};
+
+type QuestionnaireContent = {
+  eyebrow: string;
+  titleBefore: string;
+  highlight: string;
+  description: string;
+  cameraEstimateLabel: string;
+
+  questionOne: string;
+  questionOneOptionOne: string;
+  questionOneOptionTwo: string;
+  questionOneOptionThree: string;
+
+  questionTwo: string;
+  questionTwoOptionOne: string;
+  questionTwoOptionTwo: string;
+  questionTwoOptionThree: string;
+
+  questionThree: string;
+  questionThreeOptionOne: string;
+  questionThreeOptionTwo: string;
+  questionThreeOptionThree: string;
+
+  retakeText: string;
+  resultsButtonText: string;
+  disclaimer: string;
+};
+
+type ResultsContent = {
+  eyebrow: string;
+  titleBefore: string;
+  highlight: string;
+  description: string;
+
+  skinToneLabel: string;
+  qualityLabel: string;
+
+  bestColorsEyebrow: string;
+  bestColorsTitleBefore: string;
+  bestColorsHighlight: string;
+
+  categoriesEyebrow: string;
+  categoriesTitleBefore: string;
+  categoriesHighlight: string;
+  categoriesDescription: string;
+  categoryButtonText: string;
+
+  loadingEyebrow: string;
+  loadingText: string;
+
+  productsEyebrow: string;
+  productsTitleBefore: string;
+  productsHighlight: string;
+  productsDescription: string;
+
+  tryAgainText: string;
+  explorePicksText: string;
+  finalDisclaimer: string;
+};
+
+type AnalyzeContent = {
+  camera: CameraContent;
+  questionnaire: QuestionnaireContent;
+  results: ResultsContent;
+};
+
 const emptyAnswers: QuestionnaireAnswers = {
   jewelry: "",
   sun: "",
   colors: "",
 };
 
+const fallbackContent: AnalyzeContent = {
+  camera: {
+    backText: "← Back",
+    brand: "The Lizzy Edit",
+    eyebrow: "Skin Analysis",
+    titleBefore: "Let's find your",
+    highlight: "undertone.",
+    description:
+      "Position your face inside the guide and use soft natural daylight for the best result.",
+    readyTitle: "Ready when you are.",
+    readyDescription:
+      "Your browser will ask for permission to use your front camera.",
+    openCameraText: "Open Camera",
+    openingCameraText: "Opening Camera...",
+    cameraGuideText:
+      "Keep your face centered and look directly at the camera.",
+    tipOne: "Natural daylight",
+    tipTwo: "No beauty filters",
+    tipThree: "Minimal makeup",
+    analyzeButtonText: "Analyze My Skin →",
+    analyzingButtonText: "Analyzing...",
+    closeCameraText: "Close Camera",
+    privacyText:
+      "Analysis happens temporarily in your browser. Your image is not uploaded or stored.",
+  },
+
+  questionnaire: {
+    eyebrow: "Quick Undertone Check",
+    titleBefore: "Just a few",
+    highlight: "quick questions.",
+    description:
+      "Your answers help refine the estimate from your camera analysis.",
+    cameraEstimateLabel: "Camera estimate",
+
+    questionOne:
+      "Which jewelry tends to look best on you?",
+    questionOneOptionOne: "Gold",
+    questionOneOptionTwo: "Silver",
+    questionOneOptionThree: "Both",
+
+    questionTwo:
+      "What usually happens when you're in the sun?",
+    questionTwoOptionOne: "I tan easily",
+    questionTwoOptionTwo: "I burn easily",
+    questionTwoOptionThree:
+      "A little of both",
+
+    questionThree:
+      "Which colors usually make you feel your best?",
+    questionThreeOptionOne:
+      "Cream, camel & warm browns",
+    questionThreeOptionTwo:
+      "White, grey & cool tones",
+    questionThreeOptionThree:
+      "Both seem to work",
+
+    retakeText: "Retake Photo",
+    resultsButtonText: "See My Results →",
+    disclaimer:
+      "These questions are used only to refine your undertone estimate.",
+  },
+
+  results: {
+    eyebrow: "Your Result",
+    titleBefore: "Your beauty",
+    highlight: "profile.",
+    description:
+      "Based on your camera analysis and your quick undertone check.",
+
+    skinToneLabel:
+      "Estimated Skin Tone",
+    qualityLabel:
+      "Analysis Quality",
+
+    bestColorsEyebrow:
+      "Your Best Colors",
+    bestColorsTitleBefore:
+      "Shades that may",
+    bestColorsHighlight:
+      "flatter you.",
+
+    categoriesEyebrow:
+      "Beauty Categories",
+    categoriesTitleBefore:
+      "Recommended",
+    categoriesHighlight:
+      "for you.",
+    categoriesDescription:
+      "These are great places to start when choosing colors for your undertone.",
+    categoryButtonText:
+      "Explore →",
+
+    loadingEyebrow:
+      "Lizzy's Picks",
+    loadingText:
+      "Finding your product matches...",
+
+    productsEyebrow:
+      "Lizzy's Picks",
+    productsTitleBefore:
+      "Products selected",
+    productsHighlight:
+      "for your result.",
+    productsDescription:
+      "Beauty picks that may complement your estimated skin tone and undertone.",
+
+    tryAgainText:
+      "Try Again",
+    explorePicksText:
+      "Explore Beauty Picks →",
+
+    finalDisclaimer:
+      "Skin tone, undertone, color and product recommendations are estimates and can be affected by lighting, camera settings, makeup and surrounding colors. Always check the brand's shade guide when selecting a specific shade.",
+  },
+};
+
 export default function UndertoneAnalyzePage() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const videoRef =
+    useRef<HTMLVideoElement | null>(
+      null,
+    );
 
-  const supabase = useMemo(() => createClient(), []);
+  const canvasRef =
+    useRef<HTMLCanvasElement | null>(
+      null,
+    );
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsLoading, setProductsLoading] = useState(true);
+  const supabase = useMemo(
+    () => createClient(),
+    [],
+  );
 
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [cameraError, setCameraError] = useState("");
-  const [isStarting, setIsStarting] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [content, setContent] =
+    useState<AnalyzeContent>(
+      fallbackContent,
+    );
 
-  const [cameraResult, setCameraResult] =
-    useState<AnalysisResult | null>(null);
+  const [products, setProducts] =
+    useState<Product[]>([]);
 
-  const [finalResult, setFinalResult] =
-    useState<AnalysisResult | null>(null);
+  const [
+    productsLoading,
+    setProductsLoading,
+  ] = useState(true);
+
+  const [stream, setStream] =
+    useState<MediaStream | null>(
+      null,
+    );
+
+  const [
+    cameraError,
+    setCameraError,
+  ] = useState("");
+
+  const [
+    isStarting,
+    setIsStarting,
+  ] = useState(false);
+
+  const [
+    isAnalyzing,
+    setIsAnalyzing,
+  ] = useState(false);
+
+  const [
+    cameraResult,
+    setCameraResult,
+  ] =
+    useState<AnalysisResult | null>(
+      null,
+    );
+
+  const [
+    finalResult,
+    setFinalResult,
+  ] =
+    useState<AnalysisResult | null>(
+      null,
+    );
 
   const [answers, setAnswers] =
-    useState<QuestionnaireAnswers>(emptyAnswers);
+    useState<QuestionnaireAnswers>(
+      emptyAnswers,
+    );
+
+  const camera =
+    content.camera;
+
+  const questionnaire =
+    content.questionnaire;
+
+  const results =
+    content.results;
+
+  // =================================
+  // CAMERA
+  // =================================
 
   async function startCamera() {
     try {
@@ -58,23 +329,30 @@ export default function UndertoneAnalyzePage() {
       setIsStarting(true);
 
       const mediaStream =
-        await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "user",
-            width: { ideal: 1280 },
-            height: { ideal: 1280 },
+        await navigator.mediaDevices.getUserMedia(
+          {
+            video: {
+              facingMode: "user",
+              width: {
+                ideal: 1280,
+              },
+              height: {
+                ideal: 1280,
+              },
+            },
+            audio: false,
           },
-          audio: false,
-        });
+        );
 
       setStream(mediaStream);
 
       if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
+        videoRef.current.srcObject =
+          mediaStream;
       }
     } catch {
       setCameraError(
-        "We couldn't access your camera. Please allow camera access in your browser settings."
+        "We couldn't access your camera. Please allow camera access in your browser settings.",
       );
     } finally {
       setIsStarting(false);
@@ -82,18 +360,24 @@ export default function UndertoneAnalyzePage() {
   }
 
   function stopCamera() {
-    stream?.getTracks().forEach((track) => track.stop());
+    stream
+      ?.getTracks()
+      .forEach((track) =>
+        track.stop(),
+      );
+
     setStream(null);
 
     if (videoRef.current) {
-      videoRef.current.srcObject = null;
+      videoRef.current.srcObject =
+        null;
     }
   }
 
   function rgbToHex(
     r: number,
     g: number,
-    b: number
+    b: number,
   ) {
     return (
       "#" +
@@ -101,15 +385,22 @@ export default function UndertoneAnalyzePage() {
         .map((value) =>
           Math.round(value)
             .toString(16)
-            .padStart(2, "0")
+            .padStart(2, "0"),
         )
         .join("")
     );
   }
 
+  // =================================
+  // SKIN ANALYSIS
+  // =================================
+
   function analyzeSkin() {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
+    const video =
+      videoRef.current;
+
+    const canvas =
+      canvasRef.current;
 
     if (
       !video ||
@@ -117,35 +408,44 @@ export default function UndertoneAnalyzePage() {
       video.videoWidth === 0
     ) {
       setCameraError(
-        "Camera is not ready yet. Please try again."
+        "Camera is not ready yet. Please try again.",
       );
+
       return;
     }
 
     setIsAnalyzing(true);
     setCameraError("");
 
-    const context = canvas.getContext("2d", {
-      willReadFrequently: true,
-    });
+    const context =
+      canvas.getContext("2d", {
+        willReadFrequently: true,
+      });
 
     if (!context) {
       setCameraError(
-        "We couldn't analyze the image. Please try again."
+        "We couldn't analyze the image. Please try again.",
       );
+
       setIsAnalyzing(false);
+
       return;
     }
 
     /*
-      Smaller temporary image for analysis.
-      Nothing is uploaded or stored.
+      Smaller temporary image
+      for analysis.
+
+      Nothing is uploaded
+      or stored.
     */
+
     const width = 400;
 
     const height = Math.round(
-      (video.videoHeight / video.videoWidth) *
-        width
+      (video.videoHeight /
+        video.videoWidth) *
+        width,
     );
 
     canvas.width = width;
@@ -156,13 +456,17 @@ export default function UndertoneAnalyzePage() {
       0,
       0,
       width,
-      height
+      height,
     );
 
     /*
       Approximate sampling regions:
-      forehead + both cheeks.
+
+      forehead
+      left cheek
+      right cheek
     */
+
     const regions = [
       {
         x: 0.43,
@@ -170,12 +474,14 @@ export default function UndertoneAnalyzePage() {
         width: 0.14,
         height: 0.08,
       },
+
       {
         x: 0.29,
         y: 0.47,
         width: 0.12,
         height: 0.1,
       },
+
       {
         x: 0.59,
         y: 0.47,
@@ -190,169 +496,219 @@ export default function UndertoneAnalyzePage() {
       b: number;
     }[] = [];
 
-    regions.forEach((region) => {
-      const x = Math.floor(
-        width * region.x
-      );
-
-      const y = Math.floor(
-        height * region.y
-      );
-
-      const regionWidth = Math.floor(
-        width * region.width
-      );
-
-      const regionHeight = Math.floor(
-        height * region.height
-      );
-
-      const imageData =
-        context.getImageData(
-          x,
-          y,
-          regionWidth,
-          regionHeight
+    regions.forEach(
+      (region) => {
+        const x = Math.floor(
+          width * region.x,
         );
 
-      const data = imageData.data;
+        const y = Math.floor(
+          height * region.y,
+        );
 
-      for (
-        let i = 0;
-        i < data.length;
-        i += 16
-      ) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
+        const regionWidth =
+          Math.floor(
+            width *
+              region.width,
+          );
 
-        const brightness =
-          0.299 * r +
-          0.587 * g +
-          0.114 * b;
+        const regionHeight =
+          Math.floor(
+            height *
+              region.height,
+          );
 
-        /*
-          Ignore very dark shadows,
-          hair and very bright reflections.
-        */
-        if (
-          brightness < 45 ||
-          brightness > 245
+        const imageData =
+          context.getImageData(
+            x,
+            y,
+            regionWidth,
+            regionHeight,
+          );
+
+        const data =
+          imageData.data;
+
+        for (
+          let i = 0;
+          i < data.length;
+          i += 16
         ) {
-          continue;
+          const r = data[i];
+          const g =
+            data[i + 1];
+          const b =
+            data[i + 2];
+
+          const brightness =
+            0.299 * r +
+            0.587 * g +
+            0.114 * b;
+
+          if (
+            brightness < 45 ||
+            brightness > 245
+          ) {
+            continue;
+          }
+
+          const max = Math.max(
+            r,
+            g,
+            b,
+          );
+
+          const min = Math.min(
+            r,
+            g,
+            b,
+          );
+
+          if (
+            max - min <
+            8
+          ) {
+            continue;
+          }
+
+          colors.push({
+            r,
+            g,
+            b,
+          });
         }
+      },
+    );
 
-        const max = Math.max(
-          r,
-          g,
-          b
-        );
-
-        const min = Math.min(
-          r,
-          g,
-          b
-        );
-
-        if (max - min < 8) {
-          continue;
-        }
-
-        colors.push({
-          r,
-          g,
-          b,
-        });
-      }
-    });
-
-    if (colors.length < 50) {
+    if (
+      colors.length < 50
+    ) {
       setCameraError(
-        "We couldn't get a clear skin sample. Try facing a window with soft natural light and keep your face centered."
+        "We couldn't get a clear skin sample. Try facing a window with soft natural light and keep your face centered.",
       );
 
       setIsAnalyzing(false);
+
       return;
     }
 
-    const average = colors.reduce(
-      (total, color) => {
-        total.r += color.r;
-        total.g += color.g;
-        total.b += color.b;
+    const average =
+      colors.reduce(
+        (
+          total,
+          color,
+        ) => {
+          total.r +=
+            color.r;
 
-        return total;
-      },
-      {
-        r: 0,
-        g: 0,
-        b: 0,
-      }
-    );
+          total.g +=
+            color.g;
+
+          total.b +=
+            color.b;
+
+          return total;
+        },
+        {
+          r: 0,
+          g: 0,
+          b: 0,
+        },
+      );
 
     const r =
-      average.r / colors.length;
+      average.r /
+      colors.length;
 
     const g =
-      average.g / colors.length;
+      average.g /
+      colors.length;
 
     const b =
-      average.b / colors.length;
+      average.b /
+      colors.length;
 
     const brightness =
       0.299 * r +
       0.587 * g +
       0.114 * b;
 
-    /*
-      SKIN TONE
-    */
+    // =================================
+    // SKIN TONE
+    // =================================
+
     let tone = "Medium";
 
     if (brightness >= 205) {
       tone = "Fair";
-    } else if (brightness >= 180) {
+    } else if (
+      brightness >= 180
+    ) {
       tone = "Light";
-    } else if (brightness >= 155) {
-      tone = "Light-Medium";
-    } else if (brightness >= 125) {
+    } else if (
+      brightness >= 155
+    ) {
+      tone =
+        "Light-Medium";
+    } else if (
+      brightness >= 125
+    ) {
       tone = "Medium";
-    } else if (brightness >= 90) {
-      tone = "Medium-Deep";
+    } else if (
+      brightness >= 90
+    ) {
+      tone =
+        "Medium-Deep";
     } else {
       tone = "Deep";
     }
 
-    /*
-      CAMERA UNDERTONE ESTIMATE
-    */
-    const warmth = r - b;
-    const redGreenBalance = r - g;
+    // =================================
+    // CAMERA UNDERTONE
+    // =================================
 
-    let undertone = "Neutral";
+    const warmth =
+      r - b;
+
+    const redGreenBalance =
+      r - g;
+
+    let undertone =
+      "Neutral";
 
     if (
       warmth > 45 &&
       redGreenBalance > 12
     ) {
-      undertone = "Warm";
+      undertone =
+        "Warm";
     } else if (
       warmth > 30 &&
       redGreenBalance > 7
     ) {
-      undertone = "Neutral-Warm";
-    } else if (warmth < 15) {
-      undertone = "Cool";
-    } else if (warmth < 25) {
-      undertone = "Neutral-Cool";
+      undertone =
+        "Neutral-Warm";
+    } else if (
+      warmth < 15
+    ) {
+      undertone =
+        "Cool";
+    } else if (
+      warmth < 25
+    ) {
+      undertone =
+        "Neutral-Cool";
     }
 
-    /*
-      Analysis quality estimate.
-    */
+    // =================================
+    // CONFIDENCE
+    // =================================
+
     let confidence = 72;
 
-    if (colors.length > 500) {
+    if (
+      colors.length > 500
+    ) {
       confidence += 8;
     }
 
@@ -365,21 +721,26 @@ export default function UndertoneAnalyzePage() {
 
     confidence = Math.min(
       confidence,
-      90
+      90,
     );
 
     const sampledColor =
-      rgbToHex(r, g, b);
+      rgbToHex(
+        r,
+        g,
+        b,
+      );
 
     setTimeout(() => {
       setCameraResult({
         tone,
         undertone,
         confidence,
-        color: sampledColor,
+        color:
+          sampledColor,
         message:
           getResultMessage(
-            undertone
+            undertone,
           ),
       });
 
@@ -389,7 +750,7 @@ export default function UndertoneAnalyzePage() {
         0,
         0,
         canvas.width,
-        canvas.height
+        canvas.height,
       );
 
       stopCamera();
@@ -397,7 +758,7 @@ export default function UndertoneAnalyzePage() {
   }
 
   function getResultMessage(
-    undertone: string
+    undertone: string,
   ) {
     switch (undertone) {
       case "Warm":
@@ -417,19 +778,15 @@ export default function UndertoneAnalyzePage() {
     }
   }
 
+  // =================================
+  // QUESTIONNAIRE LOGIC
+  // =================================
+
   function refineUndertone(
     cameraUndertone: string,
-    questionnaire:
-      QuestionnaireAnswers
+    questionnaireAnswers:
+      QuestionnaireAnswers,
   ) {
-    /*
-      Camera score:
-      Cool          -2
-      Neutral-Cool  -1
-      Neutral        0
-      Neutral-Warm   1
-      Warm           2
-    */
     const cameraScores: Record<
       string,
       number
@@ -447,51 +804,53 @@ export default function UndertoneAnalyzePage() {
       ] ?? 0;
 
     /*
-      Jewelry
+      IMPORTANT:
+
+      These internal values
+      are intentionally NOT
+      editable in the CMS.
+
+      Only their visible labels
+      are editable.
     */
+
     if (
-      questionnaire.jewelry ===
+      questionnaireAnswers.jewelry ===
       "Gold"
     ) {
       score += 1;
     }
 
     if (
-      questionnaire.jewelry ===
+      questionnaireAnswers.jewelry ===
       "Silver"
     ) {
       score -= 1;
     }
 
-    /*
-      Sun response
-    */
     if (
-      questionnaire.sun ===
+      questionnaireAnswers.sun ===
       "Tan"
     ) {
       score += 1;
     }
 
     if (
-      questionnaire.sun ===
+      questionnaireAnswers.sun ===
       "Burn"
     ) {
       score -= 1;
     }
 
-    /*
-      Clothing / flattering colors
-    */
     if (
-      questionnaire.colors ===
+      questionnaireAnswers.colors ===
       "Warm"
     ) {
       score += 1;
     }
 
     if (
-      questionnaire.colors ===
+      questionnaireAnswers.colors ===
       "Cool"
     ) {
       score -= 1;
@@ -501,15 +860,21 @@ export default function UndertoneAnalyzePage() {
       return "Warm";
     }
 
-    if (score >= 0.75) {
+    if (
+      score >= 0.75
+    ) {
       return "Neutral-Warm";
     }
 
-    if (score <= -2) {
+    if (
+      score <= -2
+    ) {
       return "Cool";
     }
 
-    if (score <= -0.75) {
+    if (
+      score <= -0.75
+    ) {
       return "Neutral-Cool";
     }
 
@@ -524,15 +889,16 @@ export default function UndertoneAnalyzePage() {
     const finalUndertone =
       refineUndertone(
         cameraResult.undertone,
-        answers
+        answers,
       );
 
     setFinalResult({
       ...cameraResult,
-      undertone: finalUndertone,
+      undertone:
+        finalUndertone,
       message:
         getResultMessage(
-          finalUndertone
+          finalUndertone,
         ),
     });
   }
@@ -542,72 +908,200 @@ export default function UndertoneAnalyzePage() {
 
     setCameraResult(null);
     setFinalResult(null);
-    setAnswers(emptyAnswers);
+    setAnswers(
+      emptyAnswers,
+    );
     setCameraError("");
   }
 
   const questionnaireComplete =
-    answers.jewelry !== "" &&
+    answers.jewelry !==
+      "" &&
     answers.sun !== "" &&
     answers.colors !== "";
 
+  // =================================
+  // LOAD PRODUCTS + CMS
+  // =================================
+
   useEffect(() => {
-  async function loadProducts() {
-    setProductsLoading(true);
-
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("status", "published")
-      .order("created_at", {
-        ascending: false,
-      });
-
-    if (error) {
-      console.error(
-        "Error loading undertone recommendations:",
-        error
+    async function loadPageData() {
+      setProductsLoading(
+        true,
       );
 
-      setProducts([]);
-      setProductsLoading(false);
-      return;
+      const [
+        productsResponse,
+        contentResponse,
+      ] =
+        await Promise.all([
+          supabase
+            .from(
+              "products",
+            )
+            .select("*")
+            .eq(
+              "status",
+              "published",
+            )
+            .order(
+              "created_at",
+              {
+                ascending:
+                  false,
+              },
+            ),
+
+          supabase
+            .from(
+              "site_content",
+            )
+            .select(
+              "content",
+            )
+            .eq(
+              "page",
+              "undertone",
+            )
+            .eq(
+              "section",
+              "analyze",
+            )
+            .maybeSingle(),
+        ]);
+
+      // PRODUCTS
+      if (
+        productsResponse.error
+      ) {
+        console.error(
+          "Error loading undertone recommendations:",
+          productsResponse.error,
+        );
+
+        setProducts([]);
+      } else {
+        const mappedProducts: Product[] =
+          (
+            productsResponse.data ??
+            []
+          ).map(
+            (product) => ({
+              id:
+                product.id,
+
+              slug:
+                product.slug,
+
+              brand:
+                product.brand,
+
+              name:
+                product.name,
+
+              category:
+                product.category,
+
+              tags:
+                product.tags ??
+                [],
+
+              type:
+                product.type ??
+                "",
+
+              image:
+                product.image_url ??
+                "",
+
+              description:
+                product.description ??
+                "",
+
+              whyILikeIt:
+                product.why_i_like_it ??
+                [],
+
+              affiliateUrl:
+                product.affiliate_url ??
+                undefined,
+
+              featured:
+                product.featured,
+
+              homeTag:
+                product.home_tag ??
+                undefined,
+
+              skinTones:
+                product.skin_tones ??
+                [],
+
+              undertones:
+                product.undertones ??
+                [],
+
+              concerns:
+                product.concerns ??
+                [],
+            }),
+          );
+
+        setProducts(
+          mappedProducts,
+        );
+      }
+
+      // CMS
+      if (
+        contentResponse.error
+      ) {
+        console.error(
+          "Error loading Undertone Analyze content:",
+          contentResponse.error,
+        );
+      } else {
+        const saved =
+          contentResponse.data
+            ?.content ??
+          {};
+
+        setContent({
+          camera: {
+            ...fallbackContent.camera,
+            ...(saved.camera ??
+              {}),
+          },
+
+          questionnaire: {
+            ...fallbackContent.questionnaire,
+            ...(saved.questionnaire ??
+              {}),
+          },
+
+          results: {
+            ...fallbackContent.results,
+            ...(saved.results ??
+              {}),
+          },
+        });
+      }
+
+      setProductsLoading(
+        false,
+      );
     }
 
-    const mappedProducts: Product[] = (data ?? []).map(
-      (product) => ({
-        id: product.id,
-        slug: product.slug,
-        brand: product.brand,
-        name: product.name,
-        category: product.category,
-        tags: product.tags ?? [],
-        type: product.type ?? "",
-        image: product.image_url ?? "",
-        description: product.description ?? "",
-        whyILikeIt: product.why_i_like_it ?? [],
-        affiliateUrl: product.affiliate_url ?? undefined,
-        featured: product.featured,
-        homeTag: product.home_tag ?? undefined,
-        skinTones: product.skin_tones ?? [],
-        undertones: product.undertones ?? [],
-        concerns: product.concerns ?? [],
-      })
-    );
-
-    setProducts(mappedProducts);
-    setProductsLoading(false);
-  }
-
-  loadProducts();
-}, [supabase]);
+    loadPageData();
+  }, [supabase]);
 
   useEffect(() => {
     return () => {
       stream
         ?.getTracks()
-        .forEach((track) =>
-          track.stop()
+        .forEach(
+          (track) =>
+            track.stop(),
         );
     };
   }, [stream]);
@@ -621,40 +1115,42 @@ export default function UndertoneAnalyzePage() {
       />
 
       <div className="mx-auto max-w-3xl">
+        {/* TOP */}
         <div className="flex items-center justify-between gap-4">
           <Link
             href="/undertone"
             className="text-xs font-medium uppercase tracking-[0.14em] text-stone-500 transition hover:text-[#211d1b]"
           >
-            ← Back
+            {camera.backText}
           </Link>
 
           <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-[#b77b72]">
-            The Lizzy Edit
+            {camera.brand}
           </p>
         </div>
+
+        {/* =================================
+            CAMERA
+        ================================= */}
 
         {!cameraResult &&
         !finalResult ? (
           <>
             <section className="mt-10 text-center">
               <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-                Skin Analysis
+                {camera.eyebrow}
               </p>
 
               <h1 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-                Let&apos;s find your{" "}
+                {camera.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
-                  undertone.
+                  {camera.highlight}
                 </span>
               </h1>
 
               <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-stone-500 sm:text-base">
-                Position your face
-                inside the guide and
-                use soft natural
-                daylight for the best
-                result.
+                {camera.description}
               </p>
             </section>
 
@@ -667,15 +1163,15 @@ export default function UndertoneAnalyzePage() {
                     </div>
 
                     <p className="mt-5 font-serif text-3xl">
-                      Ready when you
-                      are.
+                      {
+                        camera.readyTitle
+                      }
                     </p>
 
                     <p className="mt-2 max-w-sm text-sm leading-6 text-stone-300">
-                      Your browser will
-                      ask for permission
-                      to use your front
-                      camera.
+                      {
+                        camera.readyDescription
+                      }
                     </p>
 
                     <button
@@ -689,8 +1185,8 @@ export default function UndertoneAnalyzePage() {
                       className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-white px-7 text-[10px] font-medium uppercase tracking-[0.14em] text-[#211d1b] transition hover:bg-[#f5e9e4] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isStarting
-                        ? "Opening Camera..."
-                        : "Open Camera"}
+                        ? camera.openingCameraText
+                        : camera.openCameraText}
                     </button>
                   </div>
                 )}
@@ -715,10 +1211,9 @@ export default function UndertoneAnalyzePage() {
 
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-5 pb-5 pt-16 text-center text-white">
                       <p className="text-xs">
-                        Keep your face
-                        centered and look
-                        directly at the
-                        camera.
+                        {
+                          camera.cameraGuideText
+                        }
                       </p>
                     </div>
                   </>
@@ -734,25 +1229,31 @@ export default function UndertoneAnalyzePage() {
               </div>
             )}
 
+            {/* CAMERA TIPS */}
             <section className="mt-6 grid gap-3 sm:grid-cols-3">
               {[
-                "Natural daylight",
-                "No beauty filters",
-                "Minimal makeup",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex min-h-14 items-center gap-3 rounded-[18px] border border-stone-200 bg-white px-4"
-                >
-                  <span className="text-[#b77b72]">
-                    ✓
-                  </span>
+                camera.tipOne,
+                camera.tipTwo,
+                camera.tipThree,
+              ].map(
+                (
+                  item,
+                  index,
+                ) => (
+                  <div
+                    key={`${index}-${item}`}
+                    className="flex min-h-14 items-center gap-3 rounded-[18px] border border-stone-200 bg-white px-4"
+                  >
+                    <span className="text-[#b77b72]">
+                      ✓
+                    </span>
 
-                  <p className="text-xs text-stone-600">
-                    {item}
-                  </p>
-                </div>
-              ))}
+                    <p className="text-xs text-stone-600">
+                      {item}
+                    </p>
+                  </div>
+                ),
+              )}
             </section>
 
             {stream && (
@@ -768,8 +1269,8 @@ export default function UndertoneAnalyzePage() {
                   className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#211d1b] px-8 text-[10px] font-medium uppercase tracking-[0.14em] text-white transition hover:bg-[#b76f70] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isAnalyzing
-                    ? "Analyzing..."
-                    : "Analyze My Skin →"}
+                    ? camera.analyzingButtonText
+                    : camera.analyzeButtonText}
                 </button>
 
                 <button
@@ -782,16 +1283,15 @@ export default function UndertoneAnalyzePage() {
                   }
                   className="inline-flex min-h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-8 text-[10px] font-medium uppercase tracking-[0.14em] text-stone-700 transition hover:border-stone-500 disabled:opacity-50"
                 >
-                  Close Camera
+                  {
+                    camera.closeCameraText
+                  }
                 </button>
               </div>
             )}
 
             <p className="mx-auto mt-8 max-w-lg text-center text-[11px] leading-5 text-stone-400">
-              Analysis happens
-              temporarily in your
-              browser. Your image is
-              not uploaded or stored.
+              {camera.privacyText}
             </p>
           </>
         ) : cameraResult &&
@@ -813,19 +1313,37 @@ export default function UndertoneAnalyzePage() {
             complete={
               questionnaireComplete
             }
+            content={
+              questionnaire
+            }
           />
         ) : finalResult ? (
           <ResultView
-            result={finalResult}
-            onTryAgain={tryAgain}
-            products={products}
-            productsLoading={productsLoading}
+            result={
+              finalResult
+            }
+            onTryAgain={
+              tryAgain
+            }
+            products={
+              products
+            }
+            productsLoading={
+              productsLoading
+            }
+            content={
+              results
+            }
           />
         ) : null}
       </div>
     </main>
   );
 }
+
+// =================================
+// QUESTIONNAIRE VIEW
+// =================================
 
 function QuestionnaireView({
   cameraResult,
@@ -834,45 +1352,69 @@ function QuestionnaireView({
   onFinish,
   onRetake,
   complete,
+  content,
 }: {
   cameraResult: AnalysisResult;
-  answers: QuestionnaireAnswers;
-  setAnswers: React.Dispatch<
-    React.SetStateAction<QuestionnaireAnswers>
-  >;
-  onFinish: () => void;
-  onRetake: () => void;
-  complete: boolean;
+
+  answers:
+    QuestionnaireAnswers;
+
+  setAnswers:
+    React.Dispatch<
+      React.SetStateAction<QuestionnaireAnswers>
+    >;
+
+  onFinish:
+    () => void;
+
+  onRetake:
+    () => void;
+
+  complete:
+    boolean;
+
+  content:
+    QuestionnaireContent;
 }) {
   return (
     <section className="py-12 sm:py-16">
       <div className="text-center">
         <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#b77b72]">
-          Quick Undertone Check
+          {content.eyebrow}
         </p>
 
         <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
-          Just a few{" "}
+          {content.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
-            quick questions.
+            {
+              content.highlight
+            }
           </span>
         </h1>
 
         <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500">
-          Your answers help refine
-          the estimate from your
-          camera analysis.
+          {
+            content.description
+          }
         </p>
       </div>
 
+      {/* CAMERA ESTIMATE */}
       <div className="mt-8 rounded-[24px] border border-stone-200 bg-[#f5e9e4] p-5 text-center">
         <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-stone-500">
-          Camera estimate
+          {
+            content.cameraEstimateLabel
+          }
         </p>
 
         <p className="mt-2 font-serif text-2xl">
-          {cameraResult.tone}
+          {
+            cameraResult.tone
+          }
+
           {" · "}
+
           <span className="italic text-[#b76f70]">
             {
               cameraResult.undertone
@@ -881,109 +1423,134 @@ function QuestionnaireView({
         </p>
       </div>
 
+      {/* QUESTIONS */}
       <div className="mt-8 space-y-5">
         <QuestionCard
           number="01"
-          question="Which jewelry tends to look best on you?"
+          question={
+            content.questionOne
+          }
           options={[
             {
-              label: "Gold",
+              label:
+                content.questionOneOptionOne,
+
+              /*
+                Do not change these
+                internal values.
+              */
               value: "Gold",
             },
             {
-              label: "Silver",
+              label:
+                content.questionOneOptionTwo,
               value: "Silver",
             },
             {
-              label: "Both",
+              label:
+                content.questionOneOptionThree,
               value: "Both",
             },
           ]}
           value={
             answers.jewelry
           }
-          onChange={(value) =>
+          onChange={(
+            value,
+          ) =>
             setAnswers(
               (current) => ({
                 ...current,
-                jewelry: value,
-              })
+                jewelry:
+                  value,
+              }),
             )
           }
         />
 
         <QuestionCard
           number="02"
-          question="What usually happens when you're in the sun?"
+          question={
+            content.questionTwo
+          }
           options={[
             {
               label:
-                "I tan easily",
+                content.questionTwoOptionOne,
               value: "Tan",
             },
             {
               label:
-                "I burn easily",
+                content.questionTwoOptionTwo,
               value: "Burn",
             },
             {
               label:
-                "A little of both",
+                content.questionTwoOptionThree,
               value: "Both",
             },
           ]}
-          value={answers.sun}
-          onChange={(value) =>
+          value={
+            answers.sun
+          }
+          onChange={(
+            value,
+          ) =>
             setAnswers(
               (current) => ({
                 ...current,
                 sun: value,
-              })
+              }),
             )
           }
         />
 
         <QuestionCard
           number="03"
-          question="Which colors usually make you feel your best?"
+          question={
+            content.questionThree
+          }
           options={[
             {
               label:
-                "Cream, camel & warm browns",
+                content.questionThreeOptionOne,
               value: "Warm",
             },
             {
               label:
-                "White, grey & cool tones",
+                content.questionThreeOptionTwo,
               value: "Cool",
             },
             {
               label:
-                "Both seem to work",
+                content.questionThreeOptionThree,
               value: "Both",
             },
           ]}
           value={
             answers.colors
           }
-          onChange={(value) =>
+          onChange={(
+            value,
+          ) =>
             setAnswers(
               (current) => ({
                 ...current,
                 colors: value,
-              })
+              }),
             )
           }
         />
       </div>
 
+      {/* ACTIONS */}
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         <button
           type="button"
           onClick={onRetake}
           className="inline-flex min-h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-7 text-[10px] font-medium uppercase tracking-[0.14em] transition hover:border-stone-500"
         >
-          Retake Photo
+          {content.retakeText}
         </button>
 
         <button
@@ -992,18 +1559,22 @@ function QuestionnaireView({
           disabled={!complete}
           className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#211d1b] px-8 text-[10px] font-medium uppercase tracking-[0.14em] text-white transition hover:bg-[#b76f70] disabled:cursor-not-allowed disabled:opacity-40"
         >
-          See My Results →
+          {
+            content.resultsButtonText
+          }
         </button>
       </div>
 
       <p className="mx-auto mt-6 max-w-lg text-center text-[10px] leading-5 text-stone-400">
-        These questions are used
-        only to refine your
-        undertone estimate.
+        {content.disclaimer}
       </p>
     </section>
   );
 }
+
+// =================================
+// QUESTION CARD
+// =================================
 
 function QuestionCard({
   number,
@@ -1013,14 +1584,18 @@ function QuestionCard({
   onChange,
 }: {
   number: string;
+
   question: string;
+
   options: {
     label: string;
     value: string;
   }[];
+
   value: string;
+
   onChange: (
-    value: string
+    value: string,
   ) => void;
 }) {
   return (
@@ -1050,7 +1625,7 @@ function QuestionCard({
                     type="button"
                     onClick={() =>
                       onChange(
-                        option.value
+                        option.value,
                       )
                     }
                     className={`min-h-12 rounded-[16px] border px-4 text-xs transition ${
@@ -1064,7 +1639,7 @@ function QuestionCard({
                     }
                   </button>
                 );
-              }
+              },
             )}
           </div>
         </div>
@@ -1073,68 +1648,109 @@ function QuestionCard({
   );
 }
 
-  function ResultView({
-    result,
-    onTryAgain,
-    products,
-    productsLoading,
-  }: {
-    result: AnalysisResult;
-    onTryAgain: () => void;
-    products: Product[];
-    productsLoading: boolean;
-  }) {
+// =================================
+// RESULT VIEW
+// =================================
+
+function ResultView({
+  result,
+  onTryAgain,
+  products,
+  productsLoading,
+  content,
+}: {
+  result:
+    AnalysisResult;
+
+  onTryAgain:
+    () => void;
+
+  products:
+    Product[];
+
+  productsLoading:
+    boolean;
+
+  content:
+    ResultsContent;
+}) {
   const recommendedProducts =
     products.filter(
       (product) => {
         const toneMatch =
           product.skinTones?.includes(
-            result.tone
-          ) ?? false;
+            result.tone,
+          ) ??
+          false;
 
         const undertoneMatch =
           product.undertones?.includes(
-            result.undertone
-          ) ?? false;
+            result.undertone,
+          ) ??
+          false;
 
         return (
           toneMatch &&
           undertoneMatch
         );
-      }
+      },
     );
 
   const bestColors =
     getBestColors(
-      result.undertone
+      result.undertone,
     );
 
   const position =
     getUndertonePosition(
-      result.undertone
+      result.undertone,
     );
+
+  const categories = [
+    {
+      name: "Foundation",
+      symbol: "◌",
+    },
+    {
+      name: "Blush",
+      symbol: "♡",
+    },
+    {
+      name: "Lipstick",
+      symbol: "✦",
+    },
+    {
+      name: "Bronzer",
+      symbol: "☼",
+    },
+  ];
 
   return (
     <section className="py-12 sm:py-16">
+      {/* RESULT HEADER */}
       <div className="text-center">
         <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#b77b72]">
-          Your Result
+          {content.eyebrow}
         </p>
 
         <h1 className="mt-4 font-serif text-5xl leading-tight sm:text-6xl">
-          Your beauty{" "}
+          {content.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
-            profile.
+            {
+              content.highlight
+            }
           </span>
         </h1>
 
         <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500">
-          Based on your camera
-          analysis and your quick
-          undertone check.
+          {
+            content.description
+          }
         </p>
       </div>
 
+      {/* RESULT CARD */}
       <div className="mt-10 overflow-hidden rounded-[30px] border border-stone-200 bg-white">
         <div className="bg-[#f5e9e4] px-6 py-10 text-center sm:px-10">
           <div
@@ -1146,7 +1762,9 @@ function QuestionCard({
           />
 
           <p className="mt-6 text-[9px] font-medium uppercase tracking-[0.2em] text-stone-500">
-            Estimated Skin Tone
+            {
+              content.skinToneLabel
+            }
           </p>
 
           <h2 className="mt-2 font-serif text-4xl uppercase tracking-[0.04em] sm:text-5xl">
@@ -1155,10 +1773,11 @@ function QuestionCard({
 
           <p className="mt-3 font-serif text-3xl italic text-[#b76f70] sm:text-4xl">
             {formatUndertone(
-              result.undertone
+              result.undertone,
             )}
           </p>
 
+          {/* UNDERTONE SCALE */}
           <div className="mx-auto mt-10 max-w-md">
             <div className="relative pt-6">
               <div className="h-[2px] w-full bg-gradient-to-r from-[#b7bfd7] via-[#d6c5bc] to-[#cf987c]" />
@@ -1174,9 +1793,17 @@ function QuestionCard({
             </div>
 
             <div className="mt-3 flex justify-between text-[9px] font-medium uppercase tracking-[0.14em] text-stone-500">
-              <span>Cool</span>
-              <span>Neutral</span>
-              <span>Warm</span>
+              <span>
+                Cool
+              </span>
+
+              <span>
+                Neutral
+              </span>
+
+              <span>
+                Warm
+              </span>
             </div>
           </div>
         </div>
@@ -1189,7 +1816,9 @@ function QuestionCard({
           <div className="mt-7 rounded-[20px] bg-[#fffaf7] p-5">
             <div className="flex items-center justify-between gap-4">
               <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-stone-500">
-                Analysis Quality
+                {
+                  content.qualityLabel
+                }
               </p>
 
               <p className="font-serif text-xl">
@@ -1212,16 +1841,24 @@ function QuestionCard({
         </div>
       </div>
 
+      {/* BEST COLORS */}
       <section className="mt-12">
         <div className="text-center">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-            Your Best Colors
+            {
+              content.bestColorsEyebrow
+            }
           </p>
 
           <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
-            Shades that may{" "}
+            {
+              content.bestColorsTitleBefore
+            }{" "}
+
             <span className="italic text-[#c78f86]">
-              flatter you.
+              {
+                content.bestColorsHighlight
+              }
             </span>
           </h2>
         </div>
@@ -1235,168 +1872,180 @@ function QuestionCard({
               >
                 {color}
               </div>
-            )
+            ),
           )}
         </div>
       </section>
 
+      {/* BEAUTY CATEGORIES */}
       <section className="mt-12">
         <div className="text-center">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-            Beauty Categories
+            {
+              content.categoriesEyebrow
+            }
           </p>
 
           <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
-            Recommended{" "}
+            {
+              content.categoriesTitleBefore
+            }{" "}
+
             <span className="italic text-[#c78f86]">
-              for you.
+              {
+                content.categoriesHighlight
+              }
             </span>
           </h2>
 
           <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-            These are great places
-            to start when choosing
-            colors for your
-            undertone.
+            {
+              content.categoriesDescription
+            }
           </p>
         </div>
 
         <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            {
-              name: "Foundation",
-              symbol: "◌",
-            },
-            {
-              name: "Blush",
-              symbol: "♡",
-            },
-            {
-              name: "Lipstick",
-              symbol: "✦",
-            },
-            {
-              name: "Bronzer",
-              symbol: "☼",
-            },
-          ].map((category) => (
-            <Link
-              key={
-                category.name
-              }
-              href={`/picks?filter=${encodeURIComponent(
-                category.name
-              )}`}
-              className="group flex min-h-28 flex-col items-center justify-center rounded-[22px] border border-stone-200 bg-white p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-[#d8aaa2] hover:shadow-md"
-            >
-              <span className="text-xl text-[#b77b72]">
-                {
-                  category.symbol
-                }
-              </span>
-
-              <span className="mt-3 font-serif text-xl">
-                {
+          {categories.map(
+            (category) => (
+              <Link
+                key={
                   category.name
                 }
-              </span>
+                href={`/picks?filter=${encodeURIComponent(
+                  category.name,
+                )}`}
+                className="group flex min-h-28 flex-col items-center justify-center rounded-[22px] border border-stone-200 bg-white p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-[#d8aaa2] hover:shadow-md"
+              >
+                <span className="text-xl text-[#b77b72]">
+                  {
+                    category.symbol
+                  }
+                </span>
 
-              <span className="mt-2 text-[9px] uppercase tracking-[0.14em] text-stone-400 transition group-hover:text-[#b76f70]">
-                Explore →
-              </span>
-            </Link>
-          ))}
+                <span className="mt-3 font-serif text-xl">
+                  {
+                    category.name
+                  }
+                </span>
+
+                <span className="mt-2 text-[9px] uppercase tracking-[0.14em] text-stone-400 transition group-hover:text-[#b76f70]">
+                  {
+                    content.categoryButtonText
+                  }
+                </span>
+              </Link>
+            ),
+          )}
         </div>
       </section>
 
+      {/* PRODUCTS LOADING */}
       {productsLoading && (
-          <section className="mt-12">
-            <div className="rounded-[24px] border border-stone-200 bg-white p-8 text-center">
-              <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-                Lizzy&apos;s Picks
-              </p>
-
-              <p className="mt-3 font-serif text-2xl">
-                Finding your product matches...
-              </p>
-            </div>
-          </section>
-        )}
-
-      {!productsLoading &&
-        recommendedProducts.length > 0 && (
         <section className="mt-12">
-          <div className="text-center">
+          <div className="rounded-[24px] border border-stone-200 bg-white p-8 text-center">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
-              Lizzy&apos;s Picks
+              {
+                content.loadingEyebrow
+              }
             </p>
 
-            <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
-              Products selected{" "}
-              <span className="italic text-[#c78f86]">
-                for your result.
-              </span>
-            </h2>
-
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-              Beauty picks that may
-              complement your
-              estimated skin tone and
-              undertone.
+            <p className="mt-3 font-serif text-2xl">
+              {
+                content.loadingText
+              }
             </p>
-          </div>
-
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5">
-            {recommendedProducts.map(
-              (product) => (
-                <ProductCard
-                  key={
-                    product.id
-                  }
-                  product={
-                    product
-                  }
-                />
-              )
-            )}
           </div>
         </section>
       )}
 
+      {/* RECOMMENDED PRODUCTS */}
+      {!productsLoading &&
+        recommendedProducts.length >
+          0 && (
+          <section className="mt-12">
+            <div className="text-center">
+              <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
+                {
+                  content.productsEyebrow
+                }
+              </p>
+
+              <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
+                {
+                  content.productsTitleBefore
+                }{" "}
+
+                <span className="italic text-[#c78f86]">
+                  {
+                    content.productsHighlight
+                  }
+                </span>
+              </h2>
+
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
+                {
+                  content.productsDescription
+                }
+              </p>
+            </div>
+
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5">
+              {recommendedProducts.map(
+                (product) => (
+                  <ProductCard
+                    key={
+                      product.id
+                    }
+                    product={
+                      product
+                    }
+                  />
+                ),
+              )}
+            </div>
+          </section>
+        )}
+
+      {/* RESULT ACTIONS */}
       <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:justify-center">
         <button
           type="button"
-          onClick={onTryAgain}
+          onClick={
+            onTryAgain
+          }
           className="inline-flex min-h-12 items-center justify-center rounded-full border border-stone-300 px-7 text-[10px] font-medium uppercase tracking-[0.14em] transition hover:border-stone-500"
         >
-          Try Again
+          {
+            content.tryAgainText
+          }
         </button>
 
         <Link
           href="/picks"
           className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#211d1b] px-7 text-[10px] font-medium uppercase tracking-[0.14em] text-white transition hover:bg-[#b76f70]"
         >
-          Explore Beauty Picks →
+          {
+            content.explorePicksText
+          }
         </Link>
       </div>
 
       <p className="mx-auto mt-7 max-w-lg text-center text-[10px] leading-5 text-stone-400">
-        Skin tone, undertone, color
-        and product recommendations
-        are estimates and can be
-        affected by lighting, camera
-        settings, makeup and
-        surrounding colors. Always
-        check the brand&apos;s shade
-        guide when selecting a
-        specific shade.
+        {
+          content.finalDisclaimer
+        }
       </p>
     </section>
   );
 }
 
+// =================================
+// UNDERTONE POSITION
+// =================================
+
 function getUndertonePosition(
-  undertone: string
+  undertone: string,
 ) {
   switch (undertone) {
     case "Cool":
@@ -1419,17 +2068,25 @@ function getUndertonePosition(
   }
 }
 
+// =================================
+// FORMAT UNDERTONE
+// =================================
+
 function formatUndertone(
-  undertone: string
+  undertone: string,
 ) {
   return undertone.replace(
     "-",
-    " "
+    " ",
   );
 }
 
+// =================================
+// BEST COLORS
+// =================================
+
 function getBestColors(
-  undertone: string
+  undertone: string,
 ) {
   switch (undertone) {
     case "Warm":
