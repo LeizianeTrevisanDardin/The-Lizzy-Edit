@@ -112,19 +112,26 @@ export default async function AdminPage() {
           </Link>
 
           {/* BEAUTY GUIDES */}
-          <div className="flex h-full flex-col rounded-[28px] border border-stone-200 bg-white p-6 opacity-60">
-            <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-stone-400">
-              Coming Soon
-            </p>
+            <Link
+              href="/admin/content/beauty-guide"
+              className="group flex h-full flex-col rounded-[28px] border border-stone-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
+                Editorial
+              </p>
 
-            <h2 className="mt-4 font-serif text-3xl">
-              Beauty Guides
-            </h2>
+              <h2 className="mt-4 font-serif text-3xl">
+                Beauty Guides
+              </h2>
 
-            <p className="mt-3 text-sm leading-6 text-stone-500">
-              Create and manage editorial beauty content.
-            </p>
-          </div>
+              <p className="mt-3 text-sm leading-6 text-stone-500">
+                Edit the content of your six beauty guides.
+              </p>
+
+              <span className="mt-auto pt-6 text-sm transition group-hover:translate-x-2">
+                Manage guides →
+              </span>
+            </Link>
 
           {/* ANALYTICS */}
           <Link
