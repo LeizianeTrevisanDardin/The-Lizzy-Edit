@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import { createClient } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -56,8 +65,8 @@ export default async function AdminPage() {
           </div>
         </div>
 
-       {/* DASHBOARD CARDS */}
-          <section className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* DASHBOARD CARDS */}
+        <section className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {/* PRODUCTS */}
           <Link
             href="/admin/products"
@@ -118,9 +127,12 @@ export default async function AdminPage() {
           </div>
 
           {/* ANALYTICS */}
-          <div className="flex h-full flex-col rounded-[28px] border border-stone-200 bg-white p-6 opacity-60">
-            <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-stone-400">
-              Coming Soon
+          <Link
+            href="/admin/analytics"
+            className="group flex h-full flex-col rounded-[28px] border border-stone-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
+              Overview
             </p>
 
             <h2 className="mt-4 font-serif text-3xl">
@@ -128,9 +140,13 @@ export default async function AdminPage() {
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              Track product clicks and affiliate performance.
+              View a simple overview of your products and content.
             </p>
-          </div>
+
+            <span className="mt-auto pt-6 text-sm transition group-hover:translate-x-2">
+              View analytics →
+            </span>
+          </Link>
         </section>
       </div>
     </main>

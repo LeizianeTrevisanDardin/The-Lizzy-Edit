@@ -119,12 +119,14 @@ const fallbackContent: GuideContent = {
     description:
       "The everything shower can be a lovely way to slow down and reset, but it does not need to become a two-hour checklist. A few thoughtful steps can make the routine feel special without making it exhausting.",
     image: "/images/5.png",
-    imageAlt: "Everything shower hair and body care essentials",
+    imageAlt:
+      "Everything shower hair and body care essentials",
   },
 
   intro: {
     eyebrow: "Make it realistic",
-    titleBefore: "Self-care should not feel like another",
+    titleBefore:
+      "Self-care should not feel like another",
     highlight: "obligation.",
     paragraphs: [
       "The idea behind an everything shower is simple: give yourself a little more time than usual for hair, body and skincare.",
@@ -135,7 +137,8 @@ const fallbackContent: GuideContent = {
 
   ritual: {
     eyebrow: "The ritual",
-    titleBefore: "Build it around what actually feels",
+    titleBefore:
+      "Build it around what actually feels",
     highlight: "worth doing.",
     noteLabel: "Lizzy's note",
 
@@ -177,7 +180,8 @@ const fallbackContent: GuideContent = {
 
   simpleRoutine: {
     eyebrow: "The Simple Version",
-    title: "When you want the reset without the marathon.",
+    title:
+      "When you want the reset without the marathon.",
     description:
       "Focus on the essentials and add just one or two extras that make the shower feel a little more special.",
     items: [
@@ -203,7 +207,8 @@ const fallbackContent: GuideContent = {
 
   order: {
     eyebrow: "A simple order",
-    titleBefore: "You do not need to overthink the",
+    titleBefore:
+      "You do not need to overthink the",
     highlight: "sequence.",
     items: [
       "01 — Shampoo",
@@ -219,7 +224,8 @@ const fallbackContent: GuideContent = {
 
   afterShower: {
     eyebrow: "Don't forget the after",
-    titleBefore: "The shower may end, but the",
+    titleBefore:
+      "The shower may end, but the",
     highlight: "ritual doesn't.",
     description:
       "Applying body lotion, cream or oil afterward can be one of the most satisfying parts of the routine. You can also finish with your normal facial skincare and a fragrance if that is part of what makes you feel put together.",
@@ -246,7 +252,8 @@ const fallbackContent: GuideContent = {
 
   finalNote: {
     eyebrow: "Lizzy's take",
-    titleBefore: "The best everything shower is the one you",
+    titleBefore:
+      "The best everything shower is the one you",
     highlight: "actually enjoy.",
     description:
       "You do not need ten products, candles and an elaborate routine for self-care to count. Sometimes shampoo, a body scrub, a great body cream and a little extra time are more than enough.",
@@ -254,7 +261,8 @@ const fallbackContent: GuideContent = {
 
   cta: {
     eyebrow: "The Lizzy Edit",
-    title: "Ready for a little more self-care?",
+    title:
+      "Ready for a little more self-care?",
     description:
       "Explore body, hair and self-care favorites for routines that feel a little more special.",
     buttonText: "Explore Self-Care →",
@@ -272,7 +280,7 @@ const fallbackContent: GuideContent = {
 };
 
 // =================================
-// PAGE
+// SEO
 // =================================
 
 export const metadata: Metadata = {
@@ -299,7 +307,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/images/5.png",
-        alt: "Everything shower hair and body care essentials",
+        alt:
+          "Everything shower hair and body care essentials",
       },
     ],
   },
@@ -317,6 +326,48 @@ export const metadata: Metadata = {
   },
 };
 
+// =================================
+// STRUCTURED DATA
+// =================================
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+
+  headline:
+    "The Everything Shower, Simplified",
+
+  description:
+    "Learn how to build a realistic everything shower routine with hair care, body care, exfoliation and post-shower steps without overcomplicating it.",
+
+  image: [
+    "https://the-lizzy-edit.vercel.app/images/5.png",
+  ],
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id":
+      "https://the-lizzy-edit.vercel.app/beauty-guide/05",
+  },
+
+  author: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+    url:
+      "https://the-lizzy-edit.vercel.app/about",
+  },
+
+  publisher: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+    url:
+      "https://the-lizzy-edit.vercel.app",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
 
 export default async function EverythingShowerPage() {
   const supabase = await createClient();
@@ -427,9 +478,21 @@ export default async function EverythingShowerPage() {
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      {/* =================================
+          ARTICLE STRUCTURED DATA
+      ================================= */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd),
+        }}
+      />
+
       <Header />
 
       {/* ARTICLE HEADER */}
+
       <section className="border-b border-stone-200 bg-[#f3e7e2]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Link
@@ -446,6 +509,7 @@ export default async function EverythingShowerPage() {
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               {hero.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {hero.highlight}
               </span>
@@ -459,6 +523,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* HERO IMAGE */}
+
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
@@ -476,6 +541,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* INTRODUCTION */}
+
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
           {intro.eyebrow}
@@ -483,6 +549,7 @@ export default async function EverythingShowerPage() {
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
           {intro.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
             {intro.highlight}
           </span>
@@ -500,6 +567,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* SHOWER STEPS */}
+
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -509,6 +577,7 @@ export default async function EverythingShowerPage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               {ritual.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {ritual.highlight}
               </span>
@@ -553,6 +622,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* TWO ROUTINE OPTIONS */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2">
           <div className="rounded-[28px] bg-[#efe1da] p-6 sm:p-8">
@@ -612,6 +682,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* ORDER OF STEPS */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -620,6 +691,7 @@ export default async function EverythingShowerPage() {
 
           <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
             {order.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {order.highlight}
             </span>
@@ -645,6 +717,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* AFTER SHOWER */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -653,6 +726,7 @@ export default async function EverythingShowerPage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {afterShower.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {afterShower.highlight}
             </span>
@@ -678,6 +752,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* BEAUTY NOTES */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
@@ -688,6 +763,7 @@ export default async function EverythingShowerPage() {
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
                 {beautyNotes.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
                   {beautyNotes.highlight}
                 </span>
@@ -702,7 +778,10 @@ export default async function EverythingShowerPage() {
                     className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_1fr]"
                   >
                     <span className="font-serif text-xl text-[#c78f86]">
-                      {String(index + 1).padStart(2, "0")}
+                      {String(index + 1).padStart(
+                        2,
+                        "0",
+                      )}
                     </span>
 
                     <p className="text-sm leading-7 text-stone-700 sm:text-base">
@@ -717,6 +796,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* FINAL NOTE */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -725,6 +805,7 @@ export default async function EverythingShowerPage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {finalNote.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {finalNote.highlight}
             </span>
@@ -737,6 +818,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* CTA */}
+
       <section className="mx-auto max-w-5xl px-5 pb-10 sm:px-6 sm:pb-14 lg:px-8 lg:pb-20">
         <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12">
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
@@ -767,6 +849,7 @@ export default async function EverythingShowerPage() {
       </section>
 
       {/* ARTICLE NAVIGATION */}
+
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-3 sm:items-center">
           <Link
