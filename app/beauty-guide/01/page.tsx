@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -223,6 +224,48 @@ const fallbackContent: GuideContent = {
 // =================================
 // PAGE
 // =================================
+
+export const metadata: Metadata = {
+  title: "How to Build a Simple Skincare Routine",
+
+  description:
+    "Learn how to build a simple skincare routine with cleanser, treatment, moisturizer and SPF, plus practical tips from The Lizzy Edit.",
+
+  alternates: {
+    canonical: "/beauty-guide/01",
+  },
+
+  openGraph: {
+    title:
+      "How to Build a Simple Skincare Routine | The Lizzy Edit",
+
+    description:
+      "Learn how to build a simple skincare routine with cleanser, treatment, moisturizer and SPF, plus practical tips from The Lizzy Edit.",
+
+    url: "/beauty-guide/01",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/1.png",
+        alt: "Simple skincare routine essentials",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "How to Build a Simple Skincare Routine | The Lizzy Edit",
+
+    description:
+      "Learn how to build a simple skincare routine with cleanser, treatment, moisturizer and SPF, plus practical tips from The Lizzy Edit.",
+
+    images: ["/images/1.png"],
+  },
+};
 
 export default async function SimpleSkincareRoutinePage() {
   const supabase = await createClient();

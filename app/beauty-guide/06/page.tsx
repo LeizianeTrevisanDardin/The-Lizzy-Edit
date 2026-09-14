@@ -1,4 +1,4 @@
-import Image from "next/image";
+import type { Metadata } from "next";import Image from "next/image";
 import Link from "next/link";
 
 import Header from "@/components/Header";
@@ -315,6 +315,48 @@ const fallbackContent: GuideContent = {
 // =================================
 // PAGE
 // =================================
+
+export const metadata: Metadata = {
+  title: "When Is a Beauty Product Worth the Splurge?",
+
+  description:
+    "Learn when a beauty product may be worth the splurge, how to compare value, cost per use, performance and affordable alternatives.",
+
+  alternates: {
+    canonical: "/beauty-guide/06",
+  },
+
+  openGraph: {
+    title:
+      "When Is a Beauty Product Worth the Splurge? | The Lizzy Edit",
+
+    description:
+      "Learn when a beauty product may be worth the splurge, how to compare value, cost per use, performance and affordable alternatives.",
+
+    url: "/beauty-guide/06",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/6.png",
+        alt: "Beauty products and shopping notes",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "When Is a Beauty Product Worth the Splurge? | The Lizzy Edit",
+
+    description:
+      "Learn when a beauty product may be worth the splurge, how to compare value, cost per use, performance and affordable alternatives.",
+
+    images: ["/images/6.png"],
+  },
+};
 
 export default async function WorthTheSplurgePage() {
   const supabase = await createClient();

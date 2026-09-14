@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -212,16 +213,45 @@ const fallbackContent = {
   },
 
   cta: {
-    eyebrow:
-      "Lizzy's Skincare Picks",
-    title:
-      "Ready to discover products for your routine?",
-  },
+      eyebrow:
+        "Lizzy's Skincare Picks",
+
+      title:
+        "Ready to discover products for your routine?",
+
+      buttonText:
+        "Explore My Picks",
+
+      href:
+        "/picks?filter=Skincare",
+    },
 };
+
 
 // =================================
 // PAGE
 // =================================
+  export const metadata: Metadata = {
+    title: "Skincare Recommendations",
+
+    description:
+      "Explore curated skincare recommendations by concern, skin type and routine from The Lizzy Edit.",
+
+    alternates: {
+      canonical: "/skincare",
+    },
+
+    openGraph: {
+      title: "Skincare Recommendations | The Lizzy Edit",
+
+      description:
+        "Explore curated skincare recommendations by concern, skin type and routine from The Lizzy Edit.",
+
+      url: "/skincare",
+
+      type: "website",
+    },
+  };
 
 export default async function SkincarePage() {
   const supabase = await createClient();
@@ -275,6 +305,40 @@ export default async function SkincarePage() {
 
   const savedContent =
     contentData?.content ?? {};
+
+  // =================================
+// LOAD GLOBAL PRODUCT CARD CONTENT
+// =================================
+
+const {
+  data: productCardData,
+  error: productCardError,
+} = await supabase
+  .from("site_content")
+  .select("content")
+  .eq("page", "global")
+  .eq("section", "product-card")
+  .maybeSingle();
+
+if (productCardError) {
+  console.error(
+    "Error loading global product card content:",
+    productCardError,
+  );
+}
+
+const productCard = {
+  shopButtonText:
+    "Shop This Product →",
+
+  viewButtonText:
+    "View Product →",
+
+  viewAriaLabel:
+    "View",
+
+  ...(productCardData?.content ?? {}),
+};
 
   // =================================
   // MERGE FALLBACK + CMS
@@ -515,36 +579,37 @@ export default async function SkincarePage() {
                     slug: product.slug,
                     brand: product.brand,
                     name: product.name,
-                    category:
-                      product.category,
-                    tags:
-                      product.tags ?? [],
-                    type:
-                      product.type ?? "",
-                    image:
-                      product.image_url ?? "",
+                    category: product.category,
+                    tags: product.tags ?? [],
+                    type: product.type ?? "",
+                    image: product.image_url ?? "",
                     description:
                       product.description ?? "",
                     whyILikeIt:
-                      product.why_i_like_it ??
-                      [],
+                      product.why_i_like_it ?? [],
                     affiliateUrl:
                       product.affiliate_url ??
                       undefined,
-                    featured:
-                      product.featured,
+                    featured: product.featured,
                     homeTag:
                       product.home_tag ??
                       undefined,
                     skinTones:
-                      product.skin_tones ??
-                      [],
+                      product.skin_tones ?? [],
                     undertones:
-                      product.undertones ??
-                      [],
+                      product.undertones ?? [],
                     concerns:
                       product.concerns ?? [],
                   }}
+                  shopButtonText={
+                    productCard.shopButtonText
+                  }
+                  viewButtonText={
+                    productCard.viewButtonText
+                  }
+                  viewAriaLabel={
+                    productCard.viewAriaLabel
+                  }
                 />
               ),
             )}
@@ -629,6 +694,8 @@ export default async function SkincarePage() {
       <PicksCTA
         eyebrow={cta.eyebrow}
         title={cta.title}
+        buttonText={cta.buttonText}
+        href={cta.href}
       />
 
       <Footer />

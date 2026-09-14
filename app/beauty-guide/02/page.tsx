@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -214,6 +215,48 @@ const fallbackContent: GuideContent = {
     allGuidesLink: "/beauty-guide",
     nextGuideText: "Next Guide",
     nextGuideLink: "/beauty-guide/03",
+  },
+};
+
+export const metadata: Metadata = {
+  title: "Everyday Makeup That Still Looks Like You",
+
+  description:
+    "Learn how to build an easy everyday makeup routine with lightweight complexion products, blush, mascara and comfortable lip products.",
+
+  alternates: {
+    canonical: "/beauty-guide/02",
+  },
+
+  openGraph: {
+    title:
+      "Everyday Makeup That Still Looks Like You | The Lizzy Edit",
+
+    description:
+      "Learn how to build an easy everyday makeup routine with lightweight complexion products, blush, mascara and comfortable lip products.",
+
+    url: "/beauty-guide/02",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/2.png",
+        alt: "Everyday makeup essentials",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "Everyday Makeup That Still Looks Like You | The Lizzy Edit",
+
+    description:
+      "Learn how to build an easy everyday makeup routine with lightweight complexion products, blush, mascara and comfortable lip products.",
+
+    images: ["/images/2.png"],
   },
 };
 

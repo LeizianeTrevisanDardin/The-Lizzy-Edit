@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -77,6 +78,27 @@ const fallbackContent = {
   ] as PrivacySection[],
 
   lastUpdated: "Last updated: August 2026",
+};
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+
+  description:
+    "Read The Lizzy Edit Privacy Policy and learn how website usage data, cookies, analytics, affiliate links and third-party services may be handled.",
+
+  alternates: {
+    canonical: "/privacy",
+  },
+
+  openGraph: {
+    title: "Privacy Policy | The Lizzy Edit",
+
+    description:
+      "Read The Lizzy Edit Privacy Policy and learn how website usage data, cookies, analytics, affiliate links and third-party services may be handled.",
+
+    url: "/privacy",
+
+    type: "website",
+  },
 };
 
 export default async function PrivacyPage() {

@@ -97,6 +97,27 @@ export async function updateUndertoneAnalyzePage(
 
       privacyText:
         formData.get("cameraPrivacyText")?.toString() || "",
+
+      // CAMERA ERRORS
+      accessError:
+        formData
+          .get("cameraAccessError")
+          ?.toString() || "",
+
+      notReadyError:
+        formData
+          .get("cameraNotReadyError")
+          ?.toString() || "",
+
+      analysisError:
+        formData
+          .get("cameraAnalysisError")
+          ?.toString() || "",
+
+      sampleError:
+        formData
+          .get("cameraSampleError")
+          ?.toString() || "",
     },
 
     questionnaire: {
@@ -224,6 +245,58 @@ export async function updateUndertoneAnalyzePage(
           .get("resultsQualityLabel")
           ?.toString() || "",
 
+      // UNDERTONE DISPLAY LABELS
+      coolLabel:
+        formData
+          .get("resultsCoolLabel")
+          ?.toString() || "",
+
+      neutralCoolLabel:
+        formData
+          .get("resultsNeutralCoolLabel")
+          ?.toString() || "",
+
+      neutralLabel:
+        formData
+          .get("resultsNeutralLabel")
+          ?.toString() || "",
+
+      neutralWarmLabel:
+        formData
+          .get("resultsNeutralWarmLabel")
+          ?.toString() || "",
+
+      warmLabel:
+        formData
+          .get("resultsWarmLabel")
+          ?.toString() || "",
+
+      // RESULT MESSAGES
+      warmMessage:
+        formData
+          .get("resultsWarmMessage")
+          ?.toString() || "",
+
+      neutralWarmMessage:
+        formData
+          .get("resultsNeutralWarmMessage")
+          ?.toString() || "",
+
+      neutralMessage:
+        formData
+          .get("resultsNeutralMessage")
+          ?.toString() || "",
+
+      neutralCoolMessage:
+        formData
+          .get("resultsNeutralCoolMessage")
+          ?.toString() || "",
+
+      coolMessage:
+        formData
+          .get("resultsCoolMessage")
+          ?.toString() || "",
+
       bestColorsEyebrow:
         formData
           .get("resultsBestColorsEyebrow")
@@ -237,6 +310,32 @@ export async function updateUndertoneAnalyzePage(
       bestColorsHighlight:
         formData
           .get("resultsBestColorsHighlight")
+          ?.toString() || "",
+
+      // BEST COLOR LISTS
+      bestColorsWarm:
+        formData
+          .get("resultsBestColorsWarm")
+          ?.toString() || "",
+
+      bestColorsNeutralWarm:
+        formData
+          .get("resultsBestColorsNeutralWarm")
+          ?.toString() || "",
+
+      bestColorsNeutral:
+        formData
+          .get("resultsBestColorsNeutral")
+          ?.toString() || "",
+
+      bestColorsNeutralCool:
+        formData
+          .get("resultsBestColorsNeutralCool")
+          ?.toString() || "",
+
+      bestColorsCool:
+        formData
+          .get("resultsBestColorsCool")
           ?.toString() || "",
 
       categoriesEyebrow:
@@ -262,6 +361,27 @@ export async function updateUndertoneAnalyzePage(
       categoryButtonText:
         formData
           .get("resultsCategoryButtonText")
+          ?.toString() || "",
+
+      // BEAUTY CATEGORY LABELS
+      foundationLabel:
+        formData
+          .get("resultsFoundationLabel")
+          ?.toString() || "",
+
+      blushLabel:
+        formData
+          .get("resultsBlushLabel")
+          ?.toString() || "",
+
+      lipstickLabel:
+        formData
+          .get("resultsLipstickLabel")
+          ?.toString() || "",
+
+      bronzerLabel:
+        formData
+          .get("resultsBronzerLabel")
           ?.toString() || "",
 
       loadingEyebrow:
@@ -330,7 +450,11 @@ export async function updateUndertoneAnalyzePage(
   }
 
   revalidatePath("/undertone/analyze");
-  revalidatePath("/admin/content/undertone/analyze");
+  revalidatePath(
+    "/admin/content/undertone/analyze",
+  );
 
-  redirect("/admin/content/undertone/analyze");
+  redirect(
+    "/admin/content/undertone/analyze",
+  );
 }

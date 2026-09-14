@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -273,6 +274,49 @@ const fallbackContent: GuideContent = {
 // =================================
 // PAGE
 // =================================
+
+export const metadata: Metadata = {
+  title: "The Everything Shower, Simplified",
+
+  description:
+    "Learn how to build a realistic everything shower routine with hair care, body care, exfoliation and post-shower steps without overcomplicating it.",
+
+  alternates: {
+    canonical: "/beauty-guide/05",
+  },
+
+  openGraph: {
+    title:
+      "The Everything Shower, Simplified | The Lizzy Edit",
+
+    description:
+      "Learn how to build a realistic everything shower routine with hair care, body care, exfoliation and post-shower steps without overcomplicating it.",
+
+    url: "/beauty-guide/05",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/5.png",
+        alt: "Everything shower hair and body care essentials",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "The Everything Shower, Simplified | The Lizzy Edit",
+
+    description:
+      "Learn how to build a realistic everything shower routine with hair care, body care, exfoliation and post-shower steps without overcomplicating it.",
+
+    images: ["/images/5.png"],
+  },
+};
+
 
 export default async function EverythingShowerPage() {
   const supabase = await createClient();

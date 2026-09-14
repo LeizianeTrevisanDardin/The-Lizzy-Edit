@@ -324,3 +324,99 @@ export async function updateGlobalFooter(
 
   redirect("/admin/content/global");
 }
+
+// =================================
+// PRODUCT CARD
+// =================================
+
+export async function updateGlobalProductCard(
+  formData: FormData,
+) {
+  const supabase = await createClient();
+
+  // ================================
+  // AUTH
+  // ================================
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
+  // ================================
+  // ADMIN CHECK
+  // ================================
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.role !== "admin") {
+    redirect("/");
+  }
+
+  // ================================
+  // PRODUCT CARD CONTENT
+  // ================================
+
+  const content = {
+    shopButtonText:
+      formData.get("shopButtonText")?.toString() ||
+      "Shop This Product →",
+
+    viewButtonText:
+      formData.get("viewButtonText")?.toString() ||
+      "View Product →",
+
+    viewAriaLabel:
+      formData.get("viewAriaLabel")?.toString() ||
+      "View",
+  };
+
+  // ================================
+  // SAVE
+  // ================================
+
+  const { error } = await supabase
+    .from("site_content")
+    .upsert(
+      {
+        page: "global",
+        section: "product-card",
+        content,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "page,section",
+      },
+    );
+
+  if (error) {
+    console.error(
+      "GLOBAL PRODUCT CARD UPDATE ERROR:",
+      error,
+    );
+
+    throw new Error(
+      `Could not update product card: ${error.message}`,
+    );
+  }
+
+  // ================================
+  // REFRESH PRODUCT PAGES
+  // ================================
+
+  revalidatePath("/picks");
+  revalidatePath("/skincare");
+  revalidatePath("/makeup");
+  revalidatePath("/self-care");
+  revalidatePath("/fragrances");
+  revalidatePath("/admin/content/global");
+
+  redirect("/admin/content/global");
+}

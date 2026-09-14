@@ -197,6 +197,12 @@ export async function updateAboutPage(
 
       title:
         formData.get("ctaTitle")?.toString() || "",
+
+      buttonText:
+        formData.get("ctaButtonText")?.toString() || "",
+
+      href:
+        formData.get("ctaHref")?.toString() || "",
     },
   };
 

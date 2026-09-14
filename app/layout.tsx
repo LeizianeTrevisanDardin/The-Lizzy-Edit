@@ -1,23 +1,69 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "The Lizzy Edit | Beauty by Lizzy Trevisan",
+  metadataBase: new URL(
+    "https://the-lizzy-edit.vercel.app",
+  ),
+
+  title: {
+    default:
+      "The Lizzy Edit | Beauty by Lizzy Trevisan",
+    template:
+      "%s | The Lizzy Edit",
+  },
+
   description:
     "Skincare, makeup and self-care recommendations curated by Beauty Advisor Lizzy Trevisan.",
+
+  keywords: [
+    "beauty",
+    "skincare",
+    "makeup",
+    "self-care",
+    "beauty recommendations",
+    "beauty advisor",
+    "skincare recommendations",
+    "makeup recommendations",
+  ],
+
+  authors: [
+    {
+      name: "Lizzy Trevisan",
+    },
+  ],
+
+  creator: "Lizzy Trevisan",
+
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    url: "https://the-lizzy-edit.vercel.app",
+    siteName: "The Lizzy Edit",
+    title:
+      "The Lizzy Edit | Beauty by Lizzy Trevisan",
+    description:
+      "Skincare, makeup and self-care recommendations curated by Beauty Advisor Lizzy Trevisan.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "The Lizzy Edit | Beauty by Lizzy Trevisan",
+    description:
+      "Skincare, makeup and self-care recommendations curated by Beauty Advisor Lizzy Trevisan.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +73,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${inter.variable}`}>
+      <body>
         {children}
       </body>
     </html>

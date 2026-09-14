@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -287,6 +288,48 @@ const fallbackContent: GuideContent = {
 // =================================
 // PAGE
 // =================================
+
+export const metadata: Metadata = {
+  title: "How to Choose Your Foundation Finish",
+
+  description:
+    "Learn how to choose between natural, matte, radiant and skin-like foundation finishes, plus how coverage and skin prep affect the final look.",
+
+  alternates: {
+    canonical: "/beauty-guide/04",
+  },
+
+  openGraph: {
+    title:
+      "How to Choose Your Foundation Finish | The Lizzy Edit",
+
+    description:
+      "Learn how to choose between natural, matte, radiant and skin-like foundation finishes, plus how coverage and skin prep affect the final look.",
+
+    url: "/beauty-guide/04",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/4.png",
+        alt: "Foundation and complexion makeup products",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "How to Choose Your Foundation Finish | The Lizzy Edit",
+
+    description:
+      "Learn how to choose between natural, matte, radiant and skin-like foundation finishes, plus how coverage and skin prep affect the final look.",
+
+    images: ["/images/4.png"],
+  },
+};
 
 export default async function FoundationFinishPage() {
   const supabase = await createClient();

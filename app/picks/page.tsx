@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCatalog from "@/components/PicksCatalog";
@@ -81,6 +82,28 @@ const fallbackContent = {
       "View Product →",
   },
 };
+
+  export const metadata: Metadata = {
+    title: "Beauty Picks",
+
+    description:
+      "Browse Lizzy's curated skincare, makeup, self-care and fragrance recommendations at The Lizzy Edit.",
+
+    alternates: {
+      canonical: "/picks",
+    },
+
+    openGraph: {
+      title: "Beauty Picks | The Lizzy Edit",
+
+      description:
+        "Browse Lizzy's curated skincare, makeup, self-care and fragrance recommendations at The Lizzy Edit.",
+
+      url: "/picks",
+
+      type: "website",
+    },
+  };
 
 export default async function PicksPage({
   searchParams,
