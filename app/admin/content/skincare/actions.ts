@@ -66,15 +66,24 @@ export async function updateSkincarePage(
 
       items: Array.from({ length: 6 }, (_, index) => ({
         title:
-          formData.get(`concern${index + 1}Title`)?.toString() || "",
+          formData
+            .get(`concern${index + 1}Title`)
+            ?.toString() || "",
+
         description:
           formData
             .get(`concern${index + 1}Description`)
             ?.toString() || "",
+
         symbol:
-          formData.get(`concern${index + 1}Symbol`)?.toString() || "",
+          formData
+            .get(`concern${index + 1}Symbol`)
+            ?.toString() || "",
+
         filter:
-          formData.get(`concern${index + 1}Filter`)?.toString() || "",
+          formData
+            .get(`concern${index + 1}Filter`)
+            ?.toString() || "",
       })),
     },
 
@@ -88,15 +97,24 @@ export async function updateSkincarePage(
 
       items: Array.from({ length: 4 }, (_, index) => ({
         title:
-          formData.get(`skinType${index + 1}Title`)?.toString() || "",
+          formData
+            .get(`skinType${index + 1}Title`)
+            ?.toString() || "",
+
         description:
           formData
             .get(`skinType${index + 1}Description`)
             ?.toString() || "",
+
         symbol:
-          formData.get(`skinType${index + 1}Symbol`)?.toString() || "",
+          formData
+            .get(`skinType${index + 1}Symbol`)
+            ?.toString() || "",
+
         filter:
-          formData.get(`skinType${index + 1}Filter`)?.toString() || "",
+          formData
+            .get(`skinType${index + 1}Filter`)
+            ?.toString() || "",
       })),
     },
 
@@ -135,9 +153,15 @@ export async function updateSkincarePage(
 
       steps: Array.from({ length: 4 }, (_, index) => ({
         number:
-          formData.get(`routine${index + 1}Number`)?.toString() || "",
+          formData
+            .get(`routine${index + 1}Number`)
+            ?.toString() || "",
+
         title:
-          formData.get(`routine${index + 1}Title`)?.toString() || "",
+          formData
+            .get(`routine${index + 1}Title`)
+            ?.toString() || "",
+
         description:
           formData
             .get(`routine${index + 1}Description`)
@@ -148,8 +172,15 @@ export async function updateSkincarePage(
     cta: {
       eyebrow:
         formData.get("ctaEyebrow")?.toString() || "",
+
       title:
         formData.get("ctaTitle")?.toString() || "",
+
+      buttonText:
+        formData.get("ctaButtonText")?.toString() || "",
+
+      href:
+        formData.get("ctaHref")?.toString() || "",
     },
   };
 

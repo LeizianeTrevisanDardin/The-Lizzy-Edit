@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   updateGlobalFooter,
   updateGlobalHeader,
+  updateGlobalProductCard,
 } from "./actions";
 
 export default async function AdminGlobalContentPage() {
@@ -62,6 +63,20 @@ export default async function AdminGlobalContentPage() {
     .maybeSingle();
 
   const footer = footerData?.content ?? {};
+
+  // ================================
+// PRODUCT CARD CONTENT
+// ================================
+
+const { data: productCardData } = await supabase
+  .from("site_content")
+  .select("content")
+  .eq("page", "global")
+  .eq("section", "product-card")
+  .maybeSingle();
+
+const productCard =
+  productCardData?.content ?? {};
 
   return (
     <main className="min-h-screen bg-[#fffaf7] px-5 py-8 text-[#211d1b] sm:px-6 lg:px-8">
@@ -634,6 +649,70 @@ export default async function AdminGlobalContentPage() {
             </button>
           </div>
         </form>
+
+        {/* ================================
+    PRODUCT CARDS
+================================= */}
+
+<form
+  action={updateGlobalProductCard}
+  className="mt-8 rounded-[28px] border border-stone-200 bg-white p-6 sm:p-8"
+>
+  <div className="border-b border-stone-200 pb-5">
+    <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
+      Global Section
+    </p>
+
+    <h2 className="mt-2 font-serif text-3xl">
+      Product Cards
+    </h2>
+
+    <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
+      Edit the shared button text and accessibility label used
+      by product cards across the website.
+    </p>
+  </div>
+
+  <div className="mt-6 grid gap-6 sm:grid-cols-2">
+    <Field
+      label="Shop Button Text"
+      name="shopButtonText"
+      value={
+        productCard.shopButtonText ??
+        "Shop This Product →"
+      }
+    />
+
+    <Field
+      label="View Button Text"
+      name="viewButtonText"
+      value={
+        productCard.viewButtonText ??
+        "View Product →"
+      }
+    />
+
+    <div className="sm:col-span-2">
+      <Field
+        label="View Product Accessibility Label"
+        name="viewAriaLabel"
+        value={
+          productCard.viewAriaLabel ??
+          "View"
+        }
+      />
+    </div>
+    </div>
+
+    <div className="mt-8 flex justify-end border-t border-stone-200 pt-6">
+      <button
+        type="submit"
+        className="rounded-full bg-[#211d1b] px-7 py-3 text-[10px] font-medium uppercase tracking-[0.14em] text-white transition hover:bg-[#b77b72]"
+      >
+        Save Product Cards
+      </button>
+    </div>
+  </form>
       </div>
     </main>
   );

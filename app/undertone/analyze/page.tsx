@@ -48,6 +48,11 @@ type CameraContent = {
   analyzingButtonText: string;
   closeCameraText: string;
   privacyText: string;
+
+  accessError: string;
+  notReadyError: string;
+  analysisError: string;
+  sampleError: string;
 };
 
 type QuestionnaireContent = {
@@ -86,15 +91,38 @@ type ResultsContent = {
   skinToneLabel: string;
   qualityLabel: string;
 
+  coolLabel: string;
+  neutralCoolLabel: string;
+  neutralLabel: string;
+  neutralWarmLabel: string;
+  warmLabel: string;
+
+  warmMessage: string;
+  neutralWarmMessage: string;
+  neutralMessage: string;
+  neutralCoolMessage: string;
+  coolMessage: string;
+
   bestColorsEyebrow: string;
   bestColorsTitleBefore: string;
   bestColorsHighlight: string;
+
+  bestColorsWarm: string;
+  bestColorsNeutralWarm: string;
+  bestColorsNeutral: string;
+  bestColorsNeutralCool: string;
+  bestColorsCool: string;
 
   categoriesEyebrow: string;
   categoriesTitleBefore: string;
   categoriesHighlight: string;
   categoriesDescription: string;
   categoryButtonText: string;
+
+  foundationLabel: string;
+  blushLabel: string;
+  lipstickLabel: string;
+  bronzerLabel: string;
 
   loadingEyebrow: string;
   loadingText: string;
@@ -113,6 +141,12 @@ type AnalyzeContent = {
   camera: CameraContent;
   questionnaire: QuestionnaireContent;
   results: ResultsContent;
+};
+
+type ProductCardContent = {
+  shopButtonText: string;
+  viewButtonText: string;
+  viewAriaLabel: string;
 };
 
 const emptyAnswers: QuestionnaireAnswers = {
@@ -145,7 +179,18 @@ const fallbackContent: AnalyzeContent = {
     closeCameraText: "Close Camera",
     privacyText:
       "Analysis happens temporarily in your browser. Your image is not uploaded or stored.",
-  },
+    accessError:
+      "We couldn't access your camera. Please allow camera access in your browser settings.",
+
+    notReadyError:
+      "Camera is not ready yet. Please try again.",
+
+    analysisError:
+      "We couldn't analyze the image. Please try again.",
+
+    sampleError:
+      "We couldn't get a clear skin sample. Try facing a window with soft natural light and keep your face centered.",
+      },
 
   questionnaire: {
     eyebrow: "Quick Undertone Check",
@@ -194,6 +239,26 @@ const fallbackContent: AnalyzeContent = {
       "Estimated Skin Tone",
     qualityLabel:
       "Analysis Quality",
+    coolLabel: "Cool",
+    neutralCoolLabel: "Neutral Cool",
+    neutralLabel: "Neutral",
+    neutralWarmLabel: "Neutral Warm",
+    warmLabel: "Warm",
+
+    warmMessage:
+      "Your skin appears to lean warm, with golden or peachy characteristics.",
+
+    neutralWarmMessage:
+      "Your skin appears balanced with a subtle golden warmth.",
+
+    neutralMessage:
+      "Your skin appears to have a balanced mix of warm and cool characteristics.",
+
+    neutralCoolMessage:
+      "Your skin appears balanced with a subtle cool or rosy quality.",
+
+    coolMessage:
+      "Your skin appears to lean cool, with pink, rosy or bluish characteristics.",
 
     bestColorsEyebrow:
       "Your Best Colors",
@@ -202,6 +267,21 @@ const fallbackContent: AnalyzeContent = {
     bestColorsHighlight:
       "flatter you.",
 
+    bestColorsWarm:
+        "Peach, Coral, Camel, Bronze, Terracotta, Warm Red",
+
+    bestColorsNeutralWarm:
+        "Peach, Warm Rose, Coral, Caramel, Bronze, Terracotta",
+
+    bestColorsNeutral:
+        "Rose Beige, Soft Peach, Taupe, Mauve, Cocoa, Champagne",
+
+    bestColorsNeutralCool:
+        "Dusty Rose, Mauve, Berry, Cool Taupe, Plum, Soft Pink",
+
+    bestColorsCool:
+        "Cool Pink, Berry, Blue Red, Plum, Silver, Mauve",
+        
     categoriesEyebrow:
       "Beauty Categories",
     categoriesTitleBefore:
@@ -212,6 +292,10 @@ const fallbackContent: AnalyzeContent = {
       "These are great places to start when choosing colors for your undertone.",
     categoryButtonText:
       "Explore →",
+    foundationLabel: "Foundation",
+    blushLabel: "Blush",
+    lipstickLabel: "Lipstick",
+    bronzerLabel: "Bronzer",
 
     loadingEyebrow:
       "Lizzy's Picks",
@@ -237,6 +321,13 @@ const fallbackContent: AnalyzeContent = {
   },
 };
 
+const fallbackProductCardContent: ProductCardContent = {
+  shopButtonText: "Shop This Product →",
+  viewButtonText: "View Product →",
+  viewAriaLabel: "View",
+};
+
+
 export default function UndertoneAnalyzePage() {
   const videoRef =
     useRef<HTMLVideoElement | null>(
@@ -260,6 +351,13 @@ export default function UndertoneAnalyzePage() {
 
   const [products, setProducts] =
     useState<Product[]>([]);
+
+  const [
+    productCardContent,
+    setProductCardContent,
+  ] = useState<ProductCardContent>(
+    fallbackProductCardContent,
+  );
 
   const [
     productsLoading,
@@ -351,9 +449,7 @@ export default function UndertoneAnalyzePage() {
           mediaStream;
       }
     } catch {
-      setCameraError(
-        "We couldn't access your camera. Please allow camera access in your browser settings.",
-      );
+      setCameraError(camera.accessError);
     } finally {
       setIsStarting(false);
     }
@@ -407,10 +503,7 @@ export default function UndertoneAnalyzePage() {
       !canvas ||
       video.videoWidth === 0
     ) {
-      setCameraError(
-        "Camera is not ready yet. Please try again.",
-      );
-
+        setCameraError(camera.notReadyError);
       return;
     }
 
@@ -423,9 +516,7 @@ export default function UndertoneAnalyzePage() {
       });
 
     if (!context) {
-      setCameraError(
-        "We couldn't analyze the image. Please try again.",
-      );
+      setCameraError(camera.analysisError);
 
       setIsAnalyzing(false);
 
@@ -583,9 +674,7 @@ export default function UndertoneAnalyzePage() {
     if (
       colors.length < 50
     ) {
-      setCameraError(
-        "We couldn't get a clear skin sample. Try facing a window with soft natural light and keep your face centered.",
-      );
+      setCameraError(camera.sampleError);
 
       setIsAnalyzing(false);
 
@@ -757,26 +846,26 @@ export default function UndertoneAnalyzePage() {
     }, 650);
   }
 
-  function getResultMessage(
-    undertone: string,
-  ) {
-    switch (undertone) {
-      case "Warm":
-        return "Your skin appears to lean warm, with golden or peachy characteristics.";
+ function getResultMessage(
+  undertone: string,
+) {
+  switch (undertone) {
+    case "Warm":
+      return results.warmMessage;
 
-      case "Neutral-Warm":
-        return "Your skin appears balanced with a subtle golden warmth.";
+    case "Neutral-Warm":
+      return results.neutralWarmMessage;
 
-      case "Cool":
-        return "Your skin appears to lean cool, with pink, rosy or bluish characteristics.";
+    case "Cool":
+      return results.coolMessage;
 
-      case "Neutral-Cool":
-        return "Your skin appears balanced with a subtle cool or rosy quality.";
+    case "Neutral-Cool":
+      return results.neutralCoolMessage;
 
-      default:
-        return "Your skin appears to have a balanced mix of warm and cool characteristics.";
-    }
+    default:
+      return results.neutralMessage;
   }
+}
 
   // =================================
   // QUESTIONNAIRE LOGIC
@@ -933,6 +1022,7 @@ export default function UndertoneAnalyzePage() {
       const [
         productsResponse,
         contentResponse,
+        productCardResponse,
       ] =
         await Promise.all([
           supabase
@@ -966,6 +1056,23 @@ export default function UndertoneAnalyzePage() {
             .eq(
               "section",
               "analyze",
+            )
+            .maybeSingle(),
+
+          supabase
+            .from(
+              "site_content",
+            )
+            .select(
+              "content",
+            )
+            .eq(
+              "page",
+              "global",
+            )
+            .eq(
+              "section",
+              "product-card",
             )
             .maybeSingle(),
         ]);
@@ -1084,6 +1191,18 @@ export default function UndertoneAnalyzePage() {
             ...(saved.results ??
               {}),
           },
+        });
+      }
+
+      if (productCardResponse.error) {
+        console.error(
+          "Error loading global product card content:",
+          productCardResponse.error,
+        );
+      } else {
+        setProductCardContent({
+          ...fallbackProductCardContent,
+          ...(productCardResponse.data?.content ?? {}),
         });
       }
 
@@ -1297,25 +1416,14 @@ export default function UndertoneAnalyzePage() {
         ) : cameraResult &&
           !finalResult ? (
           <QuestionnaireView
-            cameraResult={
-              cameraResult
-            }
+            cameraResult={cameraResult}
             answers={answers}
-            setAnswers={
-              setAnswers
-            }
-            onFinish={
-              finishQuestionnaire
-            }
-            onRetake={
-              tryAgain
-            }
-            complete={
-              questionnaireComplete
-            }
-            content={
-              questionnaire
-            }
+            setAnswers={setAnswers}
+            onFinish={finishQuestionnaire}
+            onRetake={tryAgain}
+            complete={questionnaireComplete}
+            content={questionnaire}
+            resultsContent={results}
           />
         ) : finalResult ? (
           <ResultView
@@ -1333,6 +1441,9 @@ export default function UndertoneAnalyzePage() {
             }
             content={
               results
+            }
+            productCardContent={
+              productCardContent
             }
           />
         ) : null}
@@ -1353,6 +1464,7 @@ function QuestionnaireView({
   onRetake,
   complete,
   content,
+  resultsContent,
 }: {
   cameraResult: AnalysisResult;
 
@@ -1375,6 +1487,9 @@ function QuestionnaireView({
 
   content:
     QuestionnaireContent;
+
+  resultsContent:
+    ResultsContent;
 }) {
   return (
     <section className="py-12 sm:py-16">
@@ -1416,9 +1531,10 @@ function QuestionnaireView({
           {" · "}
 
           <span className="italic text-[#b76f70]">
-            {
-              cameraResult.undertone
-            }
+            {getUndertoneLabel(
+              cameraResult.undertone,
+              resultsContent,
+            )}
           </span>
         </p>
       </div>
@@ -1658,6 +1774,7 @@ function ResultView({
   products,
   productsLoading,
   content,
+  productCardContent,
 }: {
   result:
     AnalysisResult;
@@ -1673,6 +1790,9 @@ function ResultView({
 
   content:
     ResultsContent;
+
+  productCardContent:
+    ProductCardContent;
 }) {
   const recommendedProducts =
     products.filter(
@@ -1699,6 +1819,7 @@ function ResultView({
   const bestColors =
     getBestColors(
       result.undertone,
+      content,
     );
 
   const position =
@@ -1707,23 +1828,27 @@ function ResultView({
     );
 
   const categories = [
-    {
-      name: "Foundation",
-      symbol: "◌",
-    },
-    {
-      name: "Blush",
-      symbol: "♡",
-    },
-    {
-      name: "Lipstick",
-      symbol: "✦",
-    },
-    {
-      name: "Bronzer",
-      symbol: "☼",
-    },
-  ];
+  {
+    name: content.foundationLabel,
+    filter: "Foundation",
+    symbol: "◌",
+  },
+  {
+    name: content.blushLabel,
+    filter: "Blush",
+    symbol: "♡",
+  },
+  {
+    name: content.lipstickLabel,
+    filter: "Lipstick",
+    symbol: "✦",
+  },
+  {
+    name: content.bronzerLabel,
+    filter: "Bronzer",
+    symbol: "☼",
+  },
+];
 
   return (
     <section className="py-12 sm:py-16">
@@ -1772,9 +1897,10 @@ function ResultView({
           </h2>
 
           <p className="mt-3 font-serif text-3xl italic text-[#b76f70] sm:text-4xl">
-            {formatUndertone(
-              result.undertone,
-            )}
+            {getUndertoneLabel(
+            result.undertone,
+            content,
+          )}
           </p>
 
           {/* UNDERTONE SCALE */}
@@ -1794,15 +1920,15 @@ function ResultView({
 
             <div className="mt-3 flex justify-between text-[9px] font-medium uppercase tracking-[0.14em] text-stone-500">
               <span>
-                Cool
+                {content.coolLabel}
               </span>
 
               <span>
-                Neutral
+                {content.neutralLabel}
               </span>
 
               <span>
-                Warm
+                {content.warmLabel}
               </span>
             </div>
           </div>
@@ -1913,7 +2039,7 @@ function ResultView({
                   category.name
                 }
                 href={`/picks?filter=${encodeURIComponent(
-                  category.name,
+                  category.filter,
                 )}`}
                 className="group flex min-h-28 flex-col items-center justify-center rounded-[22px] border border-stone-200 bg-white p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-[#d8aaa2] hover:shadow-md"
               >
@@ -2000,6 +2126,15 @@ function ResultView({
                     product={
                       product
                     }
+                    shopButtonText={
+                      productCardContent.shopButtonText
+                    }
+                    viewButtonText={
+                      productCardContent.viewButtonText
+                    }
+                    viewAriaLabel={
+                      productCardContent.viewAriaLabel
+                    }
                   />
                 ),
               )}
@@ -2040,6 +2175,31 @@ function ResultView({
   );
 }
 
+function getUndertoneLabel(
+  undertone: string,
+  content: ResultsContent,
+) {
+  switch (undertone) {
+    case "Cool":
+      return content.coolLabel;
+
+    case "Neutral-Cool":
+      return content.neutralCoolLabel;
+
+    case "Neutral":
+      return content.neutralLabel;
+
+    case "Neutral-Warm":
+      return content.neutralWarmLabel;
+
+    case "Warm":
+      return content.warmLabel;
+
+    default:
+      return undertone.replace("-", " ");
+  }
+}
+
 // =================================
 // UNDERTONE POSITION
 // =================================
@@ -2069,74 +2229,43 @@ function getUndertonePosition(
 }
 
 // =================================
-// FORMAT UNDERTONE
-// =================================
-
-function formatUndertone(
-  undertone: string,
-) {
-  return undertone.replace(
-    "-",
-    " ",
-  );
-}
-
-// =================================
 // BEST COLORS
 // =================================
 
 function getBestColors(
   undertone: string,
+  content: ResultsContent,
 ) {
+  let colors = content.bestColorsNeutral;
+
   switch (undertone) {
     case "Warm":
-      return [
-        "Peach",
-        "Coral",
-        "Camel",
-        "Bronze",
-        "Terracotta",
-        "Warm Red",
-      ];
+      colors =
+        content.bestColorsWarm;
+      break;
 
     case "Neutral-Warm":
-      return [
-        "Peach",
-        "Warm Rose",
-        "Coral",
-        "Caramel",
-        "Bronze",
-        "Terracotta",
-      ];
+      colors =
+        content.bestColorsNeutralWarm;
+      break;
 
     case "Neutral-Cool":
-      return [
-        "Dusty Rose",
-        "Mauve",
-        "Berry",
-        "Cool Taupe",
-        "Plum",
-        "Soft Pink",
-      ];
+      colors =
+        content.bestColorsNeutralCool;
+      break;
 
     case "Cool":
-      return [
-        "Cool Pink",
-        "Berry",
-        "Blue Red",
-        "Plum",
-        "Silver",
-        "Mauve",
-      ];
+      colors =
+        content.bestColorsCool;
+      break;
 
     default:
-      return [
-        "Rose Beige",
-        "Soft Peach",
-        "Taupe",
-        "Mauve",
-        "Cocoa",
-        "Champagne",
-      ];
+      colors =
+        content.bestColorsNeutral;
   }
+
+  return colors
+    .split(",")
+    .map((color) => color.trim())
+    .filter(Boolean);
 }

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -244,6 +245,48 @@ const fallbackContent: GuideContent = {
 // =================================
 // PAGE
 // =================================
+
+export const metadata: Metadata = {
+  title: "Dry vs. Dehydrated Skin",
+
+  description:
+    "Learn the difference between dry and dehydrated skin, how to spot the signs and what each skin concern may need in a skincare routine.",
+
+  alternates: {
+    canonical: "/beauty-guide/03",
+  },
+
+  openGraph: {
+    title:
+      "Dry vs. Dehydrated Skin | The Lizzy Edit",
+
+    description:
+      "Learn the difference between dry and dehydrated skin, how to spot the signs and what each skin concern may need in a skincare routine.",
+
+    url: "/beauty-guide/03",
+
+    type: "article",
+
+    images: [
+      {
+        url: "/images/3.png",
+        alt: "Dry versus dehydrated skin comparison",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "Dry vs. Dehydrated Skin | The Lizzy Edit",
+
+    description:
+      "Learn the difference between dry and dehydrated skin, how to spot the signs and what each skin concern may need in a skincare routine.",
+
+    images: ["/images/3.png"],
+  },
+};
 
 export default async function DryVsDehydratedSkinPage() {
   const supabase = await createClient();

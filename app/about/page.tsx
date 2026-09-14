@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -132,8 +133,37 @@ const fallbackContent = {
   cta: {
     eyebrow:
       "Lizzy's Self-Care Picks",
+
     title:
       "Find the little things that make your routine better.",
+
+    buttonText:
+      "Explore My Picks",
+
+    href:
+      "/picks",
+  },
+};
+
+export const metadata: Metadata = {
+  title: "About Lizzy",
+
+  description:
+    "Learn more about Lizzy Trevisan, the Beauty Advisor behind The Lizzy Edit, and her approach to skincare, makeup, self-care and beauty recommendations.",
+
+  alternates: {
+    canonical: "/about",
+  },
+
+  openGraph: {
+    title: "About Lizzy | The Lizzy Edit",
+
+    description:
+      "Learn more about Lizzy Trevisan, the Beauty Advisor behind The Lizzy Edit, and her approach to skincare, makeup, self-care and beauty recommendations.",
+
+    url: "/about",
+
+    type: "profile",
   },
 };
 
@@ -429,10 +459,11 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <PicksCTA
         eyebrow={cta.eyebrow}
         title={cta.title}
+        buttonText={cta.buttonText}
+        href={cta.href}
       />
 
       <Footer />

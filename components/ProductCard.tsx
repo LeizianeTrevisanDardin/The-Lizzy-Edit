@@ -29,14 +29,20 @@ export type Product = {
 
 type ProductCardProps = {
   product: Product;
+
   shopButtonText?: string;
   viewButtonText?: string;
+  viewAriaLabel?: string;
 };
 
 export default function ProductCard({
   product,
+
   shopButtonText = "Shop This Product →",
+
   viewButtonText = "View Product →",
+
+  viewAriaLabel = "View",
 }: ProductCardProps) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-stone-200 bg-white transition duration-500 hover:-translate-y-2 hover:shadow-xl">
@@ -44,7 +50,7 @@ export default function ProductCard({
       <Link
         href={`/picks/${product.slug}`}
         className="block"
-        aria-label={`View ${product.name}`}
+        aria-label={`${viewAriaLabel} ${product.name}`}
       >
         <div className="relative aspect-[4/5] overflow-hidden bg-[#f5eee9]">
           <Image

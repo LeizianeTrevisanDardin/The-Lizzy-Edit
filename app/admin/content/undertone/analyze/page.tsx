@@ -225,6 +225,43 @@ export default async function AdminUndertoneAnalyzePage() {
                 </div>
               </div>
             </div>
+
+            {/* CAMERA ERRORS */}
+              <div className="mt-8 border-t border-stone-200 pt-8">
+                <h3 className="font-serif text-2xl">
+                  Camera Errors
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-stone-500">
+                  Messages shown when the camera or skin analysis cannot continue.
+                </p>
+
+                <div className="mt-5 grid gap-6">
+                  <Textarea
+                    label="Camera Access Error"
+                    name="cameraAccessError"
+                    value={camera.accessError}
+                  />
+
+                  <Textarea
+                    label="Camera Not Ready Error"
+                    name="cameraNotReadyError"
+                    value={camera.notReadyError}
+                  />
+
+                  <Textarea
+                    label="Image Analysis Error"
+                    name="cameraAnalysisError"
+                    value={camera.analysisError}
+                  />
+
+                  <Textarea
+                    label="Skin Sample Error"
+                    name="cameraSampleError"
+                    value={camera.sampleError}
+                  />
+                </div>
+              </div>
           </Section>
 
           {/* QUESTIONNAIRE */}
@@ -379,6 +416,88 @@ export default async function AdminUndertoneAnalyzePage() {
               />
             </div>
 
+            {/* UNDERTONE LABELS */}
+              <div className="sm:col-span-2 mt-4 border-t border-stone-200 pt-8">
+                <h3 className="font-serif text-2xl">
+                  Undertone Labels
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-stone-500">
+                  Change how each undertone name is displayed without changing the analysis logic.
+                </p>
+
+                <div className="mt-5 grid gap-6 sm:grid-cols-2">
+                  <Field
+                    label="Cool"
+                    name="resultsCoolLabel"
+                    value={results.coolLabel}
+                  />
+
+                  <Field
+                    label="Neutral Cool"
+                    name="resultsNeutralCoolLabel"
+                    value={results.neutralCoolLabel}
+                  />
+
+                  <Field
+                    label="Neutral"
+                    name="resultsNeutralLabel"
+                    value={results.neutralLabel}
+                  />
+
+                  <Field
+                    label="Neutral Warm"
+                    name="resultsNeutralWarmLabel"
+                    value={results.neutralWarmLabel}
+                  />
+
+                  <Field
+                    label="Warm"
+                    name="resultsWarmLabel"
+                    value={results.warmLabel}
+                  />
+                </div>
+              </div>
+
+              {/* RESULT MESSAGES */}
+              <div className="sm:col-span-2 mt-4 border-t border-stone-200 pt-8">
+                <h3 className="font-serif text-2xl">
+                  Undertone Result Messages
+                </h3>
+
+                <div className="mt-5 grid gap-6">
+                  <Textarea
+                    label="Warm Message"
+                    name="resultsWarmMessage"
+                    value={results.warmMessage}
+                  />
+
+                  <Textarea
+                    label="Neutral Warm Message"
+                    name="resultsNeutralWarmMessage"
+                    value={results.neutralWarmMessage}
+                  />
+
+                  <Textarea
+                    label="Neutral Message"
+                    name="resultsNeutralMessage"
+                    value={results.neutralMessage}
+                  />
+
+                  <Textarea
+                    label="Neutral Cool Message"
+                    name="resultsNeutralCoolMessage"
+                    value={results.neutralCoolMessage}
+                  />
+
+                  <Textarea
+                    label="Cool Message"
+                    name="resultsCoolMessage"
+                    value={results.coolMessage}
+                  />
+                </div>
+              </div>
+
             {/* BEST COLORS */}
             <div className="mt-8 border-t border-stone-200 pt-8">
               <h3 className="font-serif text-2xl">
@@ -403,6 +522,49 @@ export default async function AdminUndertoneAnalyzePage() {
                   name="resultsBestColorsHighlight"
                   value={results.bestColorsHighlight}
                 />
+
+                <div className="sm:col-span-2 mt-4 border-t border-stone-200 pt-8">
+                  <h4 className="font-serif text-xl">
+                    Color Lists
+                  </h4>
+
+                  <p className="mt-2 text-sm leading-6 text-stone-500">
+                    Separate each color with a comma.
+                  </p>
+
+                  <div className="mt-5 grid gap-6">
+                    <Textarea
+                      label="Warm Colors"
+                      name="resultsBestColorsWarm"
+                      value={results.bestColorsWarm}
+                    />
+
+                    <Textarea
+                      label="Neutral Warm Colors"
+                      name="resultsBestColorsNeutralWarm"
+                      value={results.bestColorsNeutralWarm}
+                    />
+
+                    <Textarea
+                      label="Neutral Colors"
+                      name="resultsBestColorsNeutral"
+                      value={results.bestColorsNeutral}
+                    />
+
+                    <Textarea
+                      label="Neutral Cool Colors"
+                      name="resultsBestColorsNeutralCool"
+                      value={results.bestColorsNeutralCool}
+                    />
+
+                    <Textarea
+                      label="Cool Colors"
+                      name="resultsBestColorsCool"
+                      value={results.bestColorsCool}
+                    />
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -436,6 +598,38 @@ export default async function AdminUndertoneAnalyzePage() {
                   name="resultsCategoryButtonText"
                   value={results.categoryButtonText}
                 />
+
+                <div className="sm:col-span-2 mt-4 border-t border-stone-200 pt-8">
+                  <h4 className="font-serif text-xl">
+                    Category Names
+                  </h4>
+
+                  <div className="mt-5 grid gap-6 sm:grid-cols-2">
+                    <Field
+                      label="Foundation"
+                      name="resultsFoundationLabel"
+                      value={results.foundationLabel}
+                    />
+
+                    <Field
+                      label="Blush"
+                      name="resultsBlushLabel"
+                      value={results.blushLabel}
+                    />
+
+                    <Field
+                      label="Lipstick"
+                      name="resultsLipstickLabel"
+                      value={results.lipstickLabel}
+                    />
+
+                    <Field
+                      label="Bronzer"
+                      name="resultsBronzerLabel"
+                      value={results.bronzerLabel}
+                    />
+                  </div>
+                </div>
 
                 <div className="sm:col-span-2">
                   <Textarea

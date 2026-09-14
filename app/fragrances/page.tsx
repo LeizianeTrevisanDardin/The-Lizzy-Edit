@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -240,12 +241,41 @@ const fallbackContent = {
       "Fragrance is one of the most personal parts of beauty. Trends and compliments are fun, but the perfume that matters most is the one you genuinely look forward to wearing.",
   },
 
-  cta: {
-    eyebrow: "Lizzy's Fragrance Picks",
-    title:
-      "Looking for your next favorite fragrance?",
-  },
+ cta: {
+  eyebrow: "Lizzy's Fragrance Picks",
+
+  title:
+    "Looking for your next favorite fragrance?",
+
+  buttonText:
+    "Explore My Picks",
+
+  href:
+    "/picks?filter=Fragrance",
+},
 };
+
+  export const metadata: Metadata = {
+    title: "Fragrance Recommendations",
+
+    description:
+      "Discover curated fragrance recommendations, scent families, perfume guides and fragrance tips from The Lizzy Edit.",
+
+    alternates: {
+      canonical: "/fragrances",
+    },
+
+    openGraph: {
+      title: "Fragrance Recommendations | The Lizzy Edit",
+
+      description:
+        "Discover curated fragrance recommendations, scent families, perfume guides and fragrance tips from The Lizzy Edit.",
+
+      url: "/fragrances",
+
+      type: "website",
+    },
+  };
 
 export default async function FragrancePage() {
   const supabase = await createClient();
@@ -299,6 +329,40 @@ export default async function FragrancePage() {
 
   const savedContent =
     contentData?.content ?? {};
+
+  // =================================
+// LOAD GLOBAL PRODUCT CARD CONTENT
+// =================================
+
+const {
+  data: productCardData,
+  error: productCardError,
+} = await supabase
+  .from("site_content")
+  .select("content")
+  .eq("page", "global")
+  .eq("section", "product-card")
+  .maybeSingle();
+
+if (productCardError) {
+  console.error(
+    "Error loading global product card content:",
+    productCardError,
+  );
+}
+
+const productCard = {
+  shopButtonText:
+    "Shop This Product →",
+
+  viewButtonText:
+    "View Product →",
+
+  viewAriaLabel:
+    "View",
+
+  ...(productCardData?.content ?? {}),
+};
 
   const hero = {
     ...fallbackContent.hero,
@@ -577,35 +641,44 @@ export default async function FragrancePage() {
               {fragranceProducts.map(
                 (product) => (
                   <ProductCard
-                    key={product.id}
-                    product={{
-                      id: product.id,
-                      slug: product.slug,
-                      brand: product.brand,
-                      name: product.name,
-                      category: product.category,
-                      tags: product.tags ?? [],
-                      type: product.type ?? "",
-                      image: product.image_url ?? "",
-                      description:
-                        product.description ?? "",
-                      whyILikeIt:
-                        product.why_i_like_it ?? [],
-                      affiliateUrl:
-                        product.affiliate_url ??
-                        undefined,
-                      featured: product.featured,
-                      homeTag:
-                        product.home_tag ??
-                        undefined,
-                      skinTones:
-                        product.skin_tones ?? [],
-                      undertones:
-                        product.undertones ?? [],
-                      concerns:
-                        product.concerns ?? [],
-                    }}
-                  />
+                      key={product.id}
+                      product={{
+                        id: product.id,
+                        slug: product.slug,
+                        brand: product.brand,
+                        name: product.name,
+                        category: product.category,
+                        tags: product.tags ?? [],
+                        type: product.type ?? "",
+                        image: product.image_url ?? "",
+                        description:
+                          product.description ?? "",
+                        whyILikeIt:
+                          product.why_i_like_it ?? [],
+                        affiliateUrl:
+                          product.affiliate_url ??
+                          undefined,
+                        featured: product.featured,
+                        homeTag:
+                          product.home_tag ??
+                          undefined,
+                        skinTones:
+                          product.skin_tones ?? [],
+                        undertones:
+                          product.undertones ?? [],
+                        concerns:
+                          product.concerns ?? [],
+                      }}
+                      shopButtonText={
+                        productCard.shopButtonText
+                      }
+                      viewButtonText={
+                        productCard.viewButtonText
+                      }
+                      viewAriaLabel={
+                        productCard.viewAriaLabel
+                      }
+                    />
                 ),
               )}
             </div>
@@ -775,10 +848,11 @@ export default async function FragrancePage() {
         </div>
       </section>
 
-      {/* CTA */}
       <PicksCTA
-        eyebrow={cta.eyebrow}
-        title={cta.title}
+      eyebrow={cta.eyebrow}
+      title={cta.title}
+      buttonText={cta.buttonText}
+      href={cta.href}
       />
 
       <Footer />

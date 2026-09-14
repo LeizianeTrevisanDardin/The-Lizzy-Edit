@@ -75,6 +75,13 @@ const pages = [
     label: "Page",
   },
   {
+  title: "Product Detail",
+  description: "Edit shared text used on individual product pages.",
+  href: "/admin/content/product-detail",
+  status: "Available",
+  label: "Page",
+  },
+  {
     title: "Privacy",
     description: "Edit the Privacy Policy page.",
     href: "/admin/content/privacy",

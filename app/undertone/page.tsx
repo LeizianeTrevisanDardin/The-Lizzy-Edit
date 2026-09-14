@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import Header from "@/components/Header";
@@ -72,6 +73,28 @@ const fallbackContent = {
       "Your camera will only be used during the analysis. The goal of this tool is to process the image temporarily without adding your photo to your account or photo library.",
     disclaimer:
       "Results are estimates and may vary depending on lighting, camera settings and surrounding colors.",
+  },
+};
+
+export const metadata: Metadata = {
+  title: "Undertone Finder",
+
+  description:
+    "Use The Lizzy Edit undertone finder to estimate your skin tone and undertone and discover beauty colors that may complement you.",
+
+  alternates: {
+    canonical: "/undertone",
+  },
+
+  openGraph: {
+    title: "Undertone Finder | The Lizzy Edit",
+
+    description:
+      "Use The Lizzy Edit undertone finder to estimate your skin tone and undertone and discover beauty colors that may complement you.",
+
+    url: "/undertone",
+
+    type: "website",
   },
 };
 

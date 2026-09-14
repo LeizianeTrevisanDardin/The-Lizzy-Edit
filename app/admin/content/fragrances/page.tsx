@@ -584,21 +584,39 @@ export default async function AdminFragrancesContentPage() {
           </Section>
 
           {/* CTA */}
-          <Section title="Final CTA">
-            <div className="grid gap-6 sm:grid-cols-2">
-              <Field
-                label="Eyebrow"
-                name="ctaEyebrow"
-                value={cta.eyebrow}
-              />
+            <Section title="Final CTA">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <Field
+                  label="Eyebrow"
+                  name="ctaEyebrow"
+                  value={cta.eyebrow}
+                />
 
-              <Field
-                label="Title"
-                name="ctaTitle"
-                value={cta.title}
-              />
-            </div>
-          </Section>
+                <Field
+                  label="Title"
+                  name="ctaTitle"
+                  value={cta.title}
+                />
+
+                <Field
+                  label="Button Text"
+                  name="ctaButtonText"
+                  value={
+                    cta.buttonText ??
+                    "Explore My Picks"
+                  }
+                />
+
+                <Field
+                  label="Button Link"
+                  name="ctaHref"
+                  value={
+                    cta.href ??
+                    "/picks?filter=Fragrance"
+                  }
+                />
+              </div>
+            </Section>
 
           <div className="sticky bottom-5 flex justify-end">
             <button

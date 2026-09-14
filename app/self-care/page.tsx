@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -204,10 +205,39 @@ const fallbackContent = {
 
   cta: {
     eyebrow: "Lizzy's Self-Care Picks",
+
     title:
       "Find the little things that make your routine better.",
+
+    buttonText:
+      "Explore My Picks",
+
+    href:
+      "/picks?filter=Self-Care",
   },
 };
+
+  export const metadata: Metadata = {
+    title: "Self-Care Recommendations",
+
+    description:
+      "Explore curated self-care, body care, hair care and everyday wellness-inspired beauty recommendations from The Lizzy Edit.",
+
+    alternates: {
+      canonical: "/self-care",
+    },
+
+    openGraph: {
+      title: "Self-Care Recommendations | The Lizzy Edit",
+
+      description:
+        "Explore curated self-care, body care, hair care and everyday wellness-inspired beauty recommendations from The Lizzy Edit.",
+
+      url: "/self-care",
+
+      type: "website",
+    },
+  };
 
 export default async function SelfCarePage() {
   const supabase = await createClient();
@@ -255,6 +285,40 @@ export default async function SelfCarePage() {
 
   const savedContent =
     contentData?.content ?? {};
+
+  // =================================
+// LOAD GLOBAL PRODUCT CARD CONTENT
+// =================================
+
+const {
+  data: productCardData,
+  error: productCardError,
+} = await supabase
+  .from("site_content")
+  .select("content")
+  .eq("page", "global")
+  .eq("section", "product-card")
+  .maybeSingle();
+
+if (productCardError) {
+  console.error(
+    "Error loading global product card content:",
+    productCardError,
+  );
+}
+
+const productCard = {
+  shopButtonText:
+    "Shop This Product →",
+
+  viewButtonText:
+    "View Product →",
+
+  viewAriaLabel:
+    "View",
+
+  ...(productCardData?.content ?? {}),
+};
 
   const hero = {
     ...fallbackContent.hero,
@@ -509,10 +573,12 @@ export default async function SelfCarePage() {
                       whyILikeIt:
                         product.why_i_like_it ?? [],
                       affiliateUrl:
-                        product.affiliate_url ?? undefined,
+                        product.affiliate_url ??
+                        undefined,
                       featured: product.featured,
                       homeTag:
-                        product.home_tag ?? undefined,
+                        product.home_tag ??
+                        undefined,
                       skinTones:
                         product.skin_tones ?? [],
                       undertones:
@@ -520,6 +586,15 @@ export default async function SelfCarePage() {
                       concerns:
                         product.concerns ?? [],
                     }}
+                    shopButtonText={
+                      productCard.shopButtonText
+                    }
+                    viewButtonText={
+                      productCard.viewButtonText
+                    }
+                    viewAriaLabel={
+                      productCard.viewAriaLabel
+                    }
                   />
                 ),
               )}
@@ -592,10 +667,11 @@ export default async function SelfCarePage() {
         </div>
       </section>
 
-      {/* CTA */}
       <PicksCTA
         eyebrow={cta.eyebrow}
         title={cta.title}
+        buttonText={cta.buttonText}
+        href={cta.href}
       />
 
       <Footer />

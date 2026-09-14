@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import Header from "@/components/Header";
@@ -84,6 +85,27 @@ const fallbackContent = {
   },
 
   lastUpdated: "Last updated: August 2026",
+};
+export const metadata: Metadata = {
+  title: "Affiliate Disclosure",
+
+  description:
+    "Learn how affiliate links, Amazon Associates commissions and sponsored relationships may work on The Lizzy Edit.",
+
+  alternates: {
+    canonical: "/disclosure",
+  },
+
+  openGraph: {
+    title: "Affiliate Disclosure | The Lizzy Edit",
+
+    description:
+      "Learn how affiliate links, Amazon Associates commissions and sponsored relationships may work on The Lizzy Edit.",
+
+    url: "/disclosure",
+
+    type: "website",
+  },
 };
 
 export default async function DisclosurePage() {
