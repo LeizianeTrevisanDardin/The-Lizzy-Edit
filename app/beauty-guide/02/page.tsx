@@ -218,6 +218,10 @@ const fallbackContent: GuideContent = {
   },
 };
 
+// =================================
+// SEO
+// =================================
+
 export const metadata: Metadata = {
   title: "Everyday Makeup That Still Looks Like You",
 
@@ -259,6 +263,49 @@ export const metadata: Metadata = {
     images: ["/images/2.png"],
   },
 };
+
+// =================================
+// STRUCTURED DATA
+// =================================
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+
+  headline:
+    "Everyday Makeup That Still Looks Like You",
+
+  description:
+    "Learn how to build an easy everyday makeup routine with lightweight complexion products, blush, mascara and comfortable lip products.",
+
+  image: [
+    "https://the-lizzy-edit.vercel.app/images/2.png",
+  ],
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id":
+      "https://the-lizzy-edit.vercel.app/beauty-guide/02",
+  },
+
+  author: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+    url:
+      "https://the-lizzy-edit.vercel.app/about",
+  },
+
+  publisher: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+    url:
+      "https://the-lizzy-edit.vercel.app",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
 
 export default async function EverydayMakeupPage() {
   const supabase = await createClient();
@@ -347,9 +394,21 @@ export default async function EverydayMakeupPage() {
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      {/* =================================
+          ARTICLE STRUCTURED DATA
+      ================================= */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd),
+        }}
+      />
+
       <Header />
 
       {/* ARTICLE HEADER */}
+
       <section className="border-b border-stone-200 bg-[#f3e7e2]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Link
@@ -366,6 +425,7 @@ export default async function EverydayMakeupPage() {
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               {hero.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {hero.highlight}
               </span>
@@ -379,6 +439,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* HERO IMAGE */}
+
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
@@ -396,6 +457,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* INTRODUCTION */}
+
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
           {intro.eyebrow}
@@ -403,6 +465,7 @@ export default async function EverydayMakeupPage() {
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
           {intro.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
             {intro.highlight}
           </span>
@@ -420,6 +483,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* ROUTINE */}
+
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -429,6 +493,7 @@ export default async function EverydayMakeupPage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               {routine.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {routine.highlight}
               </span>
@@ -473,6 +538,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* QUICK ROUTINES */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2">
           <div className="rounded-[28px] bg-[#f0dfd8] p-6 sm:p-8">
@@ -532,6 +598,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* BEAUTY NOTES */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
@@ -542,6 +609,7 @@ export default async function EverydayMakeupPage() {
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
                 {beautyNotes.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
                   {beautyNotes.highlight}
                 </span>
@@ -573,6 +641,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* PERSONAL STYLE */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -581,6 +650,7 @@ export default async function EverydayMakeupPage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {personalStyle.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {personalStyle.highlight}
             </span>
@@ -593,6 +663,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* CTA */}
+
       <section className="mx-auto max-w-5xl px-5 pb-10 sm:px-6 sm:pb-14 lg:px-8 lg:pb-20">
         <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12">
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
@@ -623,6 +694,7 @@ export default async function EverydayMakeupPage() {
       </section>
 
       {/* ARTICLE NAVIGATION */}
+
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-3 sm:items-center">
           <Link

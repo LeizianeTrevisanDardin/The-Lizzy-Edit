@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+
 import { createClient } from "@/lib/supabase/client";
 
 export default function ForgotPasswordPage() {
@@ -12,16 +13,22 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
     setLoading(true);
     setError("");
     setMessage("");
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin/reset-password`,
-    });
+    const { error } =
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo: `${window.location.origin}/admin/reset-password`,
+        },
+      );
 
     if (error) {
       setError(error.message);
@@ -29,7 +36,9 @@ export default function ForgotPasswordPage() {
       return;
     }
 
-    setMessage("Check your email for the password reset link.");
+    setMessage(
+      "Check your email for the password reset link.",
+    );
     setLoading(false);
   }
 
@@ -47,11 +56,15 @@ export default function ForgotPasswordPage() {
             </h1>
 
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              Enter your email and we’ll send you a reset link.
+              Enter your email and we’ll send you
+              a reset link.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-8 space-y-5"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -66,7 +79,9 @@ export default function ForgotPasswordPage() {
                 required
                 autoComplete="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) =>
+                  setEmail(event.target.value)
+                }
                 className="mt-2 min-h-12 w-full rounded-2xl border border-stone-200 bg-[#fffaf7] px-4 text-sm outline-none transition focus:border-[#b77b72]"
                 placeholder="you@example.com"
               />
@@ -89,7 +104,9 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#211d1b] px-6 text-[10px] font-medium uppercase tracking-[0.16em] text-white transition hover:bg-[#b77b72] disabled:opacity-60"
             >
-              {loading ? "Sending..." : "Send Reset Link"}
+              {loading
+                ? "Sending..."
+                : "Send Reset Link"}
             </button>
           </form>
 

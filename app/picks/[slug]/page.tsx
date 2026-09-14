@@ -182,6 +182,24 @@ export default async function ProductPage({
 
   const product = data as Product;
 
+  const productJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  brand: {
+    "@type": "Brand",
+    name: product.brand,
+  },
+  description:
+    product.description ??
+    `${product.brand} ${product.name}`,
+  image: product.image_url
+    ? [product.image_url]
+    : undefined,
+  url: `https://the-lizzy-edit.vercel.app/picks/${product.slug}`,
+  category: product.category,
+};
+
   // =================================
   // LOAD PRODUCT DETAIL CMS CONTENT
   // =================================
@@ -214,6 +232,12 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd),
+        }}
+      />
       <Header />
 
       {/* =================================

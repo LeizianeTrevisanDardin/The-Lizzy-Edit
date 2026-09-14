@@ -222,7 +222,7 @@ const fallbackContent: GuideContent = {
 };
 
 // =================================
-// PAGE
+// SEO
 // =================================
 
 export const metadata: Metadata = {
@@ -266,6 +266,49 @@ export const metadata: Metadata = {
     images: ["/images/1.png"],
   },
 };
+
+// =================================
+// STRUCTURED DATA
+// =================================
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+
+  headline:
+    "How to Build a Simple Skincare Routine",
+
+  description:
+    "Learn how to build a simple skincare routine with cleanser, treatment, moisturizer and SPF, plus practical tips from The Lizzy Edit.",
+
+  image: [
+    "https://the-lizzy-edit.vercel.app/images/1.png",
+  ],
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id":
+      "https://the-lizzy-edit.vercel.app/beauty-guide/01",
+  },
+
+  author: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+    url:
+      "https://the-lizzy-edit.vercel.app/about",
+  },
+
+  publisher: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+    url:
+      "https://the-lizzy-edit.vercel.app",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
 
 export default async function SimpleSkincareRoutinePage() {
   const supabase = await createClient();
@@ -358,11 +401,23 @@ export default async function SimpleSkincareRoutinePage() {
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      {/* =================================
+          ARTICLE STRUCTURED DATA
+      ================================= */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd),
+        }}
+      />
+
       <Header />
 
       {/* ================================
           ARTICLE HEADER
       ================================= */}
+
       <section className="border-b border-stone-200 bg-[#f3e7e2]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Link
@@ -379,6 +434,7 @@ export default async function SimpleSkincareRoutinePage() {
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               {hero.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {hero.highlight}
               </span>
@@ -394,6 +450,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           HERO IMAGE
       ================================= */}
+
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
@@ -413,6 +470,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           INTRODUCTION
       ================================= */}
+
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
           {intro.eyebrow}
@@ -420,6 +478,7 @@ export default async function SimpleSkincareRoutinePage() {
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
           {intro.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
             {intro.highlight}
           </span>
@@ -439,6 +498,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           ROUTINE
       ================================= */}
+
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -448,6 +508,7 @@ export default async function SimpleSkincareRoutinePage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               {routine.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {routine.highlight}
               </span>
@@ -494,9 +555,11 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           MORNING / EVENING
       ================================= */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2">
           {/* MORNING */}
+
           <div className="rounded-[28px] bg-[#f0dfd8] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
               {morning.eyebrow}
@@ -525,6 +588,7 @@ export default async function SimpleSkincareRoutinePage() {
           </div>
 
           {/* EVENING */}
+
           <div className="rounded-[28px] bg-[#ebe3de] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
               {evening.eyebrow}
@@ -557,6 +621,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           BEAUTY NOTES
       ================================= */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
@@ -567,6 +632,7 @@ export default async function SimpleSkincareRoutinePage() {
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
                 {beautyNotes.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
                   {beautyNotes.highlight}
                 </span>
@@ -600,6 +666,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           SKIN TYPE NOTE
       ================================= */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -608,6 +675,7 @@ export default async function SimpleSkincareRoutinePage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {skinTypeNote.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {skinTypeNote.highlight}
             </span>
@@ -622,6 +690,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           CTA
       ================================= */}
+
       <section className="mx-auto max-w-5xl px-5 pb-10 sm:px-6 sm:pb-14 lg:px-8 lg:pb-20">
         <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12">
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
@@ -654,6 +723,7 @@ export default async function SimpleSkincareRoutinePage() {
       {/* ================================
           ARTICLE NAVIGATION
       ================================= */}
+
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="flex flex-col gap-4 border-t border-stone-200 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <Link

@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import { createClient } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -56,8 +65,8 @@ export default async function AdminPage() {
           </div>
         </div>
 
-       {/* DASHBOARD CARDS */}
-          <section className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* DASHBOARD CARDS */}
+        <section className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {/* PRODUCTS */}
           <Link
             href="/admin/products"

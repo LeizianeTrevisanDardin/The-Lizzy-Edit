@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/client";
 
 export default function AdminLoginPage() {
@@ -14,19 +15,24 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleLogin(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
     setError("");
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
     if (error) {
-      setError("Email or password is incorrect.");
+      setError(
+        "Email or password is incorrect.",
+      );
       setLoading(false);
       return;
     }
@@ -49,11 +55,15 @@ export default function AdminLoginPage() {
             </h1>
 
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              Sign in to manage your beauty products and content.
+              Sign in to manage your beauty
+              products and content.
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="mt-8 space-y-5">
+          <form
+            onSubmit={handleLogin}
+            className="mt-8 space-y-5"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -68,7 +78,9 @@ export default function AdminLoginPage() {
                 autoComplete="email"
                 required
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) =>
+                  setEmail(event.target.value)
+                }
                 className="mt-2 min-h-12 w-full rounded-2xl border border-stone-200 bg-[#fffaf7] px-4 text-sm outline-none transition focus:border-[#b77b72]"
                 placeholder="you@example.com"
               />
@@ -88,7 +100,11 @@ export default function AdminLoginPage() {
                 autoComplete="current-password"
                 required
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  setPassword(
+                    event.target.value,
+                  )
+                }
                 className="mt-2 min-h-12 w-full rounded-2xl border border-stone-200 bg-[#fffaf7] px-4 text-sm outline-none transition focus:border-[#b77b72]"
                 placeholder="••••••••"
               />
@@ -114,7 +130,9 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#211d1b] px-6 text-[10px] font-medium uppercase tracking-[0.16em] text-white transition hover:bg-[#b77b72] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading
+                ? "Signing in..."
+                : "Sign In"}
             </button>
           </form>
         </div>

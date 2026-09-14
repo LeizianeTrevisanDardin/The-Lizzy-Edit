@@ -1,4 +1,5 @@
-import type { Metadata } from "next";import Image from "next/image";
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import Header from "@/components/Header";
@@ -152,9 +153,11 @@ const fallbackContent: GuideContent = {
 
   checklist: {
     eyebrow: "The checklist",
-    titleBefore: "Four questions to ask before you",
+    titleBefore:
+      "Four questions to ask before you",
     highlight: "splurge.",
     noteLabel: "Lizzy's note",
+
     items: [
       {
         number: "01",
@@ -193,7 +196,8 @@ const fallbackContent: GuideContent = {
 
   saveSplurge: {
     eyebrow: "Save or splurge?",
-    titleBefore: "Think about where the extra money makes a",
+    titleBefore:
+      "Think about where the extra money makes a",
     highlight: "difference to you.",
 
     splurge: {
@@ -245,6 +249,7 @@ const fallbackContent: GuideContent = {
     eyebrow: "What are you paying for?",
     titleBefore: "Look beyond the",
     highlight: "packaging.",
+
     items: [
       {
         number: "01",
@@ -287,7 +292,8 @@ const fallbackContent: GuideContent = {
 
   finalNote: {
     eyebrow: "Lizzy's take",
-    titleBefore: "Splurge where it makes your routine",
+    titleBefore:
+      "Splurge where it makes your routine",
     highlight: "better.",
     description:
       "There is nothing wrong with loving a luxury beauty product. There is also nothing wrong with choosing the $12 option when it works just as well for you. The goal is not to always save or always splurge — it is to know why you are spending more.",
@@ -313,7 +319,7 @@ const fallbackContent: GuideContent = {
 };
 
 // =================================
-// PAGE
+// SEO
 // =================================
 
 export const metadata: Metadata = {
@@ -340,7 +346,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/images/6.png",
-        alt: "Beauty products and shopping notes",
+        alt:
+          "Beauty products and shopping notes",
       },
     ],
   },
@@ -357,6 +364,49 @@ export const metadata: Metadata = {
     images: ["/images/6.png"],
   },
 };
+
+// =================================
+// STRUCTURED DATA
+// =================================
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+
+  headline:
+    "When Is a Beauty Product Worth the Splurge?",
+
+  description:
+    "Learn when a beauty product may be worth the splurge, how to compare value, cost per use, performance and affordable alternatives.",
+
+  image: [
+    "https://the-lizzy-edit.vercel.app/images/6.png",
+  ],
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id":
+      "https://the-lizzy-edit.vercel.app/beauty-guide/06",
+  },
+
+  author: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+    url:
+      "https://the-lizzy-edit.vercel.app/about",
+  },
+
+  publisher: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+    url:
+      "https://the-lizzy-edit.vercel.app",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
 
 export default async function WorthTheSplurgePage() {
   const supabase = await createClient();
@@ -472,9 +522,21 @@ export default async function WorthTheSplurgePage() {
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      {/* =================================
+          ARTICLE STRUCTURED DATA
+      ================================= */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd),
+        }}
+      />
+
       <Header />
 
       {/* ARTICLE HEADER */}
+
       <section className="border-b border-stone-200 bg-[#f3e7e2]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Link
@@ -491,6 +553,7 @@ export default async function WorthTheSplurgePage() {
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               {hero.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {hero.highlight}
               </span>
@@ -504,6 +567,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* HERO IMAGE */}
+
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
@@ -521,6 +585,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* INTRODUCTION */}
+
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
           {intro.eyebrow}
@@ -528,6 +593,7 @@ export default async function WorthTheSplurgePage() {
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
           {intro.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
             {intro.highlight}
           </span>
@@ -545,6 +611,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* QUESTIONS */}
+
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -554,6 +621,7 @@ export default async function WorthTheSplurgePage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               {checklist.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {checklist.highlight}
               </span>
@@ -598,6 +666,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* SAVE VS SPLURGE */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -606,6 +675,7 @@ export default async function WorthTheSplurgePage() {
 
           <h2 className="mt-3 max-w-3xl font-serif text-4xl sm:text-5xl">
             {saveSplurge.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {saveSplurge.highlight}
             </span>
@@ -613,7 +683,6 @@ export default async function WorthTheSplurgePage() {
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {/* SPLURGE */}
           <div className="rounded-[28px] bg-[#efe1da] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
               {saveSplurge.splurge.eyebrow}
@@ -641,7 +710,6 @@ export default async function WorthTheSplurgePage() {
             </div>
           </div>
 
-          {/* SAVE */}
           <div className="rounded-[28px] bg-[#e8dfd9] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
               {saveSplurge.save.eyebrow}
@@ -672,6 +740,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* COST PER USE */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -680,6 +749,7 @@ export default async function WorthTheSplurgePage() {
 
           <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
             {costPerUse.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {costPerUse.highlight}
             </span>
@@ -728,6 +798,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* WHAT YOU PAY FOR */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="max-w-3xl">
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -736,6 +807,7 @@ export default async function WorthTheSplurgePage() {
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
             {value.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {value.highlight}
             </span>
@@ -767,6 +839,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* BEAUTY NOTES */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
@@ -777,6 +850,7 @@ export default async function WorthTheSplurgePage() {
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
                 {beautyNotes.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
                   {beautyNotes.highlight}
                 </span>
@@ -791,7 +865,10 @@ export default async function WorthTheSplurgePage() {
                     className="grid grid-cols-[45px_1fr] gap-4 py-6 sm:grid-cols-[70px_1fr]"
                   >
                     <span className="font-serif text-xl text-[#c78f86]">
-                      {String(index + 1).padStart(2, "0")}
+                      {String(index + 1).padStart(
+                        2,
+                        "0",
+                      )}
                     </span>
 
                     <p className="text-sm leading-7 text-stone-700 sm:text-base">
@@ -806,6 +883,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* FINAL NOTE */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -814,6 +892,7 @@ export default async function WorthTheSplurgePage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {finalNote.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {finalNote.highlight}
             </span>
@@ -826,6 +905,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* CTA */}
+
       <section className="mx-auto max-w-5xl px-5 pb-10 sm:px-6 sm:pb-14 lg:px-8 lg:pb-20">
         <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12">
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
@@ -856,6 +936,7 @@ export default async function WorthTheSplurgePage() {
       </section>
 
       {/* ARTICLE NAVIGATION */}
+
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-3 sm:items-center">
           <Link

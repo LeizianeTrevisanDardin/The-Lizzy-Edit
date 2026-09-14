@@ -66,15 +66,55 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body>
-        {children}
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "The Lizzy Edit",
+  url: "https://the-lizzy-edit.vercel.app",
+  description:
+    "Skincare, makeup and self-care recommendations curated by Beauty Advisor Lizzy Trevisan.",
+  publisher: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+  },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Lizzy Trevisan",
+  url: "https://the-lizzy-edit.vercel.app/about",
+  jobTitle: "Beauty Advisor",
+  worksFor: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+  },
+};
+
+    export default function RootLayout({
+      children,
+    }: Readonly<{
+      children: React.ReactNode;
+    }>) {
+      return (
+        <html lang="en">
+          <body>
+            <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(websiteJsonLd),
+      }}
+    />
+
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(personJsonLd),
+      }}
+    />
+
+    {children}
+      
       </body>
     </html>
   );

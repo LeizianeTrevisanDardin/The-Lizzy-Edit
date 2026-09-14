@@ -142,6 +142,7 @@ const fallbackContent: GuideContent = {
     titleBefore: "Find the look that feels",
     highlight: "most like you.",
     noteLabel: "Lizzy's note",
+
     items: [
       {
         number: "01",
@@ -182,6 +183,7 @@ const fallbackContent: GuideContent = {
     eyebrow: "Quick comparison",
     titleBefore: "What kind of result are you",
     highlight: "looking for?",
+
     items: [
       {
         eyebrow: "Natural",
@@ -214,6 +216,7 @@ const fallbackContent: GuideContent = {
     eyebrow: "Good to know",
     titleBefore: "Finish and coverage are",
     highlight: "not the same thing.",
+
     paragraphs: [
       "Coverage tells you how much of your natural complexion remains visible. Finish describes how the foundation looks once it is on your skin.",
       "That means you can find a lightweight foundation with a matte finish or a fuller-coverage foundation with a radiant finish.",
@@ -249,6 +252,7 @@ const fallbackContent: GuideContent = {
     eyebrow: "Beauty Notes",
     titleBefore: "A few things worth",
     highlight: "remembering.",
+
     items: [
       "Finish and coverage are two different things.",
       "Your preferred foundation may change with the season.",
@@ -286,7 +290,7 @@ const fallbackContent: GuideContent = {
 };
 
 // =================================
-// PAGE
+// SEO
 // =================================
 
 export const metadata: Metadata = {
@@ -330,6 +334,49 @@ export const metadata: Metadata = {
     images: ["/images/4.png"],
   },
 };
+
+// =================================
+// STRUCTURED DATA
+// =================================
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+
+  headline:
+    "How to Choose Your Foundation Finish",
+
+  description:
+    "Learn how to choose between natural, matte, radiant and skin-like foundation finishes, plus how coverage and skin prep affect the final look.",
+
+  image: [
+    "https://the-lizzy-edit.vercel.app/images/4.png",
+  ],
+
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id":
+      "https://the-lizzy-edit.vercel.app/beauty-guide/04",
+  },
+
+  author: {
+    "@type": "Person",
+    name: "Lizzy Trevisan",
+    url:
+      "https://the-lizzy-edit.vercel.app/about",
+  },
+
+  publisher: {
+    "@type": "Organization",
+    name: "The Lizzy Edit",
+    url:
+      "https://the-lizzy-edit.vercel.app",
+  },
+};
+
+// =================================
+// PAGE
+// =================================
 
 export default async function FoundationFinishPage() {
   const supabase = await createClient();
@@ -440,9 +487,21 @@ export default async function FoundationFinishPage() {
 
   return (
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
+      {/* =================================
+          ARTICLE STRUCTURED DATA
+      ================================= */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd),
+        }}
+      />
+
       <Header />
 
       {/* ARTICLE HEADER */}
+
       <section className="border-b border-stone-200 bg-[#f3e7e2]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Link
@@ -459,6 +518,7 @@ export default async function FoundationFinishPage() {
 
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               {hero.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {hero.highlight}
               </span>
@@ -472,6 +532,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* HERO IMAGE */}
+
       <section className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-[#ead8d0] shadow-sm sm:rounded-[36px]">
           <Image
@@ -489,6 +550,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* INTRODUCTION */}
+
       <section className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
           {intro.eyebrow}
@@ -496,6 +558,7 @@ export default async function FoundationFinishPage() {
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
           {intro.titleBefore}{" "}
+
           <span className="italic text-[#c78f86]">
             {intro.highlight}
           </span>
@@ -513,6 +576,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* FINISH TYPES */}
+
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -522,6 +586,7 @@ export default async function FoundationFinishPage() {
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
               {finishes.titleBefore}{" "}
+
               <span className="italic text-[#c78f86]">
                 {finishes.highlight}
               </span>
@@ -566,6 +631,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* QUICK COMPARISON */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -574,6 +640,7 @@ export default async function FoundationFinishPage() {
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
             {comparison.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {comparison.highlight}
             </span>
@@ -619,6 +686,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* COVERAGE VS FINISH */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
@@ -627,6 +695,7 @@ export default async function FoundationFinishPage() {
 
           <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
             {coverage.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {coverage.highlight}
             </span>
@@ -645,9 +714,9 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* SKIN PREP */}
+
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2">
-          {/* BEFORE */}
           <div className="rounded-[28px] bg-[#f0dfd8] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
               {beforeFoundation.eyebrow}
@@ -675,7 +744,6 @@ export default async function FoundationFinishPage() {
             </div>
           </div>
 
-          {/* AFTER */}
           <div className="rounded-[28px] bg-[#ebe3de] p-6 sm:p-8">
             <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-stone-500">
               {afterFoundation.eyebrow}
@@ -706,6 +774,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* BEAUTY NOTES */}
+
       <section className="bg-[#f6eee9]">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
@@ -716,6 +785,7 @@ export default async function FoundationFinishPage() {
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
                 {beautyNotes.titleBefore}{" "}
+
                 <span className="italic text-[#c78f86]">
                   {beautyNotes.highlight}
                 </span>
@@ -747,6 +817,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* FINAL NOTE */}
+
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="rounded-[30px] border border-stone-200 bg-white p-6 sm:p-10">
           <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-[#b77b72]">
@@ -755,6 +826,7 @@ export default async function FoundationFinishPage() {
 
           <h2 className="mt-3 font-serif text-4xl">
             {finalNote.titleBefore}{" "}
+
             <span className="italic text-[#c78f86]">
               {finalNote.highlight}
             </span>
@@ -767,6 +839,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* CTA */}
+
       <section className="mx-auto max-w-5xl px-5 pb-10 sm:px-6 sm:pb-14 lg:px-8 lg:pb-20">
         <div className="relative overflow-hidden rounded-[30px] bg-[#211d1b] px-6 py-10 text-white sm:px-10 sm:py-12">
           <div className="absolute -right-12 -top-12 h-52 w-52 rounded-full bg-[#c78f86] opacity-25 blur-3xl" />
@@ -797,6 +870,7 @@ export default async function FoundationFinishPage() {
       </section>
 
       {/* ARTICLE NAVIGATION */}
+
       <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
         <div className="grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-3 sm:items-center">
           <Link
