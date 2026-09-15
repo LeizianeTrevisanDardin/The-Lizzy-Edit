@@ -9,6 +9,11 @@ import {
 
 import Link from "next/link";
 
+import {
+  FaceDetector,
+  FilesetResolver,
+} from "@mediapipe/tasks-vision";
+
 import ProductCard, {
   type Product,
 } from "@/components/ProductCard";
@@ -339,6 +344,31 @@ export default function UndertoneAnalyzePage() {
       null,
     );
 
+  const faceDetectionTimerRef =
+    useRef<
+      ReturnType<typeof setInterval> | null
+    >(null);
+
+  const faceDetectorRef =
+    useRef<FaceDetector | null>(null);
+
+  const stableFaceFramesRef =
+    useRef(0);
+
+  const autoCaptureDoneRef =
+    useRef(false);
+
+  const [
+    faceStatus,
+    setFaceStatus,
+  ] = useState<
+    | "loading"
+    | "searching"
+    | "position"
+    | "detected"
+    | "unavailable"
+  >("loading");
+
   const supabase = useMemo(
     () => createClient(),
     [],
@@ -424,6 +454,11 @@ export default function UndertoneAnalyzePage() {
       setCameraResult(null);
       setFinalResult(null);
       setAnswers(emptyAnswers);
+
+      setFaceStatus("loading");
+      stableFaceFramesRef.current = 0;
+      autoCaptureDoneRef.current = false;
+
       setIsStarting(true);
 
       const mediaStream =
@@ -456,19 +491,33 @@ export default function UndertoneAnalyzePage() {
   }
 
   function stopCamera() {
-    stream
-      ?.getTracks()
-      .forEach((track) =>
-        track.stop(),
-      );
+  if (
+    faceDetectionTimerRef.current
+  ) {
+    clearInterval(
+      faceDetectionTimerRef.current,
+    );
 
-    setStream(null);
-
-    if (videoRef.current) {
-      videoRef.current.srcObject =
-        null;
-    }
+    faceDetectionTimerRef.current =
+      null;
   }
+
+  stableFaceFramesRef.current = 0;
+  autoCaptureDoneRef.current = false;
+
+  stream
+    ?.getTracks()
+    .forEach((track) =>
+      track.stop(),
+    );
+
+  setStream(null);
+
+  if (videoRef.current) {
+    videoRef.current.srcObject =
+      null;
+  }
+}
 
   function rgbToHex(
     r: number,
@@ -846,7 +895,194 @@ export default function UndertoneAnalyzePage() {
     }, 650);
   }
 
- function getResultMessage(
+async function startAutomaticFaceDetection() {
+  const video =
+    videoRef.current;
+
+  if (!video) {
+    return;
+  }
+
+  try {
+    setFaceStatus("loading");
+
+    if (!faceDetectorRef.current) {
+      const vision =
+        await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
+        );
+
+      faceDetectorRef.current =
+        await FaceDetector.createFromOptions(
+          vision,
+          {
+            baseOptions: {
+              modelAssetPath:
+                "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite",
+              delegate: "GPU",
+            },
+            runningMode: "VIDEO",
+            minDetectionConfidence: 0.55,
+            minSuppressionThreshold: 0.3,
+          },
+        );
+    }
+
+    const detector =
+      faceDetectorRef.current;
+
+    if (!detector) {
+      setFaceStatus("unavailable");
+      return;
+    }
+
+    if (
+      faceDetectionTimerRef.current
+    ) {
+      clearInterval(
+        faceDetectionTimerRef.current,
+      );
+    }
+
+    setFaceStatus("searching");
+    stableFaceFramesRef.current = 0;
+    autoCaptureDoneRef.current = false;
+
+    faceDetectionTimerRef.current =
+      setInterval(() => {
+        if (autoCaptureDoneRef.current) {
+          return;
+        }
+
+        const currentVideo =
+          videoRef.current;
+
+        if (
+          !currentVideo ||
+          currentVideo.readyState < 2 ||
+          currentVideo.videoWidth === 0 ||
+          currentVideo.videoHeight === 0
+        ) {
+          return;
+        }
+
+        try {
+          const result =
+            detector.detectForVideo(
+              currentVideo,
+              performance.now(),
+            );
+
+          const detections =
+            result.detections ?? [];
+
+          if (detections.length !== 1) {
+            stableFaceFramesRef.current = 0;
+            setFaceStatus("searching");
+            return;
+          }
+
+          const box =
+            detections[0].boundingBox;
+
+          if (!box) {
+            stableFaceFramesRef.current = 0;
+            setFaceStatus("searching");
+            return;
+          }
+
+          const videoWidth =
+            currentVideo.videoWidth;
+
+          const videoHeight =
+            currentVideo.videoHeight;
+
+          const faceCenterX =
+            box.originX + box.width / 2;
+
+          const faceCenterY =
+            box.originY + box.height / 2;
+
+          const frameCenterX =
+            videoWidth / 2;
+
+          const frameCenterY =
+            videoHeight / 2;
+
+          const horizontalDistance =
+            Math.abs(
+              faceCenterX - frameCenterX,
+            ) / videoWidth;
+
+          const verticalDistance =
+            Math.abs(
+              faceCenterY - frameCenterY,
+            ) / videoHeight;
+
+          const faceWidthRatio =
+            box.width / videoWidth;
+
+          const faceHeightRatio =
+            box.height / videoHeight;
+
+          const centered =
+            horizontalDistance < 0.18 &&
+            verticalDistance < 0.2;
+
+          const goodSize =
+            faceWidthRatio > 0.2 &&
+            faceWidthRatio < 0.8 &&
+            faceHeightRatio > 0.24 &&
+            faceHeightRatio < 0.92;
+
+          if (!centered || !goodSize) {
+            stableFaceFramesRef.current = 0;
+            setFaceStatus("position");
+            return;
+          }
+
+          stableFaceFramesRef.current += 1;
+          setFaceStatus("detected");
+
+          if (
+            stableFaceFramesRef.current >= 5
+          ) {
+            autoCaptureDoneRef.current = true;
+
+            if (
+              faceDetectionTimerRef.current
+            ) {
+              clearInterval(
+                faceDetectionTimerRef.current,
+              );
+
+              faceDetectionTimerRef.current =
+                null;
+            }
+
+            analyzeSkin();
+          }
+        } catch (error) {
+          console.error(
+            "MediaPipe face detection error:",
+            error,
+          );
+
+          stableFaceFramesRef.current = 0;
+          setFaceStatus("searching");
+        }
+      }, 280);
+  } catch (error) {
+    console.error(
+      "MediaPipe initialization error:",
+      error,
+    );
+
+    setFaceStatus("unavailable");
+  }
+}
+
+function getResultMessage(
   undertone: string,
 ) {
   switch (undertone) {
@@ -1225,6 +1461,74 @@ export default function UndertoneAnalyzePage() {
     };
   }, [stream]);
 
+  useEffect(() => {
+    return () => {
+      if (
+        faceDetectionTimerRef.current
+      ) {
+        clearInterval(
+          faceDetectionTimerRef.current,
+        );
+      }
+
+      faceDetectorRef.current?.close();
+      faceDetectorRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!stream) {
+      return;
+    }
+
+    const video =
+      videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    function beginDetection() {
+      startAutomaticFaceDetection();
+    }
+
+    if (
+      video.readyState >= 2
+    ) {
+      beginDetection();
+    } else {
+      video.addEventListener(
+        "loadeddata",
+        beginDetection,
+        {
+          once: true,
+        },
+      );
+    }
+
+    return () => {
+      video.removeEventListener(
+        "loadeddata",
+        beginDetection,
+      );
+
+      if (
+        faceDetectionTimerRef.current
+      ) {
+        clearInterval(
+          faceDetectionTimerRef.current,
+        );
+
+        faceDetectionTimerRef.current =
+          null;
+      }
+    };
+
+    // We intentionally start detection
+    // only when the camera stream changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stream]);
+
   return (
     <main className="min-h-screen bg-[#fffaf7] px-5 py-8 text-[#211d1b] sm:px-6 lg:px-8">
       <canvas
@@ -1328,13 +1632,29 @@ export default function UndertoneAnalyzePage() {
                       <div className="h-[72%] w-[68%] rounded-[48%] border border-white/80 shadow-[0_0_0_999px_rgba(0,0,0,0.18)] sm:h-[78%] sm:w-[48%]" />
                     </div>
 
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-5 pb-5 pt-16 text-center text-white">
-                      <p className="text-xs">
-                        {
-                          camera.cameraGuideText
-                        }
-                      </p>
-                    </div>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-5 pt-20 text-center text-white">
+  <p className="text-xs">
+    {faceStatus ===
+      "loading" &&
+      "Starting face detection..."}
+
+    {faceStatus ===
+      "searching" &&
+      "Looking for your face..."}
+
+    {faceStatus ===
+      "position" &&
+      "Center your face inside the guide."}
+
+    {faceStatus ===
+      "detected" &&
+      "Face detected ✓ Hold still..."}
+
+    {faceStatus ===
+      "unavailable" &&
+      "Automatic detection is unavailable. Use Analyze My Skin below."}
+  </p>
+</div>
                   </>
                 )}
               </div>
