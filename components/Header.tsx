@@ -27,6 +27,9 @@ const fallbackHeader = {
   beautyGuideText: "Beauty Guide",
   beautyGuideLink: "/beauty-guide",
 
+  journalText: "Journal",
+  journalLink: "/journal",
+
   undertoneText: "Find Your Undertone",
   undertoneLink: "/undertone",
 

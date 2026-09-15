@@ -30,6 +30,9 @@ const fallbackFooter = {
   beautyGuideText: "Beauty Guide",
   beautyGuideLink: "/beauty-guide",
 
+  journalText: "Journal",
+  journalLink: "/journal",
+
   privacyText: "Privacy Policy",
   privacyLink: "/privacy",
 
@@ -153,6 +156,13 @@ export default async function Footer() {
               className="transition hover:text-white"
             >
               {footer.beautyGuideText}
+            </Link>
+
+            <Link
+              href={footer.journalLink}
+              className="transition hover:text-white"
+            >
+              {footer.journalText}
             </Link>
 
             <Link
