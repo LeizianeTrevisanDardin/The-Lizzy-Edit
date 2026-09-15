@@ -154,6 +154,27 @@ export default async function AdminPage() {
               View analytics →
             </span>
           </Link>
+
+          <Link
+            href="/admin/journal"
+            className="group flex h-full flex-col rounded-[28px] border border-stone-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-[#b77b72]">
+              Editorial
+            </p>
+
+            <h2 className="mt-4 font-serif text-3xl">
+              Journal
+            </h2>
+
+            <p className="mt-3 text-sm leading-6 text-stone-500">
+              Write, edit, publish and manage your journal posts.
+            </p>
+
+            <span className="mt-auto pt-6 text-sm transition-transform duration-300 group-hover:translate-x-2">
+              Manage journal →
+            </span>
+          </Link>
         </section>
       </div>
     </main>
