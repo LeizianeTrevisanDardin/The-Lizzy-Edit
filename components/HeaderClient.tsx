@@ -27,6 +27,9 @@ type HeaderContent = {
   beautyGuideText: string;
   beautyGuideLink: string;
 
+  journalText: string;
+  journalLink: string;
+
   undertoneText: string;
   undertoneLink: string;
 
@@ -133,6 +136,13 @@ export default function HeaderClient({
             </Link>
 
             <Link
+              href={content.journalLink}
+              className="transition hover:opacity-50"
+            >
+              {content.journalText}
+            </Link>
+
+            <Link
               href={content.undertoneLink}
               className="transition hover:text-[#b77b72]"
             >
@@ -212,7 +222,7 @@ export default function HeaderClient({
         <div
           className={`overflow-hidden border-t border-stone-200 bg-[#fffaf7] transition-all duration-500 lg:hidden ${
             menuOpen
-              ? "max-h-[750px] opacity-100"
+              ? "max-h-[820px] opacity-100"
               : "max-h-0 border-t-transparent opacity-0"
           }`}
         >
@@ -257,6 +267,13 @@ export default function HeaderClient({
               onClick={closeMenu}
             >
               {content.beautyGuideText}
+            </MobileLink>
+
+            <MobileLink
+              href={content.journalLink}
+              onClick={closeMenu}
+            >
+              {content.journalText}
             </MobileLink>
 
             <MobileLink

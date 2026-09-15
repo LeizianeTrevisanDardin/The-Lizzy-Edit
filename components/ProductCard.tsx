@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import AffiliateLink from "@/components/AffiliateLink";
 
 export type Product = {
   id: number;
@@ -95,14 +96,15 @@ export default function ProductCard({
         {/* ACTIONS */}
         <div className="mt-auto pt-5">
           {product.affiliateUrl ? (
-            <a
-              href={product.affiliateUrl}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
-            >
-              {shopButtonText}
-            </a>
+            <AffiliateLink
+                href={product.affiliateUrl}
+                productSlug={product.slug}
+                productName={product.name}
+                sourcePage="product-card"
+                className="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#211d1b] px-4 text-center text-[9px] font-medium uppercase tracking-[0.14em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70]"
+              >
+                {shopButtonText}
+              </AffiliateLink>
           ) : (
             <Link
               href={`/picks/${product.slug}`}

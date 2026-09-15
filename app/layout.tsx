@@ -7,6 +7,11 @@ export const metadata: Metadata = {
     "https://the-lizzy-edit.vercel.app",
   ),
 
+  verification: {
+    google:
+      "ax1PPrZbz8QIerzQsZlbViv8c6OV0UI4v9XucQQoPCk",
+  },
+
   title: {
     default:
       "The Lizzy Edit | Beauty by Lizzy Trevisan",

@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
+import AffiliateLink from "@/components/AffiliateLink";
 
 type ProductPageProps = {
   params: Promise<{
@@ -348,16 +349,15 @@ export default async function ProductPage({
             <div className="mt-8">
               {product.affiliate_url ? (
                 <>
-                  <a
-                    href={
-                      product.affiliate_url
-                    }
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#211d1b] px-7 text-[10px] font-medium uppercase tracking-[0.15em] text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#b76f70] sm:w-auto"
+                  <AffiliateLink
+                    href={product.affiliate_url}
+                    productSlug={product.slug}
+                    productName={product.name}
+                    sourcePage={`/picks/${product.slug}`}
+                    className="SEU CLASSNAME ATUAL AQUI"
                   >
                     {content.shopButtonText}
-                  </a>
+                  </AffiliateLink>
 
                   <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
                     {content.affiliateShortText}
