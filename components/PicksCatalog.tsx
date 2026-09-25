@@ -102,21 +102,51 @@ export default function PicksCatalog({
   const [activeFilter, setActiveFilter] =
     useState(initialFilter);
 
+  const concernFilters = [
+    "Dryness",
+    "Sensitivity",
+    "Breakouts",
+    "Fine Lines",
+    "Dark Spots",
+    "Dullness",
+  ];
+
+  const categoryFilters = [
+    "Skincare",
+    "Makeup",
+    "Self-Care",
+    "Fragrance",
+  ];
+
   const filteredProducts = products.filter(
     (product) => {
       if (activeFilter === "All") {
         return true;
       }
 
-      if (product.category === activeFilter) {
-        return true;
+      if (
+        categoryFilters.includes(activeFilter)
+      ) {
+        return (
+          product.category === activeFilter
+        );
       }
 
-      if (product.tags.includes(activeFilter)) {
-        return true;
+      if (
+        concernFilters.includes(activeFilter)
+      ) {
+        return (
+          product.concerns?.includes(
+            activeFilter,
+          ) ?? false
+        );
       }
 
-      return false;
+      return (
+        product.tags?.includes(
+          activeFilter,
+        ) ?? false
+      );
     },
   );
 
