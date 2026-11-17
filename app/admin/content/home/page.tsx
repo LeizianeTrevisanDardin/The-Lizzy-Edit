@@ -430,7 +430,7 @@ export default async function AdminHomeContentPage() {
             <div className="mt-5 grid gap-6 sm:grid-cols-2">
               <Field
                 label="Title"
-                name="fraganceTitle"
+                name="fragranceTitle"
                 value={categoryItems[3]?.title}
               />
 
