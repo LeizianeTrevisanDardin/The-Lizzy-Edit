@@ -389,6 +389,7 @@ export default async function AdminHomeContentPage() {
             </div>
           </div>
 
+        
           {/* SELF CARE */}
           <div className="mt-8 border-t border-stone-200 pt-6">
             <h3 className="font-serif text-2xl">
@@ -420,6 +421,38 @@ export default async function AdminHomeContentPage() {
                 value={categoryItems[2]?.href}
               />
             </div>
+             {/* FRAGRANCES */}
+          <div className="mt-8 border-t border-stone-200 pt-6">
+            <h3 className="font-serif text-2xl">
+              Fragrance Card
+            </h3>
+
+            <div className="mt-5 grid gap-6 sm:grid-cols-2">
+              <Field
+                label="Title"
+                name="fraganceTitle"
+                value={categoryItems[3]?.title}
+              />
+
+              <Field
+                label="Description"
+                name="fragranceDescription"
+                value={categoryItems[3]?.description}
+              />
+
+              <Field
+                label="Image"
+                name="fragranceImage"
+                value={categoryItems[3]?.image}
+              />
+
+              <Field
+                label="Link"
+                name="fragranceHref"
+                value={categoryItems[3]?.href}
+              />
+            </div>
+          </div>
           </div>
 
           <div className="mt-8 flex justify-end border-t border-stone-200 pt-6">
