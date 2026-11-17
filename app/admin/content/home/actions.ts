@@ -267,6 +267,31 @@ export async function updateHomeCategories(
             .get("selfCareHref")
             ?.toString() || "",
       },
+      {
+        id: "fragrance",
+
+        title:
+          formData
+            .get("fragranceTitle")
+            ?.toString() || "",
+
+        description:
+          formData
+            .get(
+              "fragranceDescription",
+            )
+            ?.toString() || "",
+
+        image:
+          formData
+            .get("fragranceImage")
+            ?.toString() || "",
+
+        href:
+          formData
+            .get("fragranceHref")
+            ?.toString() || "",
+      },
     ],
   };
 
