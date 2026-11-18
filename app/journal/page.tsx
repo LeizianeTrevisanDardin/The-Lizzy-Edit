@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -62,12 +64,20 @@ export default async function JournalPage() {
             Editorial
           </p>
 
+          
           <h1 className="mt-4 font-serif text-5xl leading-tight sm:text-6xl lg:text-7xl">
-            The Lizzy{" "}
-            <span className="italic text-[#c78f86]">
-              Journal
-            </span>
+            <TextReveal>
+              <RevealWord text="The" />
+              {" "}
+              <RevealWord text="Lizzy" />
+              {" "}
+              <RevealWord
+                text="Journal."
+                className="italic text-[#c78f86]"
+              />
+            </TextReveal>
           </h1>
+
 
           <p className="mt-6 max-w-2xl text-base leading-8 text-stone-600 sm:text-lg">
             Beauty notes, product features and personal recommendations from The Lizzy Edit.

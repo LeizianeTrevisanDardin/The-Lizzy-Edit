@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
 import ExploreCard from "@/components/ExploreCard";
 import ProductCard from "@/components/ProductCard";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -411,13 +413,31 @@ if (productCardError) {
               {hero.eyebrow}
             </p>
 
-            <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
+            
+            
+            <h1 className="mt-4 font-serif text-5xl leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
+                <TextReveal>
+                  {hero.titleBefore.split(" ").map((word: string, index: number) => (
+                    <Fragment key={`before-${index}`}>
+                      <RevealWord text={word} />
+                      {" "}
+                    </Fragment>
+                  ))}
 
-              <span className="italic text-[#b76f70]">
-                {hero.highlight}
-              </span>
-            </h1>
+                  {hero.highlight.split(" ").map((word: string, index: number) => (
+                    <Fragment key={`highlight-${index}`}>
+                      <RevealWord
+                        text={word}
+                        className="italic text-[#c78f86]"
+                      />
+                      {" "}
+                    </Fragment>
+                  ))}
+                </TextReveal>
+              </h1>
+
+
+
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
               {hero.description}
@@ -479,11 +499,21 @@ if (productCardError) {
           </p>
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {categories.titleBefore}{" "}
+            <TextReveal>
+              {categories.titleBefore.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`categories-${index}`}
+                  text={word}
+                />
+              ))}
 
-            <span className="italic text-[#b76f70]">
-              {categories.highlight}
-            </span>
+              {" "}
+
+              <RevealWord
+                text={categories.highlight}
+                className="italic text-[#b76f70]"
+              />
+            </TextReveal>
           </h2>
 
           <p className="mt-4 max-w-xl text-sm leading-6 text-stone-600 sm:text-base">
@@ -521,11 +551,21 @@ if (productCardError) {
               </p>
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-                {products.titleBefore}{" "}
+                <TextReveal>
+                  {products.titleBefore.split(" ").map((word: string, index: number) => (
+                    <RevealWord
+                      key={`products-${index}`}
+                      text={word}
+                    />
+                  ))}
 
-                <span className="italic text-[#b76f70]">
-                  {products.highlight}
-                </span>
+                  {" "}
+
+                  <RevealWord
+                    text={products.highlight}
+                    className="italic text-[#b76f70]"
+                  />
+                </TextReveal>
               </h2>
 
               <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
@@ -613,12 +653,22 @@ if (productCardError) {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {looks.titleBefore}{" "}
+            <TextReveal>
+              {looks.titleBefore.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`looks-${index}`}
+                  text={word}
+                />
+              ))}
 
-              <span className="italic text-[#b76f70]">
-                {looks.highlight}
-              </span>
-            </h2>
+              {" "}
+
+              <RevealWord
+                text={looks.highlight}
+                className="italic text-[#b76f70]"
+              />
+            </TextReveal>
+          </h2>
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
@@ -678,12 +728,22 @@ if (productCardError) {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              {guide.titleBefore}{" "}
+            <TextReveal>
+              {guide.titleBefore.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`guide-${index}`}
+                  text={word}
+                />
+              ))}
 
-              <span className="italic text-[#b76f70]">
-                {guide.highlight}
-              </span>
-            </h2>
+              {" "}
+
+              <RevealWord
+                text={guide.highlight}
+                className="italic text-[#b76f70]"
+              />
+            </TextReveal>
+          </h2>
 
             <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
               {guide.description}

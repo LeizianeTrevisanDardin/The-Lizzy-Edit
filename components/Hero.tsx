@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 import { createClient } from "@/lib/supabase/server";
+import TextReveal, { RevealWord} from "./animations/TextReveal";
+
 
 const fallbackHero = {
   eyebrow: "Beauty Advisor Curated",
@@ -59,13 +61,32 @@ export default async function Hero() {
             {hero.eyebrow}
           </p>
 
-          <h2 className="max-w-xl font-serif text-5xl leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
-            {hero.titleBefore}{" "}
-            <span className="italic text-[#c78f86]">
-              {hero.highlight}
-            </span>{" "}
-            {hero.titleAfter}
-          </h2>
+          
+      <h2
+        className="max-w-xl font-serif text-5xl leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl"
+      >
+        <TextReveal>
+          {hero.titleBefore.split(" ").map((word: string, index: number) => (
+            <RevealWord
+              key={`before-${index}`}
+              text={word}
+            />
+          ))}
+
+          <RevealWord
+            text={hero.highlight}
+            className="italic text-[#c78f86]"
+          />
+
+          {hero.titleAfter.split(" ").map((word: string, index: number) => (
+            <RevealWord
+              key={`after-${index}`}
+              text={word}
+            />
+          ))}
+        </TextReveal>
+      </h2>
+
 
           <p className="mt-6 max-w-md text-sm leading-6 text-stone-600 sm:text-base sm:leading-7 lg:text-lg">
             {hero.description}

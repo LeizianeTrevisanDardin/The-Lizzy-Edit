@@ -6,6 +6,7 @@ import Categories from "@/components/Categories";
 import AboutLizzy from "@/components/AboutLizzy";
 import LizzyPicks from "@/components/LizzyPicks";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Beauty Recommendations by Lizzy Trevisan",
@@ -31,10 +32,22 @@ export default function Home() {
     <main className="min-h-screen bg-[#fffaf7] text-[#211d1b]">
       <Header />
       <Hero />
-      <Categories />
-      <AboutLizzy />
-      <LizzyPicks />
-      <Footer />
+      <ScrollReveal>
+        <Categories />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.2}>
+        <AboutLizzy />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.2}>
+        <LizzyPicks />
+      </ScrollReveal>
+     
+        <Footer />
+    
     </main>
   );
 }
+
+ 

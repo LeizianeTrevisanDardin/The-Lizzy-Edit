@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -163,13 +165,27 @@ export default async function UndertonePage() {
               {hero.eyebrow}
             </p>
 
-            <h1 className="mt-5 font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
+          <h1 className="mt-5 font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <TextReveal>
+              {hero.titleBefore.split(" ").map((word: string, index: number) => (
+                <Fragment key={`before-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
 
-              <span className="italic text-[#c78f86]">
-                {hero.highlight}
-              </span>
-            </h1>
+              {hero.highlight.split(" ").map((word: string, index: number) => (
+                <Fragment key={`highlight-${index}`}>
+                  <RevealWord
+                    text={word}
+                    className="italic text-[#c78f86]"
+                  />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
+          </h1>
+
 
             <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
               {hero.description}
@@ -202,13 +218,28 @@ export default async function UndertonePage() {
             {howItWorks.eyebrow}
           </p>
 
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {howItWorks.titleBefore}{" "}
+          
+        <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+          <TextReveal>
+            {howItWorks.titleBefore.split(" ").map((word: string, index: number) => (
+              <Fragment key={`how-before-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
 
-            <span className="italic text-[#c78f86]">
-              {howItWorks.highlight}
-            </span>
-          </h2>
+            {howItWorks.highlight.split(" ").map((word: string, index: number) => (
+              <Fragment key={`how-highlight-${index}`}>
+                <RevealWord
+                  text={word}
+                  className="italic text-[#c78f86]"
+                />
+                {" "}
+              </Fragment>
+            ))}
+          </TextReveal>
+        </h2>
+
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -244,13 +275,28 @@ export default async function UndertonePage() {
                 {beforeStart.eyebrow}
               </p>
 
-              <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-                {beforeStart.titleBefore}{" "}
+              
+            <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+              <TextReveal>
+                {beforeStart.titleBefore.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`before-${index}`}>
+                    <RevealWord text={word} />
+                    {" "}
+                  </Fragment>
+                ))}
 
-                <span className="italic">
-                  {beforeStart.highlight}
-                </span>
-              </h2>
+                {beforeStart.highlight.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`highlight-${index}`}>
+                    <RevealWord
+                      text={word}
+                      className="italic"
+                    />
+                    {" "}
+                  </Fragment>
+                ))}
+              </TextReveal>
+            </h2>
+
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">

@@ -19,6 +19,9 @@ const fallbackFooter = {
   selfCareText: "Self-Care",
   selfCareLink: "/self-care",
 
+  fragrancesText: "Fragrances",
+  fragrancesLink: "/fragrances",
+
   picksText: "Lizzy's Picks",
   picksLink: "/picks",
 
@@ -44,10 +47,10 @@ const fallbackFooter = {
     "Beauty tips, new finds and Lizzy's latest recommendations.",
 
   instagramText: "IG",
-  instagramLink: "#",
+  instagramLink: "https://www.instagram.com/lizzy_trevisan/",
 
   tiktokText: "TT",
-  tiktokLink: "#",
+  tiktokLink: "https://www.tiktok.com/@lizzytrevisan",
 
   affiliateText:
     "As an Amazon Associate, I earn from qualifying purchases.",
@@ -129,6 +132,13 @@ export default async function Footer() {
             </Link>
 
             <Link
+              href={footer.fragrancesLink}
+              className="transition hover:text-white"
+            >
+              {footer.fragrancesText}
+            </Link>
+
+            <Link
               href={footer.picksLink}
               className="transition hover:text-white"
             >
@@ -192,41 +202,59 @@ export default async function Footer() {
           </p>
 
           <div className="mt-5 flex gap-3">
-            <a
-              href={footer.instagramLink}
-              aria-label="Instagram"
-              target={
-                footer.instagramLink.startsWith("http")
-                  ? "_blank"
-                  : undefined
-              }
-              rel={
-                footer.instagramLink.startsWith("http")
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-700 transition hover:border-white hover:bg-white hover:text-black"
-            >
-              {footer.instagramText}
-            </a>
+            
+            {footer.instagramLink && (
+              <a
+                href={footer.instagramLink}
+                aria-label="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-white/15 text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#c78f86] hover:bg-[#c78f86] hover:text-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle
+                    cx="17.5"
+                    cy="6.5"
+                    r="0.5"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+            )}
 
-            <a
-              href={footer.tiktokLink}
-              aria-label="TikTok"
-              target={
-                footer.tiktokLink.startsWith("http")
-                  ? "_blank"
-                  : undefined
-              }
-              rel={
-                footer.tiktokLink.startsWith("http")
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-700 transition hover:border-white hover:bg-white hover:text-black"
-            >
-              {footer.tiktokText}
-            </a>
+
+            {/* TIKTOK */}
+              {footer.tiktokLink && (
+                <a
+                  href={footer.tiktokLink}
+                  aria-label="TikTok"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-white/15 text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#c78f86] hover:bg-[#c78f86]"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M19.6 7.1a5.5 5.5 0 0 1-3.4-1.2v7.6a5.8 5.8 0 1 1-5.8-5.8c.4 0 .8 0 1.2.1v3.2a2.7 2.7 0 1 0 1.9 2.5V2h3.2a5.5 5.5 0 0 0 2.9 3.3v1.8Z" />
+                  </svg>
+                </a>
+              )}
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -148,7 +149,7 @@ export async function updateGlobalHeader(
   };
 
   // ================================
-  // SAVE
+  // SAVE HEADER
   // ================================
 
   const { error } = await supabase
@@ -186,10 +187,19 @@ export async function updateGlobalHeader(
   redirect("/admin/content/global");
 }
 
+
+// =================================
+// GLOBAL FOOTER
+// =================================
+
 export async function updateGlobalFooter(
   formData: FormData,
 ) {
   const supabase = await createClient();
+
+  // ================================
+  // AUTH
+  // ================================
 
   const {
     data: { user },
@@ -198,6 +208,10 @@ export async function updateGlobalFooter(
   if (!user) {
     redirect("/admin/login");
   }
+
+  // ================================
+  // ADMIN CHECK
+  // ================================
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -209,6 +223,10 @@ export async function updateGlobalFooter(
     redirect("/");
   }
 
+  // ================================
+  // FOOTER CONTENT
+  // ================================
+
   const content = {
     brandTitle:
       formData.get("brandTitle")?.toString() || "",
@@ -219,6 +237,7 @@ export async function updateGlobalFooter(
     brandDescription:
       formData.get("brandDescription")?.toString() || "",
 
+    // EXPLORE
     exploreTitle:
       formData.get("exploreTitle")?.toString() || "",
 
@@ -239,6 +258,12 @@ export async function updateGlobalFooter(
 
     selfCareLink:
       formData.get("selfCareLink")?.toString() || "",
+    
+    fragrancesText:
+    formData.get("fragrancesText")?.toString() || "Fragrances",
+
+    fragrancesLink:
+    formData.get("fragrancesLink")?.toString() || "/fragrances",
 
     picksText:
       formData.get("picksText")?.toString() || "",
@@ -246,6 +271,7 @@ export async function updateGlobalFooter(
     picksLink:
       formData.get("picksLink")?.toString() || "",
 
+    // ABOUT
     aboutSectionTitle:
       formData.get("aboutSectionTitle")?.toString() || "",
 
@@ -273,24 +299,27 @@ export async function updateGlobalFooter(
     disclosureLink:
       formData.get("disclosureLink")?.toString() || "",
 
+    // FOLLOW
     followTitle:
       formData.get("followTitle")?.toString() || "",
 
     followDescription:
       formData.get("followDescription")?.toString() || "",
 
+    // SOCIAL MEDIA
     instagramText:
       formData.get("instagramText")?.toString() || "",
 
     instagramLink:
-      formData.get("instagramLink")?.toString() || "",
+      formData.get("instagramLink")?.toString().trim() || "",
 
     tiktokText:
       formData.get("tiktokText")?.toString() || "",
 
     tiktokLink:
-      formData.get("tiktokLink")?.toString() || "",
+      formData.get("tiktokLink")?.toString().trim() || "",
 
+    // LEGAL
     affiliateText:
       formData.get("affiliateText")?.toString() || "",
 
@@ -301,7 +330,20 @@ export async function updateGlobalFooter(
       formData.get("bottomText")?.toString() || "",
   };
 
-  const { error } = await supabase
+  // ================================
+  // DEBUG - RECEIVED FORM DATA
+  // ================================
+
+  console.log("FOOTER FORM DATA:", {
+    instagramLink: content.instagramLink,
+    tiktokLink: content.tiktokLink,
+  });
+
+  // ================================
+  // SAVE FOOTER
+  // ================================
+
+  const { data: savedData, error } = await supabase
     .from("site_content")
     .upsert(
       {
@@ -313,17 +355,40 @@ export async function updateGlobalFooter(
       {
         onConflict: "page,section",
       },
-    );
+    )
+    .select("content")
+    .single();
 
   if (error) {
-    throw new Error(error.message);
+    console.error(
+      "GLOBAL FOOTER UPDATE ERROR:",
+      error,
+    );
+
+    throw new Error(
+      `Could not update footer: ${error.message}`,
+    );
   }
+
+  // ================================
+  // DEBUG - CONFIRM SAVED DATA
+  // ================================
+
+  console.log("FOOTER SAVED IN SUPABASE:", {
+    instagramLink: savedData.content.instagramLink,
+    tiktokLink: savedData.content.tiktokLink,
+  });
+
+  // ================================
+  // REFRESH WEBSITE
+  // ================================
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/content/global");
 
   redirect("/admin/content/global");
 }
+
 
 // =================================
 // PRODUCT CARD
@@ -379,7 +444,7 @@ export async function updateGlobalProductCard(
   };
 
   // ================================
-  // SAVE
+  // SAVE PRODUCT CARD
   // ================================
 
   const { error } = await supabase

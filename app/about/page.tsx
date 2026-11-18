@@ -5,6 +5,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -242,13 +244,24 @@ export default async function AboutPage() {
               {hero.eyebrow}
             </p>
 
-            <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
+            
+          <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <TextReveal>
+              <RevealWord text="Hi," />
 
-              <span className="italic text-[#c78f86]">
-                {hero.highlight}
-              </span>
-            </h1>
+              {" "}
+
+              <RevealWord text="I'm" />
+
+              {" "}
+
+              <RevealWord
+                text="Lizzy."
+                className="italic text-[#c78f86]"
+              />
+            </TextReveal>
+          </h1>
+
 
             <p className="mt-6 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
               {hero.description}
@@ -308,13 +321,25 @@ export default async function AboutPage() {
               {story.eyebrow}
             </p>
 
+            
+        
             <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              {story.titleBefore}{" "}
+              <TextReveal>
+                {story.titleBefore.split(" ").map((word: string, index: number) => (
+                  <span key={`story-${index}`} className="inline-block">
+                    <RevealWord text={word} />
+                    {" "}
+                  </span>
+                ))}
 
-              <span className="italic text-[#c78f86]">
-                {story.highlight}
-              </span>
+                <RevealWord
+                  text={story.highlight}
+                  className="italic text-[#c78f86]"
+                />
+              </TextReveal>
             </h2>
+
+
           </div>
 
           <div className="space-y-5 text-sm leading-7 text-stone-600 sm:text-base">
@@ -339,13 +364,28 @@ export default async function AboutPage() {
               {values.eyebrow}
             </p>
 
+            
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {values.titleBefore}{" "}
+              <TextReveal>
+                {values.titleBefore.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`values-before-${index}`}>
+                    <RevealWord text={word} />
+                    {" "}
+                  </Fragment>
+                ))}
 
-              <span className="italic text-[#c78f86]">
-                {values.highlight}
-              </span>
+                {values.highlight.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`values-highlight-${index}`}>
+                    <RevealWord
+                      text={word}
+                      className="italic text-[#c78f86]"
+                    />
+                    {" "}
+                  </Fragment>
+                ))}
+              </TextReveal>
             </h2>
+
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
@@ -381,13 +421,28 @@ export default async function AboutPage() {
               {insideEdit.eyebrow}
             </p>
 
-            <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              {insideEdit.titleBefore}{" "}
+           
+            
+        <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+          <TextReveal>
+            {insideEdit.titleBefore.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`inside-before-${index}`}
+                text={word}
+              />
+            ))}
 
-              <span className="italic text-[#c78f86]">
-                {insideEdit.highlight}
-              </span>
-            </h2>
+            {insideEdit.highlight.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`inside-highlight-${index}`}
+                text={word}
+                className="italic text-[#c78f86]"
+              />
+            ))}
+          </TextReveal>
+        </h2>
+
+
 
             <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
               {insideEdit.description}
@@ -436,9 +491,18 @@ export default async function AboutPage() {
                 {transparency.eyebrow}
               </p>
 
-              <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
-                {transparency.title}
-              </h2>
+              
+          <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
+            <TextReveal>
+              {transparency.title.split(" ").map((word: string, index: number) => (
+                <Fragment key={`transparency-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
+          </h2>
+
             </div>
 
             <div>
