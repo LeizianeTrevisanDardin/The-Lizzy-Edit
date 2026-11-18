@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 import { updateMakeupPage } from "./actions";
+import TextReveal, {
+  RevealWord,
+} from "@/components/animations/TextReveal";
 
 export default async function AdminMakeupContentPage() {
   const supabase = await createClient();

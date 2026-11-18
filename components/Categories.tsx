@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
+import { Fragment } from "react";
+import TextReveal, {
+  RevealWord,
+} from "@/components/animations/TextReveal";
 
 const fallbackCategories = {
   eyebrow: "Shop by category",
@@ -83,15 +87,35 @@ export default async function Categories() {
           {categories.eyebrow}
         </p>
 
+        
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-          {categories.titleBefore}{" "}
+          <TextReveal>
+            {categories.titleBefore.split(" ").map((word: string, index: number) => (
+              <Fragment key={`categories-before-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
 
-          <span className="italic text-[#c78f86]">
-            {categories.highlight}
-          </span>{" "}
+            {categories.highlight.split(" ").map((word: string, index: number) => (
+              <Fragment key={`categories-highlight-${index}`}>
+                <RevealWord
+                  text={word}
+                  className="italic text-[#c78f86]"
+                />
+                {" "}
+              </Fragment>
+            ))}
 
-          {categories.titleAfter}
+            {categories.titleAfter.split(" ").map((word, index) => (
+              <Fragment key={`categories-after-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
+          </TextReveal>
         </h2>
+
 
         <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-stone-600 sm:text-base">
           {categories.description}

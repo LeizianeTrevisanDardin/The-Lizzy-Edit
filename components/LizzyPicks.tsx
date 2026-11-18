@@ -2,6 +2,10 @@ import Link from "next/link";
 
 import ProductCard from "@/components/ProductCard";
 import { createClient } from "@/lib/supabase/server";
+import { Fragment } from "react";
+import TextReveal, {
+  RevealWord,
+} from "@/components/animations/TextReveal";
 
 type Product = {
   id: number;
@@ -122,12 +126,28 @@ export default async function LizzyPicks() {
             {picks.eyebrow}
           </p>
 
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {picks.titleBefore}{" "}
-            <span className="italic text-[#c78f86]">
-              {picks.highlight}
-            </span>
-          </h2>
+          
+        <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+          <TextReveal>
+            {picks.titleBefore.split(" ").map((word: string, index: number) => (
+              <Fragment key={`picks-before-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
+
+            {picks.highlight.split(" ").map((word: string, index: number) => (
+              <Fragment key={`picks-highlight-${index}`}>
+                <RevealWord
+                  text={word}
+                  className="italic text-[#c78f86]"
+                />
+                {" "}
+              </Fragment>
+            ))}
+          </TextReveal>
+        </h2>
+
 
           <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
             {picks.description}

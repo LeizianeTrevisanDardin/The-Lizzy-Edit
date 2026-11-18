@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PicksCatalog from "@/components/PicksCatalog";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -185,13 +187,28 @@ export default async function PicksPage({
             {hero.eyebrow}
           </p>
 
-          <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-tight sm:text-6xl lg:text-7xl">
-            {hero.titleBefore}{" "}
+          
+        <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-tight sm:text-6xl lg:text-7xl">
+          <TextReveal>
+            {hero.titleBefore.split(" ").map((word: string, index: number) => (
+              <Fragment key={`before-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
 
-            <span className="italic text-[#c78f86]">
-              {hero.highlight}
-            </span>
-          </h1>
+            {hero.highlight.split(" ").map((word: string, index: number) => (
+              <Fragment key={`highlight-${index}`}>
+                <RevealWord
+                  text={word}
+                  className="italic text-[#c78f86]"
+                />
+                {" "}
+              </Fragment>
+            ))}
+          </TextReveal>
+        </h1>
+
 
           <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
             {hero.description}

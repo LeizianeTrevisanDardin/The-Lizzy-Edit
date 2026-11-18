@@ -480,6 +480,18 @@ const productCard =
               />
 
               <Field
+                label="Fragrances Text"
+                name="fragrancesText"
+                value={footer.fragrancesText ?? "Fragrances"}
+              />
+
+              <Field
+                label="Fragrances Link"
+                name="fragrancesLink"
+                value={footer.fragrancesLink ?? "/fragrances"}
+              />
+
+              <Field
                 label="Picks Text"
                 name="picksText"
                 value={footer.picksText}

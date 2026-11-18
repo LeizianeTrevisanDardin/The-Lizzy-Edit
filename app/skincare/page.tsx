@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import PicksCTA from "@/components/PicksCTA";
 import ExploreCard from "@/components/ExploreCard";
 import ProductCard from "@/components/ProductCard";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -400,13 +401,27 @@ const productCard = {
               {hero.eyebrow}
             </p>
 
-            <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
+            
+          <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <TextReveal>
+              {hero.titleBefore.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`hero-before-${index}`}
+                  text={word}
+                  className="mr-[0.22em]"
+                />
+              ))}
 
-              <span className="italic text-[#c78f86]">
-                {hero.highlight}
-              </span>
-            </h1>
+              {hero.highlight.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`hero-highlight-${index}`}
+                  text={word}
+                  className="mr-[0.22em] italic text-[#c78f86]"
+                />
+              ))}
+            </TextReveal>
+          </h1>
+
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
               {hero.description}
@@ -468,13 +483,27 @@ const productCard = {
             {concerns.eyebrow}
           </p>
 
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {concerns.titleBefore}{" "}
+          
+        <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+          <TextReveal>
+            {concerns.titleBefore.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`concerns-before-${index}`}
+                text={word}
+                className="mr-[0.22em]"
+              />
+            ))}
 
-            <span className="italic text-[#c78f86]">
-              {concerns.highlight}
-            </span>
-          </h2>
+            {concerns.highlight.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`concerns-highlight-${index}`}
+                text={word}
+                className="mr-[0.22em] italic text-[#c78f86]"
+              />
+            ))}
+          </TextReveal>
+        </h2>
+
 
           <p className="mt-4 max-w-lg text-sm leading-6 text-stone-600 sm:text-base">
             {concerns.description}
@@ -547,13 +576,27 @@ const productCard = {
               {products.eyebrow}
             </p>
 
-            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {products.titleBefore}{" "}
+            
+        <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+          <TextReveal>
+            {products.titleBefore.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`products-before-${index}`}
+                text={word}
+                className="mr-[0.22em]"
+              />
+            ))}
 
-              <span className="italic text-[#c78f86]">
-                {products.highlight}
-              </span>
-            </h2>
+            {products.highlight.split(" ").map((word: string, index: number) => (
+              <RevealWord
+                key={`products-highlight-${index}`}
+                text={word}
+                className="mr-[0.22em] italic text-[#c78f86]"
+              />
+            ))}
+          </TextReveal>
+        </h2>
+
 
             <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
               {products.description}
@@ -639,13 +682,27 @@ const productCard = {
                 {routine.eyebrow}
               </p>
 
-              <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-                {routine.titleBefore}{" "}
+              
+          <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+            <TextReveal>
+              {routine.titleBefore.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`routine-before-${index}`}
+                  text={word}
+                  className="mr-[0.22em]"
+                />
+              ))}
 
-                <span className="italic text-[#c78f86]">
-                  {routine.highlight}
-                </span>
-              </h2>
+              {routine.highlight.split(" ").map((word: string, index: number) => (
+                <RevealWord
+                  key={`routine-highlight-${index}`}
+                  text={word}
+                  className="mr-[0.22em] italic text-[#c78f86]"
+                />
+              ))}
+            </TextReveal>
+          </h2>
+
 
               <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
                 {routine.description}

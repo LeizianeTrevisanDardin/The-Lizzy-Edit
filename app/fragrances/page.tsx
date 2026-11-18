@@ -8,6 +8,8 @@ import PicksCTA from "@/components/PicksCTA";
 import ProductCard from "@/components/ProductCard";
 
 import { createClient } from "@/lib/supabase/server";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 type Product = {
   id: number;
@@ -50,6 +52,42 @@ type FragranceNoteItem = {
   title: string;
   description: string;
 };
+
+type AnimatedTitleProps = {
+  before: string;
+  highlight: string;
+  className?: string;
+};
+
+function AnimatedTitle({
+  before,
+  highlight,
+  className = "",
+}: AnimatedTitleProps) {
+  return (
+    <TextReveal>
+      <span className={className}>
+        {before.split(" ").map((word, index) => (
+          <Fragment key={`before-${index}`}>
+            <RevealWord text={word} />
+            {" "}
+          </Fragment>
+        ))}
+
+        {highlight.split(" ").map((word, index) => (
+          <Fragment key={`highlight-${index}`}>
+            <RevealWord
+              text={word}
+              className="italic text-[#c78f86]"
+            />
+            {" "}
+          </Fragment>
+        ))}
+      </span>
+    </TextReveal>
+  );
+}
+
 
 const fallbackContent = {
   hero: {
@@ -443,11 +481,10 @@ const productCard = {
             </p>
 
             <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
-
-              <span className="italic text-[#c78f86]">
-                {hero.highlight}
-              </span>
+              <AnimatedTitle
+                before={hero.titleBefore}
+                highlight={hero.highlight}
+              />
             </h1>
 
             <p className="mt-6 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
@@ -497,11 +534,10 @@ const productCard = {
         </p>
 
         <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-          {intro.titleBefore}{" "}
-
-          <span className="italic text-[#c78f86]">
-            {intro.highlight}
-          </span>
+          <AnimatedTitle
+            before={intro.titleBefore}
+            highlight={intro.highlight}
+          />
         </h2>
 
         <div className="mt-7 space-y-5 text-base leading-8 text-stone-600">
@@ -523,11 +559,10 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {families.titleBefore}{" "}
-
-              <span className="italic text-[#c78f86]">
-                {families.highlight}
-              </span>
+              <AnimatedTitle
+                before={families.titleBefore}
+                highlight={families.highlight}
+              />
             </h2>
 
             <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
@@ -569,11 +604,10 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              {wardrobe.titleBefore}{" "}
-
-              <span className="italic text-[#c78f86]">
-                {wardrobe.highlight}
-              </span>
+              <AnimatedTitle
+                before={wardrobe.titleBefore}
+                highlight={wardrobe.highlight}
+              />
             </h2>
 
             <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
@@ -616,11 +650,10 @@ const productCard = {
               </p>
 
               <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-                {products.titleBefore}{" "}
-
-                <span className="italic text-[#c78f86]">
-                  {products.highlight}
-                </span>
+                <AnimatedTitle
+                  before={products.titleBefore}
+                  highlight={products.highlight}
+                />
               </h2>
 
               <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
@@ -704,11 +737,10 @@ const productCard = {
           </p>
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {fragrance101.titleBefore}{" "}
-
-            <span className="italic text-[#c78f86]">
-              {fragrance101.highlight}
-            </span>
+            <AnimatedTitle
+              before={fragrance101.titleBefore}
+              highlight={fragrance101.highlight}
+            />
           </h2>
 
           <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
@@ -749,12 +781,11 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {concentration.titleBefore}{" "}
-
-              <span className="italic text-[#c78f86]">
-                {concentration.highlight}
-              </span>
-            </h2>
+            <AnimatedTitle
+              before={concentration.titleBefore}
+              highlight={concentration.highlight}
+            />
+          </h2>
           </div>
 
           <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -798,11 +829,10 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {tips.titleBefore}{" "}
-
-              <span className="italic text-[#c78f86]">
-                {tips.highlight}
-              </span>
+              <AnimatedTitle
+                before={tips.titleBefore}
+                highlight={tips.highlight}
+              />
             </h2>
           </div>
 
@@ -835,11 +865,10 @@ const productCard = {
           </p>
 
           <h2 className="mt-3 font-serif text-4xl">
-            {finalNote.titleBefore}{" "}
-
-            <span className="italic text-[#c78f86]">
-              {finalNote.highlight}
-            </span>
+            <AnimatedTitle
+              before={finalNote.titleBefore}
+              highlight={finalNote.highlight}
+            />
           </h2>
 
           <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">

@@ -9,6 +9,8 @@ import ExploreCard from "@/components/ExploreCard";
 import ProductCard from "@/components/ProductCard";
 
 import { createClient } from "@/lib/supabase/server";
+import TextReveal, { RevealWord } from "@/components/animations/TextReveal";
+import { Fragment } from "react";
 
 type Product = {
   id: number;
@@ -374,12 +376,28 @@ const productCard = {
               {hero.eyebrow}
             </p>
 
-            <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.titleBefore}{" "}
-              <span className="italic text-[#aa8778]">
-                {hero.highlight}
-              </span>
-            </h1>
+            
+          <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <TextReveal>
+              {hero.titleBefore.split(" ").map((word: string, index: number) => (
+                <Fragment key={`before-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
+
+              {hero.highlight.split(" ").map((word: string, index: number) => (
+                <Fragment key={`highlight-${index}`}>
+                  <RevealWord
+                    text={word}
+                    className="italic text-[#aa8778]"
+                  />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
+          </h1>
+
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
               {hero.description}
@@ -437,11 +455,25 @@ const productCard = {
           </p>
 
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-            {categories.titleBefore}{" "}
-            <span className="italic text-[#aa8778]">
-              {categories.highlight}
-            </span>
-          </h2>
+          <TextReveal>
+            {categories.titleBefore.split(" ").map((word: string, index: number) => (
+              <Fragment key={`category-before-${index}`}>
+                <RevealWord text={word} />
+                {" "}
+              </Fragment>
+            ))}
+
+            {categories.highlight.split(" ").map((word: string, index: number) => (
+              <Fragment key={`category-highlight-${index}`}>
+                <RevealWord
+                  text={word}
+                  className="italic text-[#aa8778]"
+                />
+                {" "}
+              </Fragment>
+            ))}
+          </TextReveal>
+        </h2>
 
           <p className="mt-4 max-w-xl text-sm leading-6 text-stone-600 sm:text-base">
             {categories.description}
@@ -472,11 +504,25 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-              {rituals.titleBefore}{" "}
-              <span className="italic text-[#aa8778]">
-                {rituals.highlight}
-              </span>
-            </h2>
+            <TextReveal>
+              {rituals.titleBefore.split(" ").map((word: string, index: number) => (
+                <Fragment key={`ritual-before-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
+
+              {rituals.highlight.split(" ").map((word: string, index: number) => (
+                <Fragment key={`ritual-highlight-${index}`}>
+                  <RevealWord
+                    text={word}
+                    className="italic text-[#aa8778]"
+                  />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
+          </h2>
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
@@ -533,12 +579,26 @@ const productCard = {
                 {products.eyebrow}
               </p>
 
-              <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
-                {products.titleBefore}{" "}
-                <span className="italic text-[#aa8778]">
-                  {products.highlight}
-                </span>
-              </h2>
+             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">
+              <TextReveal>
+                {products.titleBefore.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`products-before-${index}`}>
+                    <RevealWord text={word} />
+                    {" "}
+                  </Fragment>
+                ))}
+
+                {products.highlight.split(" ").map((word: string, index: number) => (
+                  <Fragment key={`products-highlight-${index}`}>
+                    <RevealWord
+                      text={word}
+                      className="italic text-[#aa8778]"
+                    />
+                    {" "}
+                  </Fragment>
+                ))}
+              </TextReveal>
+            </h2>
 
               <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600 sm:text-base">
                 {products.description}
@@ -622,11 +682,25 @@ const productCard = {
             </p>
 
             <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-              {guide.titleBefore}{" "}
-              <span className="italic text-[#aa8778]">
-                {guide.highlight}
-              </span>
-            </h2>
+            <TextReveal>
+              {guide.titleBefore.split(" ").map((word: string, index: number) => (
+                <Fragment key={`guide-before-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
+
+              {guide.highlight.split(" ").map((word: string, index: number) => (
+                <Fragment key={`guide-highlight-${index}`}>
+                  <RevealWord
+                    text={word}
+                    className="italic text-[#aa8778]"
+                  />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
+          </h2>
 
             <p className="mt-5 max-w-md text-sm leading-7 text-stone-600 sm:text-base">
               {guide.description}

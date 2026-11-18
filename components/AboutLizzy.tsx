@@ -2,6 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { createClient } from "@/lib/supabase/server";
+import { Fragment } from "react";
+
+import TextReveal, {
+  RevealWord,
+} from "@/components/animations/TextReveal";
 
 const fallbackAbout = {
   image: "/images/Lizzy.png",
@@ -99,12 +104,28 @@ export default async function AboutLizzy() {
             {about.eyebrow}
           </p>
 
+          
           <h2 className="mt-3 font-serif text-5xl leading-none sm:text-6xl">
-            {about.name}
-            <span className="ml-2 italic text-[#c78f86]">
-              {about.nameAccent}
-            </span>
+            <TextReveal>
+              {about.name.split(" ").map((word: string, index: number) => (
+                <Fragment key={`name-${index}`}>
+                  <RevealWord text={word} />
+                  {" "}
+                </Fragment>
+              ))}
+
+              {about.nameAccent.split(" ").map((word: string, index: number) => (
+                <Fragment key={`accent-${index}`}>
+                  <RevealWord
+                    text={word}
+                    className="ml-2 italic text-[#c78f86]"
+                  />
+                  {" "}
+                </Fragment>
+              ))}
+            </TextReveal>
           </h2>
+
 
           <p className="mt-7 max-w-xl text-base leading-7 text-stone-700 sm:text-lg">
             {about.paragraphOne}
