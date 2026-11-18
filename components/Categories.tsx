@@ -107,7 +107,7 @@ export default async function Categories() {
               </Fragment>
             ))}
 
-            {categories.titleAfter.split(" ").map((word, index) => (
+            {categories.titleAfter.split(" ").map((word: string, index: number) => (
               <Fragment key={`categories-after-${index}`}>
                 <RevealWord text={word} />
                 {" "}
